@@ -1,0 +1,25 @@
+# Errors
+
+ApiMask uses a consistent error envelope:
+
+```json
+{
+  "success": false,
+  "data": null,
+  "error": {
+    "code": "RATE_LIMIT_EXCEEDED",
+    "message": "You have exceeded your rate limit. Retry after 60 seconds.",
+    "retry_after": 60
+  },
+  "meta": { "request_id": "req_xyz456" }
+}
+```
+
+## Common error codes
+
+| Code | HTTP | Meaning |
+|---|---|---|
+| `UNAUTHORIZED` | 401 | Missing or invalid API key. |
+| `RATE_LIMIT_EXCEEDED` | 429 | Too many requests; retry after `retry_after` seconds. |
+| `INVALID_REQUEST` | 400 | Request body failed validation. |
+| `INTERNAL_ERROR` | 500 | Unexpected server error. |

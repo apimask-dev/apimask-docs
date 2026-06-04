@@ -1,0 +1,10 @@
+{
+  "index": "Overview",
+  "quickstart": "Quickstart",
+  "authentication": "Authentication",
+  "errors": "Errors",
+  "rate-limits": "Rate Limits",
+  "pricing": "Pricing",
+  "changelog": "Changelog",
+  "api": "API Reference"
+}

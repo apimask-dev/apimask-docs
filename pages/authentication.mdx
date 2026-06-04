@@ -1,0 +1,22 @@
+# Authentication
+
+Every request must include your API key as a bearer token:
+
+```
+Authorization: Bearer <api_key>
+```
+
+## API keys
+
+- Keys are created in the dashboard and shown in full only once.
+- Keys are stored as SHA-256 hashes; only a short prefix (e.g. `am_live_`) is displayed afterward.
+- You can create multiple keys per account with custom labels, and revoke any key at any time.
+
+## Example
+
+```bash
+curl https://api.apimask.dev/v1/resume/analyze \
+  -H "Authorization: Bearer am_live_xxxxxxxxxxxx" \
+  -H "Content-Type: application/json" \
+  -d '{ "resume_text": "..." }'
+```

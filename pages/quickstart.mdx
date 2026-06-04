@@ -1,0 +1,26 @@
+# Quickstart
+
+Get up and running with ApiMask in a few minutes.
+
+## 1. Create an API key
+
+Sign in to the [dashboard](https://apimask.dev) and create an API key. The raw key is
+shown once — store it securely.
+
+## 2. Make a request
+
+```bash
+curl https://api.apimask.dev/v1/resume/analyze \
+  -H "Authorization: Bearer $APIMASK_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{ "resume_text": "..." }'
+```
+
+## 3. Use an SDK
+
+```bash
+npm install @apimask/sdk
+pip install apimask
+```
+
+See the [API Reference](/api/resume) for the full list of endpoints.
