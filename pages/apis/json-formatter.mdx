@@ -1,0 +1,51 @@
+---
+title: JSON Formatter API
+description: Validate, format, minify, and optionally sort JSON through RapidAPI.
+---
+
+# JSON Formatter API
+
+Validate, format, minify, and optionally sort JSON. Use it in developer tools,
+admin panels, data cleaning workflows, and automation pipelines.
+
+## Endpoint
+
+```http
+POST /v1/dev/data/json/format
+```
+
+## Request body
+
+| Field | Type | Required | Description |
+|---|---|---:|---|
+| `text` | `string` | Yes | JSON string to validate or format. |
+| `indent` | `number` | No | Indent size from `0` to `8`. Defaults to `2`. |
+| `sort_keys` | `boolean` | No | Sort object keys. Defaults to `false`. |
+
+## Example request
+
+```bash
+curl --request POST \
+  --url https://apimask-developer-utilities-api.p.rapidapi.com/v1/dev/data/json/format \
+  --header "Content-Type: application/json" \
+  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
+  --header "X-RapidAPI-Host: apimask-developer-utilities-api.p.rapidapi.com" \
+  --data '{"text":"{\"name\":\"ApiMask\",\"ok\":true}","indent":2,"sort_keys":false}'
+```
+
+## Example response
+
+```json
+{
+  "success": true,
+  "data": {
+    "is_valid": true,
+    "formatted": "{\n  \"name\": \"ApiMask\",\n  \"ok\": true\n}",
+    "minified": "{\"name\":\"ApiMask\",\"ok\":true}",
+    "error": null,
+    "type": "object"
+  },
+  "error": null,
+  "meta": {}
+}
+```

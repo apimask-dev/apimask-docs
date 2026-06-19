@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://apimask.dev/sitemap.xml

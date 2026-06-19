@@ -1,0 +1,59 @@
+---
+title: Regex Generator API
+description: Generate regular expressions from plain English descriptions with explanations and test cases through RapidAPI.
+---
+
+# Regex Generator API
+
+Generate a regular expression from a plain English description. Use it in developer
+tools, form builders, validation workflows, and automation systems.
+
+## Endpoint
+
+```http
+POST /v1/dev/regex/generate
+```
+
+## Request body
+
+| Field | Type | Required | Description |
+|---|---|---:|---|
+| `description` | `string` | Yes | Plain English description of the desired regex. |
+| `flavor` | `string` | No | Regex flavor such as `pcre`, `python`, `javascript`, `go`, or `re2`. Defaults to `pcre`. |
+
+## Example request
+
+```bash
+curl --request POST \
+  --url https://apimask-developer-utilities-api.p.rapidapi.com/v1/dev/regex/generate \
+  --header "Content-Type: application/json" \
+  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
+  --header "X-RapidAPI-Host: apimask-developer-utilities-api.p.rapidapi.com" \
+  --data '{"description":"Match a valid email address","flavor":"python"}'
+```
+
+## Example response
+
+```json
+{
+  "success": true,
+  "data": {
+    "pattern": "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$",
+    "explanation": "Matches a common email address structure.",
+    "test_cases": [
+      { "string": "hello@example.com", "should_match": true },
+      { "string": "not-an-email", "should_match": false }
+    ]
+  },
+  "error": null,
+  "meta": {}
+}
+```
+
+## Response fields
+
+| Field | Type | Description |
+|---|---|---|
+| `pattern` | `string` | Generated regular expression. |
+| `explanation` | `string` | Plain English explanation. |
+| `test_cases` | `array` | Suggested strings and expected match results. |

@@ -1,0 +1,50 @@
+---
+title: Hash Generator API
+description: Generate MD5, SHA-1, SHA-256, SHA-512, and BLAKE2 hashes for strings through RapidAPI.
+---
+
+# Hash Generator API
+
+Generate hashes for a string value. Use it in developer tools, debugging workflows,
+integrity checks, and automation systems.
+
+## Endpoint
+
+```http
+POST /v1/dev/data/hash
+```
+
+## Request body
+
+| Field | Type | Required | Description |
+|---|---|---:|---|
+| `value` | `string` | Yes | Value to hash. |
+| `algorithms` | `string[]` | No | Algorithms to return. Defaults to `md5`, `sha1`, `sha256`, and `sha512`. |
+
+## Example request
+
+```bash
+curl --request POST \
+  --url https://apimask-developer-utilities-api.p.rapidapi.com/v1/dev/data/hash \
+  --header "Content-Type: application/json" \
+  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
+  --header "X-RapidAPI-Host: apimask-developer-utilities-api.p.rapidapi.com" \
+  --data '{"value":"hello","algorithms":["md5","sha256","sha512"]}'
+```
+
+## Example response
+
+```json
+{
+  "success": true,
+  "data": {
+    "hashes": {
+      "md5": "5d41402abc4b2a76b9719d911017c592",
+      "sha256": "2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824"
+    },
+    "unsupported_algorithms": []
+  },
+  "error": null,
+  "meta": {}
+}
+```

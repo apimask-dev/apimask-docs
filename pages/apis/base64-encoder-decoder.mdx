@@ -1,0 +1,51 @@
+---
+title: Base64 Encode and Decode API
+description: Encode UTF-8 text as Base64 or decode Base64 text through RapidAPI, with optional URL-safe alphabet support.
+---
+
+# Base64 Encode and Decode API
+
+Encode UTF-8 text as Base64 or decode Base64 text back to UTF-8. Use it in automation,
+developer tools, integrations, and data transformation workflows.
+
+## Endpoints
+
+```http
+POST /v1/dev/data/base64/encode
+POST /v1/dev/data/base64/decode
+```
+
+## Request body
+
+| Field | Type | Required | Description |
+|---|---|---:|---|
+| `value` | `string` | Yes | Value to encode or decode. |
+| `urlsafe` | `boolean` | No | Use the URL-safe Base64 alphabet. Defaults to `false`. |
+
+## Example encode request
+
+```bash
+curl --request POST \
+  --url https://apimask-developer-utilities-api.p.rapidapi.com/v1/dev/data/base64/encode \
+  --header "Content-Type: application/json" \
+  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
+  --header "X-RapidAPI-Host: apimask-developer-utilities-api.p.rapidapi.com" \
+  --data '{"value":"hello ApiMask","urlsafe":false}'
+```
+
+## Example response
+
+```json
+{
+  "success": true,
+  "data": {
+    "input": "hello ApiMask",
+    "output": "aGVsbG8gQXBpTWFzaw==",
+    "operation": "encode",
+    "is_valid": true,
+    "error": null
+  },
+  "error": null,
+  "meta": {}
+}
+```

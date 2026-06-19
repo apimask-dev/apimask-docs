@@ -1,0 +1,49 @@
+---
+title: Regex Explainer API
+description: Explain regular expressions in plain English with token-by-token breakdowns through RapidAPI.
+---
+
+# Regex Explainer API
+
+Explain a regular expression in plain English. Use it in developer education,
+debugging tools, code review assistants, and validation UI.
+
+## Endpoint
+
+```http
+POST /v1/dev/regex/explain
+```
+
+## Request body
+
+| Field | Type | Required | Description |
+|---|---|---:|---|
+| `pattern` | `string` | Yes | Regular expression pattern to explain. |
+
+## Example request
+
+```bash
+curl --request POST \
+  --url https://apimask-developer-utilities-api.p.rapidapi.com/v1/dev/regex/explain \
+  --header "Content-Type: application/json" \
+  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
+  --header "X-RapidAPI-Host: apimask-developer-utilities-api.p.rapidapi.com" \
+  --data '{"pattern":"^[A-Z][a-z]+$"}'
+```
+
+## Example response
+
+```json
+{
+  "success": true,
+  "data": {
+    "explanation": "Matches one capital letter followed by one or more lowercase letters.",
+    "breakdown": [
+      { "token": "^", "meaning": "Start of string" },
+      { "token": "[A-Z]", "meaning": "One uppercase letter" }
+    ]
+  },
+  "error": null,
+  "meta": {}
+}
+```

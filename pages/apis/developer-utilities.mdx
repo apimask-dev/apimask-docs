@@ -1,0 +1,44 @@
+---
+title: Developer Utilities API
+description: ApiMask Developer Utilities API provides regex, stacktrace, README, changelog, JSON, Base64, hash, ID, and URL parsing endpoints through RapidAPI.
+---
+
+# Developer Utilities API
+
+The ApiMask Developer Utilities API is a focused RapidAPI product for developer
+workflows, CI automation, code assistants, and backend tools.
+
+[Find ApiMask on RapidAPI](https://rapidapi.com/search/ApiMask)
+
+## Endpoints
+
+| Endpoint | Method | Docs |
+|---|---|---|
+| `/v1/dev/email/validate` | `POST` | [Email Validation API](/api/email-validation) |
+| `/v1/dev/regex/generate` | `POST` | [Regex Generator API](/api/regex-generator) |
+| `/v1/dev/regex/explain` | `POST` | [Regex Explainer API](/api/regex-explainer) |
+| `/v1/dev/stacktrace` | `POST` | [Stacktrace Analyzer API](/api/stacktrace-analyzer) |
+| `/v1/dev/readme` | `POST` | [README Generator API](/api/readme-generator) |
+| `/v1/dev/changelog` | `POST` | [Changelog Generator API](/api/changelog-generator) |
+| `/v1/dev/data/json/format` | `POST` | [JSON Formatter API](/api/json-formatter) |
+| `/v1/dev/data/base64/encode` | `POST` | [Base64 Encode/Decode API](/api/base64-encoder-decoder) |
+| `/v1/dev/data/base64/decode` | `POST` | [Base64 Encode/Decode API](/api/base64-encoder-decoder) |
+| `/v1/dev/data/hash` | `POST` | [Hash Generator API](/api/hash-generator) |
+| `/v1/dev/data/id/generate` | `POST` | [UUID/ULID Generator API](/api/id-generator) |
+| `/v1/dev/data/url/parse` | `POST` | [URL Parser API](/api/url-parser) |
+
+## Base URL
+
+Use the RapidAPI base URL and host shown in your RapidAPI code examples.
+
+```http
+https://apimask-developer-utilities-api.p.rapidapi.com
+```
+
+## Authentication
+
+```http
+X-RapidAPI-Key: your-rapidapi-key
+X-RapidAPI-Host: apimask-developer-utilities-api.p.rapidapi.com
+Content-Type: application/json
+```

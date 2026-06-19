@@ -1,26 +1,44 @@
+---
+title: Quickstart
+description: Subscribe to ApiMask on RapidAPI and make your first API request with curl, JavaScript, or Python.
+---
+
 # Quickstart
 
-Get up and running with ApiMask in a few minutes.
+Get up and running with ApiMask through RapidAPI in a few minutes.
 
-## 1. Create an API key
+## 1. Subscribe on RapidAPI
 
-Sign in to the [dashboard](https://apimask.dev) and create an API key. The raw key is
-shown once — store it securely.
+Open the ApiMask listing on RapidAPI, choose a plan, and copy the generated request
+headers from RapidAPI's code examples.
+
+[Find ApiMask on RapidAPI](https://rapidapi.com/search/ApiMask)
 
 ## 2. Make a request
 
-```bash
-curl https://api.apimask.dev/v1/resume/analyze \
-  -H "Authorization: Bearer $APIMASK_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{ "resume_text": "..." }'
-```
-
-## 3. Use an SDK
+RapidAPI requests use the `X-RapidAPI-Key` and `X-RapidAPI-Host` headers. The host
+shown below is for the Developer Utilities API.
 
 ```bash
-npm install @apimask/sdk
-pip install apimask
+curl --request POST \
+  --url https://apimask-developer-utilities-api.p.rapidapi.com/v1/dev/data/json/format \
+  --header "Content-Type: application/json" \
+  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
+  --header "X-RapidAPI-Host: apimask-developer-utilities-api.p.rapidapi.com" \
+  --data '{"text":"{\"name\":\"ApiMask\",\"ok\":true}","indent":2}'
 ```
 
-See the [API Reference](/api/resume) for the full list of endpoints.
+## 3. Pick an endpoint
+
+Start with a live endpoint:
+
+- [Email Validation API](/api/email-validation)
+- [Regex Generator API](/api/regex-generator)
+- [Stacktrace Analyzer API](/api/stacktrace-analyzer)
+- [JSON Formatter API](/api/json-formatter)
+- [SSL Checker API](/api/ssl-checker)
+
+## 4. Use RapidAPI examples
+
+RapidAPI generates code samples for multiple languages after you subscribe. Use the
+endpoint docs on this site for request fields, response fields, and behavior notes.

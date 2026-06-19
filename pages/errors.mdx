@@ -1,6 +1,12 @@
+---
+title: Errors
+description: Understand ApiMask error responses, validation errors, RapidAPI authentication failures, and rate-limit responses.
+---
+
 # Errors
 
-ApiMask uses a consistent error envelope:
+ApiMask endpoint responses use a consistent JSON envelope when the request reaches
+the ApiMask API:
 
 ```json
 {
@@ -19,7 +25,13 @@ ApiMask uses a consistent error envelope:
 
 | Code | HTTP | Meaning |
 |---|---|---|
-| `UNAUTHORIZED` | 401 | Missing or invalid API key. |
-| `RATE_LIMIT_EXCEEDED` | 429 | Too many requests; retry after `retry_after` seconds. |
+| `UNAUTHORIZED` | 401 | Missing, invalid, or unsubscribed RapidAPI credentials. |
+| `RATE_LIMIT_EXCEEDED` | 429 | Too many requests for the active RapidAPI plan. |
 | `INVALID_REQUEST` | 400 | Request body failed validation. |
 | `INTERNAL_ERROR` | 500 | Unexpected server error. |
+
+## RapidAPI errors
+
+RapidAPI may return its own `401`, `403`, or `429` response before the request reaches
+ApiMask. In that case, check the subscription, `X-RapidAPI-Key`, `X-RapidAPI-Host`,
+and plan quota in your RapidAPI dashboard.

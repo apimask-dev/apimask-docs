@@ -1,0 +1,52 @@
+---
+title: Robots.txt Analyzer API
+description: Analyze robots.txt status, directives, sitemap URLs, user agents, and warnings through RapidAPI.
+---
+
+# Robots.txt Analyzer API
+
+Analyze a site's `robots.txt` directives for SEO tooling, crawler configuration,
+website audits, and technical monitoring.
+
+## Endpoint
+
+```http
+POST /v1/utility/robots/analyze
+```
+
+## Request body
+
+| Field | Type | Required | Description |
+|---|---|---:|---|
+| `url` | `string` | Yes | Site URL or direct `robots.txt` URL. |
+
+## Example request
+
+```bash
+curl --request POST \
+  --url https://apimask-email-domain-validation-api.p.rapidapi.com/v1/utility/robots/analyze \
+  --header "Content-Type: application/json" \
+  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
+  --header "X-RapidAPI-Host: apimask-email-domain-validation-api.p.rapidapi.com" \
+  --data '{"url":"https://example.com"}'
+```
+
+## Example response
+
+```json
+{
+  "success": true,
+  "data": {
+    "url": "https://example.com",
+    "robots_url": "https://example.com/robots.txt",
+    "exists": true,
+    "status_code": 200,
+    "disallow_rules": ["/private"],
+    "sitemap_urls": ["https://example.com/sitemap.xml"],
+    "user_agents": ["*"],
+    "warnings": []
+  },
+  "error": null,
+  "meta": {}
+}
+```

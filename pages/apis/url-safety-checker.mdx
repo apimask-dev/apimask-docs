@@ -1,0 +1,53 @@
+---
+title: URL Safety Checker API
+description: Check URL redirects, final URL, homograph risk, status code, threat indicators, and safety status through RapidAPI.
+---
+
+# URL Safety Checker API
+
+Check a URL for redirects, final destination, status code, homograph risk, threat
+indicators, and safety status. Use it in link scanners, moderation tools, website
+audits, and user-generated content workflows.
+
+## Endpoint
+
+```http
+POST /v1/utility/url/safety
+```
+
+## Request body
+
+| Field | Type | Required | Description |
+|---|---|---:|---|
+| `url` | `string` | Yes | URL to check. |
+
+## Example request
+
+```bash
+curl --request POST \
+  --url https://apimask-email-domain-validation-api.p.rapidapi.com/v1/utility/url/safety \
+  --header "Content-Type: application/json" \
+  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
+  --header "X-RapidAPI-Host: apimask-email-domain-validation-api.p.rapidapi.com" \
+  --data '{"url":"https://example.com"}'
+```
+
+## Example response
+
+```json
+{
+  "success": true,
+  "data": {
+    "url": "https://example.com",
+    "final_url": "https://example.com",
+    "redirect_count": 0,
+    "redirect_chain": [],
+    "is_safe": true,
+    "threat_types": [],
+    "is_homograph": false,
+    "status_code": 200
+  },
+  "error": null,
+  "meta": {}
+}
+```

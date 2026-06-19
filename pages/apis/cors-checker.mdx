@@ -1,0 +1,53 @@
+---
+title: CORS Checker API
+description: Check CORS response headers, allowed origins, credentials, methods, exposed headers, and risk level through RapidAPI.
+---
+
+# CORS Checker API
+
+Check CORS behavior for a URL and origin. Use it in API audits, frontend debugging,
+security checks, and developer support workflows.
+
+## Endpoint
+
+```http
+POST /v1/utility/cors/check
+```
+
+## Request body
+
+| Field | Type | Required | Description |
+|---|---|---:|---|
+| `url` | `string` | Yes | URL to check for CORS behavior. |
+| `origin` | `string` | No | Origin to send in the check request. Defaults to `https://example.com`. |
+
+## Example request
+
+```bash
+curl --request POST \
+  --url https://apimask-email-domain-validation-api.p.rapidapi.com/v1/utility/cors/check \
+  --header "Content-Type: application/json" \
+  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
+  --header "X-RapidAPI-Host: apimask-email-domain-validation-api.p.rapidapi.com" \
+  --data '{"url":"https://api.example.com","origin":"https://app.example.com"}'
+```
+
+## Example response
+
+```json
+{
+  "success": true,
+  "data": {
+    "url": "https://api.example.com",
+    "status_code": 200,
+    "allows_origin": true,
+    "allows_credentials": false,
+    "allowed_methods": ["GET", "POST"],
+    "exposed_headers": [],
+    "risk_level": "low",
+    "warnings": []
+  },
+  "error": null,
+  "meta": {}
+}
+```

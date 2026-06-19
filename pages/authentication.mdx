@@ -1,22 +1,39 @@
+---
+title: Authentication
+description: ApiMask authentication is handled by RapidAPI using X-RapidAPI-Key and X-RapidAPI-Host headers.
+---
+
 # Authentication
 
-Every request must include your API key as a bearer token:
+ApiMask is distributed through RapidAPI. Authentication, subscriptions, plan limits,
+and billing are handled by RapidAPI.
 
+## Required headers
+
+Every request must include the RapidAPI headers shown in your RapidAPI dashboard:
+
+```http
+X-RapidAPI-Key: your-rapidapi-key
+X-RapidAPI-Host: apimask-developer-utilities-api.p.rapidapi.com
+Content-Type: application/json
 ```
-Authorization: Bearer <api_key>
-```
 
-## API keys
-
-- Keys are created in the dashboard and shown in full only once.
-- Keys are stored as SHA-256 hashes; only a short prefix (e.g. `am_live_`) is displayed afterward.
-- You can create multiple keys per account with custom labels, and revoke any key at any time.
+Use the exact `X-RapidAPI-Host` value from the product you subscribed to. Different
+ApiMask products may use different RapidAPI hosts.
 
 ## Example
 
 ```bash
-curl https://api.apimask.dev/v1/resume/analyze \
-  -H "Authorization: Bearer am_live_xxxxxxxxxxxx" \
-  -H "Content-Type: application/json" \
-  -d '{ "resume_text": "..." }'
+curl --request POST \
+  --url https://apimask-developer-utilities-api.p.rapidapi.com/v1/dev/email/validate \
+  --header "Content-Type: application/json" \
+  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
+  --header "X-RapidAPI-Host: apimask-developer-utilities-api.p.rapidapi.com" \
+  --data '{"email":"hello@example.com","check_smtp":false}'
 ```
+
+## Troubleshooting
+
+- `401` usually means the RapidAPI key is missing, invalid, or not subscribed to the product.
+- `403` usually means the request is not allowed for the subscribed product or plan.
+- `429` means the RapidAPI plan limit has been reached.

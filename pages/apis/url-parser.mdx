@@ -1,0 +1,54 @@
+---
+title: URL Parser API
+description: Parse URLs into scheme, host, port, path, query parameters, fragment, credentials metadata, and normalized URL through RapidAPI.
+---
+
+# URL Parser API
+
+Parse a URL into structured components for validation, data extraction, crawling,
+analytics, security checks, and automation.
+
+## Endpoint
+
+```http
+POST /v1/dev/data/url/parse
+```
+
+## Request body
+
+| Field | Type | Required | Description |
+|---|---|---:|---|
+| `url` | `string` | Yes | URL to parse. |
+
+## Example request
+
+```bash
+curl --request POST \
+  --url https://apimask-developer-utilities-api.p.rapidapi.com/v1/dev/data/url/parse \
+  --header "Content-Type: application/json" \
+  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
+  --header "X-RapidAPI-Host: apimask-developer-utilities-api.p.rapidapi.com" \
+  --data '{"url":"https://example.com:443/docs?q=api#intro"}'
+```
+
+## Example response
+
+```json
+{
+  "success": true,
+  "data": {
+    "scheme": "https",
+    "host": "example.com",
+    "port": 443,
+    "path": "/docs",
+    "query": "q=api",
+    "fragment": "intro",
+    "username": null,
+    "has_password": false,
+    "query_params": { "q": ["api"] },
+    "normalized_url": "https://example.com:443/docs?q=api#intro"
+  },
+  "error": null,
+  "meta": {}
+}
+```

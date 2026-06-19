@@ -1,0 +1,53 @@
+---
+title: DNS Analyzer API
+description: Analyze A, AAAA, MX, TXT, NS, CNAME, SPF, and DMARC records for a domain through RapidAPI.
+---
+
+# DNS Analyzer API
+
+Analyze DNS records for a domain. Use it in domain onboarding, email deliverability
+checks, infrastructure dashboards, website audits, and security tooling.
+
+## Endpoint
+
+```http
+POST /v1/utility/dns/analyze
+```
+
+## Request body
+
+| Field | Type | Required | Description |
+|---|---|---:|---|
+| `domain` | `string` | Yes | Domain to analyze. |
+
+## Example request
+
+```bash
+curl --request POST \
+  --url https://apimask-email-domain-validation-api.p.rapidapi.com/v1/utility/dns/analyze \
+  --header "Content-Type: application/json" \
+  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
+  --header "X-RapidAPI-Host: apimask-email-domain-validation-api.p.rapidapi.com" \
+  --data '{"domain":"example.com"}'
+```
+
+## Example response
+
+```json
+{
+  "success": true,
+  "data": {
+    "domain": "example.com",
+    "a_records": ["93.184.216.34"],
+    "aaaa_records": [],
+    "mx_records": [],
+    "txt_records": [],
+    "ns_records": ["a.iana-servers.net"],
+    "cname_records": [],
+    "spf": null,
+    "dmarc": null
+  },
+  "error": null,
+  "meta": {}
+}
+```

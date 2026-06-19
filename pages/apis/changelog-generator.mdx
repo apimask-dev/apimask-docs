@@ -1,0 +1,47 @@
+---
+title: Changelog Generator API
+description: Generate categorized changelogs from raw git logs or diffs through RapidAPI.
+---
+
+# Changelog Generator API
+
+Turn raw git logs or diffs into a clean changelog for release notes, CI pipelines,
+developer portals, and deployment automation.
+
+## Endpoint
+
+```http
+POST /v1/dev/changelog
+```
+
+## Request body
+
+| Field | Type | Required | Description |
+|---|---|---:|---|
+| `git_log` | `string` | Yes | Raw git log or diff. |
+| `version` | `string` | No | Version number or release name. |
+| `format_style` | `string` | No | Output style such as `markdown`, `slack`, or `plain_text`. Defaults to `markdown`. |
+
+## Example request
+
+```bash
+curl --request POST \
+  --url https://apimask-developer-utilities-api.p.rapidapi.com/v1/dev/changelog \
+  --header "Content-Type: application/json" \
+  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
+  --header "X-RapidAPI-Host: apimask-developer-utilities-api.p.rapidapi.com" \
+  --data '{"version":"1.2.0","format_style":"markdown","git_log":"feat: add JSON formatter\nfix: handle invalid base64"}'
+```
+
+## Example response
+
+```json
+{
+  "success": true,
+  "data": {
+    "changelog": "## 1.2.0\n\n### Added\n- JSON formatter\n\n### Fixed\n- Invalid Base64 handling"
+  },
+  "error": null,
+  "meta": {}
+}
+```

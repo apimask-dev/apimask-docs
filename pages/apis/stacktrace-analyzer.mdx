@@ -1,0 +1,50 @@
+---
+title: Stacktrace Analyzer API
+description: Analyze stacktraces, identify root causes, suggest fixes, and return relevant documentation links through RapidAPI.
+---
+
+# Stacktrace Analyzer API
+
+Analyze stacktraces and error messages for developer tools, CI systems, support
+workflows, and coding assistants.
+
+## Endpoint
+
+```http
+POST /v1/dev/stacktrace
+```
+
+## Request body
+
+| Field | Type | Required | Description |
+|---|---|---:|---|
+| `stacktrace` | `string` | Yes | Raw stacktrace or error message. |
+| `language` | `string` | No | Programming language, if known. |
+| `framework` | `string` | No | Framework, if known. |
+
+## Example request
+
+```bash
+curl --request POST \
+  --url https://apimask-developer-utilities-api.p.rapidapi.com/v1/dev/stacktrace \
+  --header "Content-Type: application/json" \
+  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
+  --header "X-RapidAPI-Host: apimask-developer-utilities-api.p.rapidapi.com" \
+  --data '{"stacktrace":"TypeError: Cannot read properties of undefined","language":"javascript","framework":"nextjs"}'
+```
+
+## Example response
+
+```json
+{
+  "success": true,
+  "data": {
+    "error_type": "TypeError",
+    "root_cause": "Code attempted to access a property on an undefined value.",
+    "fix_suggestion": "Check that the object exists before reading from it.",
+    "documentation_links": ["https://developer.mozilla.org/"]
+  },
+  "error": null,
+  "meta": {}
+}
+```

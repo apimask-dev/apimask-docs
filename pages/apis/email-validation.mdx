@@ -1,0 +1,73 @@
+---
+title: Email Validation API
+description: Validate email syntax, domains, MX records, disposable providers, role accounts, and optional SMTP mailbox checks through RapidAPI.
+---
+
+# Email Validation API
+
+Validate email addresses before signup, lead capture, CRM imports, and outbound
+workflows. The API checks syntax, normalizes the address, identifies role accounts,
+detects disposable domains, checks MX records, and can optionally attempt SMTP
+mailbox verification.
+
+[Find ApiMask on RapidAPI](https://rapidapi.com/search/ApiMask)
+
+## Endpoint
+
+```http
+POST /v1/dev/email/validate
+POST /v1/utility/email/validate
+```
+
+## Request body
+
+| Field | Type | Required | Description |
+|---|---|---:|---|
+| `email` | `string` | Yes | Email address to validate. |
+| `check_smtp` | `boolean` | No | Attempt SMTP mailbox verification. Defaults to `false`; slower and not always reliable. |
+
+## Example request
+
+```bash
+curl --request POST \
+  --url https://apimask-developer-utilities-api.p.rapidapi.com/v1/dev/email/validate \
+  --header "Content-Type: application/json" \
+  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
+  --header "X-RapidAPI-Host: apimask-developer-utilities-api.p.rapidapi.com" \
+  --data '{"email":"hello@example.com","check_smtp":false}'
+```
+
+## Example response
+
+```json
+{
+  "success": true,
+  "data": {
+    "is_valid": true,
+    "email": "hello@example.com",
+    "local_part": "hello",
+    "domain": "example.com",
+    "is_disposable": false,
+    "has_mx_records": true,
+    "smtp_verified": false,
+    "is_role_account": false,
+    "reason": null
+  },
+  "error": null,
+  "meta": {}
+}
+```
+
+## Response fields
+
+| Field | Type | Description |
+|---|---|---|
+| `is_valid` | `boolean` | Whether the email is syntactically and structurally valid. |
+| `email` | `string` or `null` | Normalized email address if valid. |
+| `local_part` | `string` or `null` | Portion before `@`. |
+| `domain` | `string` or `null` | Portion after `@`. |
+| `is_disposable` | `boolean` | Whether the domain is a known disposable email provider. |
+| `has_mx_records` | `boolean` | Whether the domain has MX records. |
+| `smtp_verified` | `boolean` | Whether SMTP mailbox verification succeeded. |
+| `is_role_account` | `boolean` | Whether the address is a role account like `support@` or `info@`. |
+| `reason` | `string` or `null` | Invalid reason when available. |

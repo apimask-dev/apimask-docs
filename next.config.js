@@ -1,4 +1,6 @@
-const withNextra = require("nextra")({
+const nextra = require("nextra").default;
+
+const withNextra = nextra({
   theme: "nextra-theme-docs",
   themeConfig: "./theme.config.tsx",
   defaultShowCopyCode: true,
@@ -6,4 +8,30 @@ const withNextra = require("nextra")({
 
 module.exports = withNextra({
   reactStrictMode: true,
+  async redirects() {
+    return [
+      {
+        source: "/apis",
+        destination: "/api",
+        permanent: true,
+      },
+      {
+        source: "/apis/:path*",
+        destination: "/api/:path*",
+        permanent: true,
+      },
+    ];
+  },
+  async rewrites() {
+    return [
+      {
+        source: "/api",
+        destination: "/apis",
+      },
+      {
+        source: "/api/:path*",
+        destination: "/apis/:path*",
+      },
+    ];
+  },
 });

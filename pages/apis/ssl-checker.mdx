@@ -1,0 +1,56 @@
+---
+title: SSL Certificate Checker API
+description: Check SSL certificates for validity, issuer, subject, SANs, expiration dates, and days remaining through RapidAPI.
+---
+
+# SSL Certificate Checker API
+
+Check a domain's SSL certificate for validity, issuer, subject, alternative names,
+expiration dates, and days remaining. Use it in website audits, uptime monitors,
+security dashboards, and domain operations tooling.
+
+## Endpoint
+
+```http
+POST /v1/utility/ssl/check
+```
+
+## Request body
+
+| Field | Type | Required | Description |
+|---|---|---:|---|
+| `domain` | `string` | Yes | Domain to check. |
+| `port` | `number` | No | Port to check. Defaults to `443`. |
+
+## Example request
+
+```bash
+curl --request POST \
+  --url https://apimask-email-domain-validation-api.p.rapidapi.com/v1/utility/ssl/check \
+  --header "Content-Type: application/json" \
+  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
+  --header "X-RapidAPI-Host: apimask-email-domain-validation-api.p.rapidapi.com" \
+  --data '{"domain":"example.com","port":443}'
+```
+
+## Example response
+
+```json
+{
+  "success": true,
+  "data": {
+    "is_valid": true,
+    "subject": {},
+    "issuer": {},
+    "version": 3,
+    "serial_number": "12345",
+    "not_before": "2026-01-01T00:00:00Z",
+    "not_after": "2026-12-31T23:59:59Z",
+    "days_remaining": 195,
+    "sans": ["example.com"],
+    "error": null
+  },
+  "error": null,
+  "meta": {}
+}
+```

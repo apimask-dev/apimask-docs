@@ -1,0 +1,51 @@
+---
+title: UUID and ULID Generator API
+description: Generate UUIDv4, UUIDv1, or ULID-compatible identifiers through RapidAPI.
+---
+
+# UUID and ULID Generator API
+
+Generate identifiers for tests, fixtures, automation workflows, database seeds, and
+developer tools.
+
+## Endpoint
+
+```http
+POST /v1/dev/data/id/generate
+```
+
+## Request body
+
+| Field | Type | Required | Description |
+|---|---|---:|---|
+| `count` | `number` | No | Number of IDs to generate, from `1` to `100`. Defaults to `1`. |
+| `kind` | `string` | No | ID type: `uuid4`, `uuid1`, or `ulid`. Defaults to `uuid4`. |
+
+## Example request
+
+```bash
+curl --request POST \
+  --url https://apimask-developer-utilities-api.p.rapidapi.com/v1/dev/data/id/generate \
+  --header "Content-Type: application/json" \
+  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
+  --header "X-RapidAPI-Host: apimask-developer-utilities-api.p.rapidapi.com" \
+  --data '{"kind":"uuid4","count":3}'
+```
+
+## Example response
+
+```json
+{
+  "success": true,
+  "data": {
+    "kind": "uuid4",
+    "ids": [
+      "2b76b310-9a18-4edc-a88a-0f65c8ce9b88",
+      "86e23583-13df-4022-99b6-4a26fd0d14fb",
+      "b2d198e4-cc6e-4ad8-8f15-7c3a04cfb274"
+    ]
+  },
+  "error": null,
+  "meta": {}
+}
+```

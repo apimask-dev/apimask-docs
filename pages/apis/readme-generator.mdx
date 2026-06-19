@@ -1,0 +1,52 @@
+---
+title: README Generator API
+description: Generate professional README.md content from repository metadata through RapidAPI.
+---
+
+# README Generator API
+
+Generate a professional `README.md` draft from repository metadata. Use it in project
+scaffolding, internal developer portals, template generators, and Git automation.
+
+## Endpoint
+
+```http
+POST /v1/dev/readme
+```
+
+## Request body
+
+| Field | Type | Required | Description |
+|---|---|---:|---|
+| `repo_name` | `string` | Yes | Repository name. |
+| `description` | `string` | Yes | Short project description. |
+| `language` | `string` | No | Primary programming language. |
+| `stack` | `string[]` | No | Technologies or frameworks used. |
+| `features` | `string[]` | No | Key features. |
+| `install_commands` | `string[]` | No | Setup commands. |
+| `usage_example` | `string` | No | Code snippet demonstrating usage. |
+| `license` | `string` | No | License name. Defaults to `MIT`. |
+
+## Example request
+
+```bash
+curl --request POST \
+  --url https://apimask-developer-utilities-api.p.rapidapi.com/v1/dev/readme \
+  --header "Content-Type: application/json" \
+  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
+  --header "X-RapidAPI-Host: apimask-developer-utilities-api.p.rapidapi.com" \
+  --data '{"repo_name":"apimask","description":"Developer utility APIs","language":"TypeScript","stack":["Next.js","FastAPI"],"features":["API docs","RapidAPI examples"]}'
+```
+
+## Example response
+
+```json
+{
+  "success": true,
+  "data": {
+    "readme_md": "# apimask\n\nDeveloper utility APIs..."
+  },
+  "error": null,
+  "meta": {}
+}
+```

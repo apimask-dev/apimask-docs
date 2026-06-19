@@ -1,0 +1,53 @@
+---
+title: Security Headers Analyzer API
+description: Analyze website security headers, score header coverage, and get missing header recommendations through RapidAPI.
+---
+
+# Security Headers Analyzer API
+
+Analyze browser security headers for a URL. Use it in website audits, security
+dashboards, CI checks, and SEO or agency reporting workflows.
+
+## Endpoint
+
+```http
+POST /v1/utility/security-headers/analyze
+```
+
+## Request body
+
+| Field | Type | Required | Description |
+|---|---|---:|---|
+| `url` | `string` | Yes | URL to check for security headers. |
+
+## Example request
+
+```bash
+curl --request POST \
+  --url https://apimask-email-domain-validation-api.p.rapidapi.com/v1/utility/security-headers/analyze \
+  --header "Content-Type: application/json" \
+  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
+  --header "X-RapidAPI-Host: apimask-email-domain-validation-api.p.rapidapi.com" \
+  --data '{"url":"https://example.com"}'
+```
+
+## Example response
+
+```json
+{
+  "success": true,
+  "data": {
+    "url": "https://example.com",
+    "status_code": 200,
+    "score": 80,
+    "grade": "B",
+    "present_headers": {
+      "strict-transport-security": "max-age=31536000"
+    },
+    "missing_headers": ["content-security-policy"],
+    "recommendations": ["Add a Content-Security-Policy header."]
+  },
+  "error": null,
+  "meta": {}
+}
+```

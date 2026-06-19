@@ -1,13 +1,24 @@
-# Rate Limits
+---
+title: Limits on RapidAPI
+description: ApiMask request limits and quotas are controlled by the RapidAPI plan you subscribe to.
+---
 
-Rate limits are enforced per API key using a Redis sliding window.
+# Limits on RapidAPI
 
-| Tier | Per minute | Per day |
-|---|---|---|
-| Free | 20 | 500 |
-| Starter | 100 | 5,000 |
-| Pro | 500 | 50,000 |
-| Enterprise | Custom | Custom |
+ApiMask request limits, quotas, and throttling are controlled by the RapidAPI product
+and plan you subscribe to.
 
-When a limit is exceeded, the API returns `429` with a `RATE_LIMIT_EXCEEDED` error and a
-`retry_after` value (in seconds).
+## Where to check limits
+
+Use your RapidAPI dashboard to view:
+
+- Current plan
+- Monthly request quota
+- Remaining usage
+- Rate-limit responses
+- Upgrade options
+
+## Common limit response
+
+When a plan limit is reached, RapidAPI may return `429 Too Many Requests`. Upgrade or
+wait for the quota window to reset according to the plan details shown on RapidAPI.
