@@ -1,0 +1,21 @@
+{
+  "name": "ApiMask",
+  "short_name": "ApiMask",
+  "description": "Developer, email, domain, and website utility APIs available through RapidAPI.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f4f5f1",
+  "theme_color": "#32126a",
+  "icons": [
+    {
+      "src": "/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

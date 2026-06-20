@@ -33,10 +33,11 @@ const routes = [
 
 function generateSitemap() {
   const baseUrl = "https://apimask.dev";
+  const lastmod = new Date().toISOString();
   const urls = routes
     .map((route) => {
       const loc = route ? `${baseUrl}/${route}` : baseUrl;
-      return `  <url><loc>${loc}</loc><changefreq>weekly</changefreq></url>`;
+      return `  <url><loc>${loc}</loc><lastmod>${lastmod}</lastmod><changefreq>weekly</changefreq></url>`;
     })
     .join("\n");
 

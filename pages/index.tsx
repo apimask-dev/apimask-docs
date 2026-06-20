@@ -24,6 +24,20 @@ export default function LandingPage() {
     <>
       <Head>
         <title>ApiMask - Developer and Website Utility APIs</title>
+        <link rel="canonical" href="https://apimask.dev" />
+        <link rel="shortcut icon" href="/favicon.ico" />
+        <link rel="icon" href="/favicon-32x32.png" sizes="32x32" type="image/png" />
+        <link rel="icon" href="/favicon-16x16.png" sizes="16x16" type="image/png" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
+        <link rel="manifest" href="/site.webmanifest" />
+        <meta name="theme-color" content="#32126a" />
+        <meta name="application-name" content="ApiMask" />
+        <meta name="apple-mobile-web-app-title" content="ApiMask" />
+        <meta name="robots" content="index,follow" />
+        <meta
+          name="keywords"
+          content="ApiMask, RapidAPI APIs, developer utilities API, email validation API, DNS analyzer API, SSL checker API, security headers analyzer API, JSON formatter API"
+        />
         <meta
           name="description"
           content="ApiMask provides production-ready developer utility, email validation, DNS, SSL, security header, sitemap, and website audit APIs through RapidAPI."
@@ -35,6 +49,16 @@ export default function LandingPage() {
         />
         <meta property="og:url" content="https://apimask.dev" />
         <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="ApiMask" />
+        <meta property="og:image" content="https://apimask.dev/apimask-logo.png" />
+        <meta property="og:image:alt" content="ApiMask logo" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="ApiMask - Developer and Website Utility APIs" />
+        <meta
+          name="twitter:description"
+          content="Focused APIs for developers, SaaS teams, SEO tools, and website audit workflows. Available through RapidAPI."
+        />
+        <meta name="twitter:image" content="https://apimask.dev/apimask-logo.png" />
       </Head>
 
       <main className="landing">
