@@ -40,7 +40,7 @@ export default function LandingPage() {
       <main className="landing">
         <nav className="nav" aria-label="Main navigation">
           <Link href="/" className="brand" aria-label="ApiMask home">
-            <span className="brandMark">AM</span>
+            <img className="brandMark" src="/apimask-logo.png" alt="" aria-hidden="true" />
             <span>ApiMask</span>
           </Link>
           <div className="navLinks">
@@ -53,8 +53,13 @@ export default function LandingPage() {
 
         <section className="hero">
           <div className="heroCopy">
-            <p className="eyebrow">Available through RapidAPI</p>
-            <h1>Practical APIs for developer tools and website intelligence.</h1>
+            <div className="heroBadges" aria-label="ApiMask launch details">
+              <span>Available through RapidAPI</span>
+              <span>20 live endpoint docs</span>
+            </div>
+            <h1>
+              Practical APIs for <span>developer tools</span> and website intelligence.
+            </h1>
             <p className="lead">
               ApiMask gives teams focused JSON APIs for email validation, regex generation,
               stacktrace analysis, DNS checks, SSL checks, security headers, sitemap
@@ -68,6 +73,10 @@ export default function LandingPage() {
                 Explore API docs
               </Link>
             </div>
+            <p className="integrationNote">
+              RapidAPI handles keys, billing, quotas, and usage. ApiMask focuses on fast,
+              focused endpoints with clear docs.
+            </p>
             <div className="metrics" aria-label="ApiMask launch metrics">
               <span>
                 <strong>20</strong>
@@ -84,29 +93,75 @@ export default function LandingPage() {
             </div>
           </div>
 
-          <div className="heroVisual" aria-label="Example ApiMask API response">
-            <div className="terminalTop">
-              <span>POST /v1/utility/dns/analyze</span>
-              <span>200 OK</span>
+          <div className="heroVisualWrap">
+            <div className="heroVisual" aria-label="Example ApiMask API response">
+              <div className="terminalTop">
+                <div className="terminalMeta">
+                  <span className="dot" />
+                  <span>POST /v1/utility/dns/analyze</span>
+                </div>
+                <span className="status">200 OK</span>
+              </div>
+              <pre aria-label="Example JSON response">
+                <code>
+                  <span className="punct">{"{"}</span>
+                  {"\n  "}
+                  <span className="key">"success"</span>
+                  <span className="punct">: </span>
+                  <span className="bool">true</span>
+                  <span className="punct">,</span>
+                  {"\n  "}
+                  <span className="key">"data"</span>
+                  <span className="punct">: {"{"}</span>
+                  {"\n    "}
+                  <span className="key">"domain"</span>
+                  <span className="punct">: </span>
+                  <span className="string">"example.com"</span>
+                  <span className="punct">,</span>
+                  {"\n    "}
+                  <span className="key">"mx_records"</span>
+                  <span className="punct">: []</span>
+                  <span className="punct">,</span>
+                  {"\n    "}
+                  <span className="key">"spf"</span>
+                  <span className="punct">: </span>
+                  <span className="null">null</span>
+                  <span className="punct">,</span>
+                  {"\n    "}
+                  <span className="key">"dmarc"</span>
+                  <span className="punct">: </span>
+                  <span className="null">null</span>
+                  {"\n  "}
+                  <span className="punct">{"}"}</span>
+                  <span className="punct">,</span>
+                  {"\n  "}
+                  <span className="key">"error"</span>
+                  <span className="punct">: </span>
+                  <span className="null">null</span>
+                  <span className="punct">,</span>
+                  {"\n  "}
+                  <span className="key">"meta"</span>
+                  <span className="punct">: {"{}"}</span>
+                  {"\n"}
+                  <span className="punct">{"}"}</span>
+                </code>
+              </pre>
+              <div className="terminalFooter">
+                <span>DNS + SSL + Headers</span>
+                <span>
+                  <strong>92ms</strong> cached response
+                </span>
+              </div>
             </div>
-            <pre>{`{
-  "success": true,
-  "data": {
-    "domain": "example.com",
-    "mx_records": [],
-    "spf": null,
-    "dmarc": null
-  },
-  "error": null,
-  "meta": {}
-}`}</pre>
           </div>
         </section>
 
         <section className="strip" aria-label="ApiMask use cases">
-          {useCases.map((item) => (
-            <span key={item}>{item}</span>
-          ))}
+          <div className="marqueeTrack">
+            {[...useCases, ...useCases, ...useCases].map((item, index) => (
+              <span key={`${item}-${index}`}>{item}</span>
+            ))}
+          </div>
         </section>
 
         <section className="section">
@@ -172,11 +227,9 @@ export default function LandingPage() {
       <style jsx>{`
         .landing {
           min-height: 100vh;
-          background: #f7f8f6;
+          background: #f4f5f1;
           color: #12140f;
-          font-family:
-            Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-            sans-serif;
+          font-family: var(--apimask-sans);
         }
 
         .nav {
@@ -202,19 +255,17 @@ export default function LandingPage() {
           gap: 10px;
           color: #12140f;
           font-weight: 760;
+          font-family: var(--apimask-display);
           text-decoration: none;
         }
 
         .brandMark {
-          display: grid;
           width: 34px;
           height: 34px;
-          place-items: center;
-          border-radius: 8px;
-          background: #12140f;
-          color: #f7f8f6;
-          font-size: 12px;
-          letter-spacing: 0;
+          border-radius: 7px;
+          background: #ffffff;
+          object-fit: cover;
+          box-shadow: 0 10px 24px rgba(50, 18, 106, 0.12);
         }
 
         .navLinks {
@@ -229,12 +280,38 @@ export default function LandingPage() {
 
         .hero {
           display: grid;
-          grid-template-columns: minmax(0, 1.03fr) minmax(360px, 0.97fr);
+          grid-template-columns: minmax(0, 0.92fr) minmax(500px, 1.08fr);
           gap: 54px;
           max-width: 1180px;
           margin: 0 auto;
-          padding: 82px 28px 64px;
+          padding: 74px 28px 72px;
           align-items: center;
+        }
+
+        .heroCopy {
+          max-width: 560px;
+        }
+
+        .heroBadges {
+          display: flex;
+          gap: 10px;
+          margin-bottom: 22px;
+          flex-wrap: wrap;
+        }
+
+        .heroBadges span {
+          display: inline-flex;
+          min-height: 34px;
+          align-items: center;
+          border: 1px solid rgba(50, 18, 106, 0.16);
+          border-radius: 999px;
+          background: rgba(255, 255, 255, 0.72);
+          padding: 0 13px;
+          color: #32126a;
+          font-size: 12px;
+          font-weight: 760;
+          text-transform: uppercase;
+          box-shadow: 0 8px 26px rgba(50, 18, 106, 0.06);
         }
 
         .eyebrow {
@@ -254,11 +331,16 @@ export default function LandingPage() {
         }
 
         h1 {
-          max-width: 760px;
-          margin-bottom: 22px;
-          font-size: clamp(44px, 7vw, 82px);
-          line-height: 0.96;
+          max-width: 590px;
+          margin-bottom: 24px;
+          font-size: clamp(52px, 4.5vw, 76px);
+          line-height: 0.94;
           letter-spacing: 0;
+          font-family: var(--apimask-display);
+        }
+
+        h1 span {
+          color: #32126a;
         }
 
         h2 {
@@ -266,12 +348,14 @@ export default function LandingPage() {
           font-size: clamp(30px, 4vw, 48px);
           line-height: 1.04;
           letter-spacing: 0;
+          font-family: var(--apimask-display);
         }
 
         h3 {
           margin-bottom: 10px;
           font-size: 18px;
           letter-spacing: 0;
+          font-family: var(--apimask-display);
         }
 
         .lead,
@@ -284,8 +368,8 @@ export default function LandingPage() {
         }
 
         .lead {
-          max-width: 680px;
-          margin-bottom: 30px;
+          max-width: 590px;
+          margin-bottom: 28px;
           font-size: 19px;
         }
 
@@ -297,11 +381,11 @@ export default function LandingPage() {
         .primaryAction,
         .secondaryAction {
           display: inline-flex;
-          min-height: 44px;
+          min-height: 48px;
           align-items: center;
           justify-content: center;
           border-radius: 7px;
-          padding: 0 18px;
+          padding: 0 20px;
           font-size: 14px;
           font-weight: 720;
           text-decoration: none;
@@ -310,21 +394,40 @@ export default function LandingPage() {
         .primaryAction {
           background: #11140f;
           color: #ffffff;
+          box-shadow: 0 14px 28px rgba(17, 20, 15, 0.16);
         }
 
         .secondaryAction {
-          border: 1px solid #c9cec3;
-          background: #ffffff;
+          border: 1px solid transparent;
+          background: transparent;
           color: #171a14;
         }
 
+        .secondaryAction:after {
+          margin-left: 8px;
+          content: "->";
+          font-family: var(--apimask-mono);
+          font-size: 13px;
+        }
+
+        .integrationNote {
+          max-width: 560px;
+          margin: 16px 0 0;
+          color: #696f65;
+          font-size: 14px;
+          line-height: 1.55;
+        }
+
         .metrics {
-          gap: 24px;
+          gap: 18px;
           margin-top: 34px;
           flex-wrap: wrap;
         }
 
         .metrics span {
+          min-width: 132px;
+          border-left: 1px solid #d8ddd2;
+          padding-left: 16px;
           color: #62675d;
           font-size: 13px;
         }
@@ -336,53 +439,173 @@ export default function LandingPage() {
           line-height: 1.2;
         }
 
+        .heroVisualWrap {
+          position: relative;
+          display: grid;
+          align-items: center;
+          min-height: 500px;
+        }
+
+        .heroVisualWrap:before {
+          position: absolute;
+          inset: 44px 38px 18px 28px;
+          border: 1px solid rgba(50, 18, 106, 0.08);
+          border-radius: 20px;
+          background: rgba(255, 255, 255, 0.5);
+          content: "";
+          transform: rotate(-2deg);
+        }
+
         .heroVisual {
+          position: relative;
+          z-index: 1;
           border: 1px solid #20251d;
-          border-radius: 8px;
+          border-radius: 10px;
           overflow: hidden;
           background: #11140f;
-          box-shadow: 0 24px 70px rgba(17, 20, 15, 0.24);
+          box-shadow: 0 34px 90px rgba(17, 20, 15, 0.22);
+        }
+
+        .dot {
+          width: 8px;
+          height: 8px;
+          border-radius: 999px;
+          background: #8bd6a5;
+          box-shadow: 0 0 0 4px rgba(139, 214, 165, 0.18);
         }
 
         .terminalTop {
           justify-content: space-between;
           gap: 12px;
           border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-          padding: 14px 16px;
+          padding: 16px 20px;
           color: #d7ddce;
+          font-family: var(--apimask-mono);
           font-size: 13px;
         }
 
-        .terminalTop span:last-child {
+        .terminalMeta {
+          display: inline-flex;
+          min-width: 0;
+          align-items: center;
+          gap: 10px;
+        }
+
+        .terminalMeta span:last-child {
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+
+        .status {
           color: #8bd6a5;
+          white-space: nowrap;
         }
 
         pre {
           margin: 0;
-          padding: 24px;
+          padding: 34px 42px;
           overflow-x: auto;
-          color: #ecf1e8;
+          color: #dfe8dc;
+          font-family: var(--apimask-mono);
           font-size: 14px;
-          line-height: 1.75;
+          line-height: 1.78;
+        }
+
+        code {
+          font-family: var(--apimask-mono);
+        }
+
+        .key {
+          color: #8bd6a5;
+        }
+
+        .string {
+          color: #f2d38b;
+        }
+
+        .bool {
+          color: #93c5fd;
+        }
+
+        .null {
+          color: #c4b5fd;
+        }
+
+        .punct {
+          color: #dfe8dc;
+        }
+
+        .terminalFooter {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 14px;
+          border-top: 1px solid rgba(255, 255, 255, 0.1);
+          padding: 13px 20px;
+          color: #aeb8aa;
+          font-size: 13px;
+          font-weight: 650;
+        }
+
+        .terminalFooter span:first-child {
+          color: #f4f7f0;
+        }
+
+        .terminalFooter strong {
+          color: #8bd6a5;
+          font-family: var(--apimask-mono);
+          font-size: 14px;
         }
 
         .strip {
-          justify-content: center;
-          gap: 10px;
-          flex-wrap: wrap;
-          max-width: 1180px;
-          margin: 0 auto;
-          padding: 0 28px 60px;
+          width: 100%;
+          overflow: hidden;
+          border-top: 1px solid rgba(255, 255, 255, 0.1);
+          border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+          background: #070807;
+          padding: 16px 0;
+          white-space: nowrap;
+        }
+
+        .marqueeTrack {
+          display: flex;
+          width: max-content;
+          align-items: center;
+          gap: 14px;
+          animation: marquee 28s linear infinite;
+          will-change: transform;
         }
 
         .strip span {
-          border: 1px solid #d8ddd2;
+          display: inline-flex;
+          min-height: 38px;
+          align-items: center;
+          border: 1px solid rgba(255, 255, 255, 0.18);
           border-radius: 999px;
-          background: #ffffff;
-          padding: 8px 13px;
-          color: #40463b;
+          background: rgba(255, 255, 255, 0.06);
+          padding: 0 18px;
+          color: #f4f7f0;
           font-size: 13px;
-          font-weight: 650;
+          font-weight: 680;
+          box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+        }
+
+        @keyframes marquee {
+          from {
+            transform: translate3d(0, 0, 0);
+          }
+
+          to {
+            transform: translate3d(-33.333%, 0, 0);
+          }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .marqueeTrack {
+            animation: none;
+            transform: none;
+          }
         }
 
         .section,
@@ -478,6 +701,15 @@ export default function LandingPage() {
 
           .hero {
             padding-top: 48px;
+            gap: 36px;
+          }
+
+          .heroVisualWrap {
+            min-height: auto;
+          }
+
+          .heroVisualWrap:before {
+            inset: 24px 16px 6px;
           }
 
           .apiGrid {
@@ -509,6 +741,23 @@ export default function LandingPage() {
 
           .heroVisual {
             min-width: 0;
+          }
+
+          pre {
+            padding: 22px 20px 26px;
+            font-size: 13px;
+          }
+
+          .terminalTop {
+            align-items: flex-start;
+            flex-direction: column;
+            padding: 14px 16px;
+          }
+
+          .terminalFooter {
+            align-items: flex-start;
+            flex-direction: column;
+            padding: 12px 16px;
           }
         }
       `}</style>

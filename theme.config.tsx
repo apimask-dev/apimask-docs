@@ -2,7 +2,12 @@ import React from "react";
 import type { DocsThemeConfig } from "nextra-theme-docs";
 
 const config: DocsThemeConfig = {
-  logo: <span style={{ fontWeight: 700 }}>ApiMask</span>,
+  logo: (
+    <span className="apimask-logo">
+      <img src="/apimask-logo.png" alt="" aria-hidden="true" />
+      <span>ApiMask</span>
+    </span>
+  ),
   project: {
     link: "https://github.com/apimask-dev",
   },
@@ -14,6 +19,9 @@ const config: DocsThemeConfig = {
   head: (
     <>
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="icon" href="/apimask-logo.png" type="image/png" />
+      <link rel="preconnect" href="https://fonts.googleapis.com" />
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
       <meta
         name="description"
         content="ApiMask provides production-ready developer utility, email validation, domain analysis, and website audit APIs through RapidAPI."

@@ -4,6 +4,15 @@ const withNextra = nextra({
   theme: "nextra-theme-docs",
   themeConfig: "./theme.config.tsx",
   defaultShowCopyCode: true,
+  codeHighlight: true,
+  mdxOptions: {
+    rehypePrettyCodeOptions: {
+      theme: {
+        light: "github-light",
+        dark: "github-dark",
+      },
+    },
+  },
 });
 
 module.exports = withNextra({

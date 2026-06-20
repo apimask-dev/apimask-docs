@@ -1,0 +1,103 @@
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;450;500;600;700&family=IBM+Plex+Sans:wght@400;450;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap");
+
+:root {
+  --apimask-sans: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
+  --apimask-display: "Space Grotesk", "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
+  --apimask-mono: "IBM Plex Mono", "SFMono-Regular", "Cascadia Code", "Roboto Mono", Menlo, Monaco, Consolas, monospace;
+  --apimask-ink: #12140f;
+  --apimask-muted: #555c50;
+  --apimask-line: #d9ded3;
+  --apimask-surface: #f7f8f6;
+  --apimask-code-bg: #11140f;
+}
+
+html {
+  font-family: var(--apimask-sans);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--apimask-sans);
+  letter-spacing: 0;
+  font-size: 16px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.nextra-nav-container,
+.nextra-sidebar-container {
+  font-family: var(--apimask-display);
+  letter-spacing: 0;
+}
+
+code,
+kbd,
+samp,
+pre,
+.nextra-code {
+  font-family: var(--apimask-mono) !important;
+  font-variant-ligatures: contextual;
+  font-feature-settings: "liga" 1, "calt" 1, "zero" 1;
+}
+
+pre {
+  border-radius: 8px !important;
+}
+
+pre code.nextra-code {
+  font-size: 0.875rem !important;
+  line-height: 1.75 !important;
+}
+
+:not(pre) > code.nextra-code {
+  border-color: rgba(17, 20, 15, 0.12) !important;
+  background: rgba(17, 20, 15, 0.055) !important;
+  color: #11140f;
+  font-size: 0.88em !important;
+  font-weight: 560;
+}
+
+html[class~="dark"] :not(pre) > code.nextra-code {
+  border-color: rgba(255, 255, 255, 0.14) !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: #f4f7f0;
+}
+
+[data-rehype-pretty-code-figure] {
+  margin-top: 1.25rem;
+  margin-bottom: 1.75rem;
+}
+
+[data-rehype-pretty-code-figure] pre {
+  border: 1px solid rgba(139, 214, 165, 0.18);
+  background: var(--apimask-code-bg) !important;
+  box-shadow: 0 18px 44px rgba(17, 20, 15, 0.14);
+}
+
+[data-rehype-pretty-code-figure] code {
+  background: transparent !important;
+}
+
+.apimask-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+  color: inherit;
+  font-family: var(--apimask-display);
+  font-weight: 760;
+}
+
+.apimask-logo img {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 7px;
+  background: #ffffff;
+  object-fit: cover;
+  box-shadow: 0 8px 20px rgba(50, 18, 106, 0.1);
+}
