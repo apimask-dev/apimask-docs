@@ -209,23 +209,49 @@ export default function LandingPage() {
         </section>
 
         <section className="productBand">
-          <div>
+          <div className="productIntro">
             <p className="eyebrow">Product groups</p>
             <h2>Built for marketplace discovery and direct developer intent.</h2>
+            <p>
+              ApiMask is packaged around buyer intent so users can find the exact API set
+              they need on RapidAPI.
+            </p>
           </div>
           <div className="productGrid">
             <Link href="/api/developer-utilities" className="productCard">
-              <span>Developer Utilities API</span>
+              <div className="productTop">
+                <span className="productIcon">{"{}"}</span>
+                <span className="productCount">12 endpoints</span>
+              </div>
+              <h3>Developer Utilities API</h3>
               <p>
                 Regex, stacktrace, README, changelog, JSON, Base64, hashes, IDs, and URL parsing.
               </p>
+              <div className="tagRow">
+                <span>Regex</span>
+                <span>JSON</span>
+                <span>Base64</span>
+                <span>Stacktrace</span>
+              </div>
+              <strong>View docs</strong>
             </Link>
             <Link href="/api/email-domain-validation" className="productCard">
-              <span>Email, Domain, and Website Utilities</span>
+              <div className="productTop">
+                <span className="productIcon">@</span>
+                <span className="productCount">8 endpoints</span>
+              </div>
+              <h3>Email, Domain, and Website Utilities</h3>
               <p>
                 Email validation, DNS analysis, SSL checks, URL safety, security headers,
                 robots.txt, sitemap, and CORS checks.
               </p>
+              <div className="tagRow">
+                <span>Email</span>
+                <span>DNS</span>
+                <span>SSL</span>
+                <span>CORS</span>
+              </div>
+              <strong>View docs</strong>
             </Link>
           </div>
         </section>
@@ -665,28 +691,119 @@ export default function LandingPage() {
 
         .productBand {
           display: grid;
-          grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
-          gap: 34px;
+          grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.18fr);
+          gap: 56px;
           align-items: start;
           border-top: 1px solid #e2e5dd;
           border-bottom: 1px solid #e2e5dd;
         }
 
+        .productIntro {
+          position: sticky;
+          top: 96px;
+        }
+
+        .productIntro h2 {
+          max-width: 560px;
+          margin-bottom: 18px;
+        }
+
+        .productIntro p:last-child {
+          max-width: 470px;
+          color: #5c6258;
+          font-size: 17px;
+          line-height: 1.65;
+        }
+
         .productGrid {
           grid-template-columns: 1fr;
+          gap: 18px;
         }
 
         .productCard {
-          display: block;
+          display: grid;
+          gap: 16px;
           color: inherit;
           text-decoration: none;
+          transition:
+            border-color 180ms ease,
+            box-shadow 180ms ease,
+            transform 180ms ease;
         }
 
-        .productCard span {
-          display: block;
-          margin-bottom: 8px;
+        .productCard:hover {
+          border-color: rgba(50, 18, 106, 0.22);
+          box-shadow: 0 18px 48px rgba(17, 20, 15, 0.08);
+          transform: translateY(-2px);
+        }
+
+        .productTop {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 14px;
+        }
+
+        .productIcon {
+          display: inline-grid;
+          width: 42px;
+          height: 42px;
+          place-items: center;
+          border-radius: 8px;
+          background: #f1edf8;
+          color: #32126a;
+          font-family: var(--apimask-mono);
+          font-size: 15px;
+          font-weight: 800;
+        }
+
+        .productCount {
+          border: 1px solid #e0d8ec;
+          border-radius: 999px;
+          padding: 6px 10px;
+          color: #32126a;
+          font-size: 12px;
+          font-weight: 740;
+        }
+
+        .productCard h3 {
+          margin: 0;
           font-size: 18px;
           font-weight: 760;
+        }
+
+        .productCard p {
+          margin: 0;
+        }
+
+        .tagRow {
+          display: flex;
+          gap: 8px;
+          flex-wrap: wrap;
+        }
+
+        .tagRow span {
+          border: 1px solid #dfe4d9;
+          border-radius: 999px;
+          background: #f8f9f6;
+          padding: 5px 9px;
+          color: #50564d;
+          font-size: 12px;
+          font-weight: 650;
+        }
+
+        .productCard strong {
+          display: inline-flex;
+          align-items: center;
+          color: #11140f;
+          font-size: 14px;
+        }
+
+        .productCard strong:after {
+          margin-left: 8px;
+          content: "->";
+          font-family: var(--apimask-mono);
+          font-size: 12px;
         }
 
         .cta {
@@ -721,6 +838,10 @@ export default function LandingPage() {
           .hero,
           .productBand {
             grid-template-columns: 1fr;
+          }
+
+          .productIntro {
+            position: static;
           }
 
           .hero {
