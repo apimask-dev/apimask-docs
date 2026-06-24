@@ -79,15 +79,15 @@ export default function LandingPage() {
           <div className="heroCopy">
             <div className="heroBadges" aria-label="ApiMask launch details">
               <span>Available through RapidAPI</span>
-              <span>20 live endpoint docs</span>
+              <span>4 API products</span>
             </div>
             <h1>
               Practical APIs for <span>developer tools</span> and website intelligence.
             </h1>
             <p className="lead">
-              ApiMask gives teams focused JSON APIs for email validation, regex generation,
-              stacktrace analysis, DNS checks, SSL checks, security headers, sitemap
-              validation, CORS checks, and everyday developer utilities.
+              ApiMask gives teams focused JSON APIs for QR code generation, AI content,
+              email validation, regex generation, DNS and SSL checks, security headers,
+              and everyday developer utilities — all available through RapidAPI.
             </p>
             <div className="actions">
               <a className="primaryAction" href="https://rapidapi.com/search/ApiMask">
@@ -103,12 +103,12 @@ export default function LandingPage() {
             </p>
             <div className="metrics" aria-label="ApiMask launch metrics">
               <span>
-                <strong>20</strong>
-                live endpoint docs
+                <strong>34</strong>
+                live endpoints
               </span>
               <span>
-                <strong>2</strong>
-                product groups
+                <strong>4</strong>
+                API products
               </span>
               <span>
                 <strong>JSON</strong>
@@ -218,6 +218,42 @@ export default function LandingPage() {
             </p>
           </div>
           <div className="productGrid">
+            <Link href="/api/qr-code-generator-api" className="productCard">
+              <div className="productTop">
+                <span className="productIcon">QR</span>
+                <span className="productCount">6 endpoints</span>
+              </div>
+              <h3>QR Code Generator API with Logo</h3>
+              <p>
+                PNG/SVG QR codes for URLs, WiFi, vCards, email, and SMS, with branded
+                colors and optional logo overlay.
+              </p>
+              <div className="tagRow">
+                <span>Logo</span>
+                <span>WiFi</span>
+                <span>vCard</span>
+                <span>SVG</span>
+              </div>
+              <strong>View docs</strong>
+            </Link>
+            <Link href="/api/ai-content-generator-api" className="productCard">
+              <div className="productTop">
+                <span className="productIcon">AI</span>
+                <span className="productCount">8 endpoints</span>
+              </div>
+              <h3>AI Content Generator API</h3>
+              <p>
+                Summaries, rewrites, SEO meta tags, blog outlines, product descriptions,
+                social captions, headlines, and FAQs.
+              </p>
+              <div className="tagRow">
+                <span>SEO</span>
+                <span>Rewrite</span>
+                <span>Captions</span>
+                <span>FAQ</span>
+              </div>
+              <strong>View docs</strong>
+            </Link>
             <Link href="/api/developer-utilities" className="productCard">
               <div className="productTop">
                 <span className="productIcon">{"{}"}</span>

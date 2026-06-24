@@ -12,6 +12,29 @@ const config: DocsThemeConfig = {
     link: "https://github.com/apimask-dev",
   },
   docsRepositoryBase: "https://github.com/apimask-dev/apimask-docs/tree/main",
+  navbar: {
+    extraContent: (
+      <a
+        href="https://rapidapi.com/search/ApiMask"
+        target="_blank"
+        rel="noreferrer"
+        style={{
+          display: "inline-flex",
+          alignItems: "center",
+          whiteSpace: "nowrap",
+          borderRadius: "7px",
+          background: "#11140f",
+          color: "#ffffff",
+          padding: "7px 13px",
+          fontSize: "13px",
+          fontWeight: 700,
+          textDecoration: "none",
+        }}
+      >
+        Subscribe on RapidAPI
+      </a>
+    ),
+  },
   footer: {
     content:
       "ApiMask — Developer, email, domain, and website utility APIs available through RapidAPI.",
