@@ -37,7 +37,7 @@ const config: DocsThemeConfig = {
   },
   footer: {
     content:
-      "ApiMask — Developer, email, domain, and website utility APIs available through RapidAPI.",
+      "ApiMask — QR code, AI content, developer, email, domain, and website utility APIs available through RapidAPI.",
   },
   head: (
     <>

@@ -2,12 +2,12 @@ import Head from "next/head";
 import Link from "next/link";
 
 const popularApis = [
+  ["QR Code Generator", "Create PNG/SVG QR codes for URLs, WiFi, and vCards with optional logo overlay."],
+  ["AI Content Generator", "Generate SEO meta tags, summaries, rewrites, and product descriptions."],
   ["Email Validation", "Verify syntax, MX records, disposable domains, and role accounts."],
   ["Regex Generator", "Turn plain English descriptions into usable regular expressions."],
-  ["JSON Formatter", "Validate, format, minify, and sort JSON for developer tools."],
   ["DNS Analyzer", "Inspect A, AAAA, MX, TXT, NS, CNAME, SPF, and DMARC records."],
   ["SSL Checker", "Check certificate validity, issuer, SANs, and expiration windows."],
-  ["Security Headers", "Score browser security headers and surface missing protections."],
 ];
 
 const useCases = [
