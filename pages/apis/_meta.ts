@@ -2,6 +2,11 @@ export default {
   index: "API Catalog",
   "developer-utilities": "Developer Utilities",
   "email-domain-validation": "Email & Domain",
+  "qr-code-generator-api": "QR Code Generator API",
+  "qr-code-api-with-logo": "QR Code API with Logo",
+  "wifi-qr-code-api": "WiFi QR Code API",
+  "ai-content-generator-api": "AI Content Generator API",
+  "seo-meta-tags-api": "SEO Meta Tags API",
   "email-validation": "Email Validation",
   "regex-generator": "Regex Generator",
   "regex-explainer": "Regex Explainer",
@@ -24,5 +29,5 @@ export default {
   appstore: "App Store Roadmap",
   pdf: "PDF Roadmap",
   ocr: "OCR Roadmap",
-  content: "Content Roadmap",
+  content: "Content Tools",
 };

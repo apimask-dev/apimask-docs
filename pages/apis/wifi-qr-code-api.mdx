@@ -1,0 +1,112 @@
+---
+title: WiFi QR Code API
+description: Generate scannable WiFi QR codes for guest networks, venues, offices, events, and customer onboarding through RapidAPI.
+---
+
+# WiFi QR Code API
+
+Generate WiFi QR codes that connect a phone to a network on scan — no typing the
+password. Use it for guest networks, offices, cafes, venues, vacation rentals,
+events, and onboarding flows. Output is a ready-to-use PNG or SVG image.
+
+This endpoint is part of the [QR Code Generator API](/apis/qr-code-generator-api).
+
+[Open QR Code Generator API on RapidAPI](https://rapidapi.com/aftaab/api/qr-code-generator-api-with-logo)
+
+## Base URL and authentication
+
+```http
+https://qr-code-generator-api-with-logo.p.rapidapi.com
+```
+
+| Header | Value |
+|---|---|
+| `Content-Type` | `application/json` |
+| `X-RapidAPI-Key` | Your RapidAPI key |
+| `X-RapidAPI-Host` | `qr-code-generator-api-with-logo.p.rapidapi.com` |
+
+See [Authentication](/authentication), [Rate limits](/rate-limits), and
+[Errors](/errors) for shared behavior.
+
+## Endpoint
+
+```http
+POST /v1/qr/wifi
+```
+
+## Request body
+
+| Field | Type | Required | Default | Description |
+|---|---|---:|---|---|
+| `ssid` | `string` | Yes | — | WiFi network name. 1–128 characters. |
+| `password` | `string` | No | `null` | WiFi password. Up to 256 characters. Omit for open networks. |
+| `encryption` | `WPA`, `WEP`, `nopass` | No | `WPA` | Network security type. Use `nopass` for open networks. |
+| `hidden` | `boolean` | No | `false` | Whether the SSID is hidden (non-broadcasting). |
+| `output` | `png` or `svg` | No | `png` | Output image format. |
+| `fill_color` | `string` | No | `#000000` | Foreground (module) color. |
+| `back_color` | `string` | No | `#ffffff` | Background color. |
+| `box_size` | `integer` | No | `10` | Pixel size of each module, `2`–`40`. |
+| `border` | `integer` | No | `4` | Quiet-zone width in modules, `0`–`12`. |
+| `error_correction` | `L`, `M`, `Q`, `H` | No | `M` | Error correction level. |
+
+## Example request
+
+```bash
+curl --request POST \
+  --url https://qr-code-generator-api-with-logo.p.rapidapi.com/v1/qr/wifi \
+  --header "Content-Type: application/json" \
+  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
+  --header "X-RapidAPI-Host: qr-code-generator-api-with-logo.p.rapidapi.com" \
+  --data '{"ssid":"Guest WiFi","password":"secret123","encryption":"WPA","hidden":false,"output":"png"}'
+```
+
+## Example response
+
+```json
+{
+  "success": true,
+  "data": {
+    "payload": "WIFI:T:WPA;S:Guest WiFi;P:secret123;H:false;;",
+    "format": "png",
+    "mime_type": "image/png",
+    "data_base64": "iVBORw0KGgo...",
+    "data_url": "data:image/png;base64,iVBORw0KGgo...",
+    "size_px": 330
+  },
+  "error": null,
+  "meta": { "request_id": "req_8f3b1d6a0c25" }
+}
+```
+
+## Response fields
+
+| Field | Type | Description |
+|---|---|---|
+| `payload` | `string` | The encoded WiFi string. |
+| `format` | `png` or `svg` | Output format. |
+| `mime_type` | `string` | `image/png` or `image/svg+xml`. |
+| `data_base64` | `string` | Image bytes as base64. |
+| `data_url` | `string` | Ready-to-embed `data:` URL. |
+| `size_px` | `integer` or `null` | Rendered width in pixels for PNG; `null` for SVG. |
+
+## Tips
+
+- **Open networks:** set `encryption` to `nopass` and omit `password`.
+- **Hidden networks:** set `hidden` to `true` so the device knows to search for a
+  non-broadcasting SSID.
+- **Special characters:** the API escapes `;`, `,`, `:`, and `\` in the SSID and
+  password for you — send them as-is.
+- **Print large:** for posters, raise `box_size` or use `output: "svg"` so the
+  code stays crisp at any size.
+
+## Errors
+
+Validation failures return `INVALID_REQUEST` (HTTP 400); auth and quota issues
+return `UNAUTHORIZED` (401) or `RATE_LIMIT_EXCEEDED` (429). See [Errors](/errors)
+for the full list.
+
+## Related docs
+
+- [QR Code Generator API](/apis/qr-code-generator-api)
+- [QR Code API with Logo](/apis/qr-code-api-with-logo)
+- [API Catalog](/apis)

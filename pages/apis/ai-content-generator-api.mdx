@@ -1,0 +1,498 @@
+---
+title: AI Content Generator API
+description: Generate summaries, rewrites, SEO meta tags, blog outlines, product descriptions, social captions, headlines, and FAQs from a single JSON API through RapidAPI.
+---
+
+# AI Content Generator API
+
+Generate marketing and editorial content through eight JSON endpoints. Use it in
+SaaS apps, CMS tools, SEO dashboards, ecommerce catalogs, internal tools, and
+marketing automation. Every endpoint takes plain JSON in and returns structured
+JSON out, so you can wire results straight into a UI, database, or workflow.
+
+[Open AI Content Generator API on RapidAPI](https://rapidapi.com/aftaab/api/ai-content-generator-api)
+
+## Base URL and authentication
+
+```http
+https://ai-content-generator-api.p.rapidapi.com
+```
+
+All requests are `POST` with a JSON body and authenticate through RapidAPI. Send
+these headers on every call:
+
+| Header | Value |
+|---|---|
+| `Content-Type` | `application/json` |
+| `X-RapidAPI-Key` | Your RapidAPI key |
+| `X-RapidAPI-Host` | `ai-content-generator-api.p.rapidapi.com` |
+
+See [Authentication](/authentication), [Rate limits](/rate-limits), and
+[Errors](/errors) for shared behavior.
+
+## Response envelope
+
+Every endpoint returns the standard ApiMask envelope. AI endpoints include the
+model and token usage in `meta`:
+
+```json
+{
+  "success": true,
+  "data": { },
+  "error": null,
+  "meta": {
+    "request_id": "req_3f1c9a2b7d10",
+    "model": "gpt-4o-mini",
+    "prompt_tokens": 412,
+    "completion_tokens": 188,
+    "cost_usd": 0.00012345
+  }
+}
+```
+
+## Endpoints
+
+```http
+POST /v1/content/summarize
+POST /v1/content/rewrite
+POST /v1/content/meta-tags
+POST /v1/content/blog/outline
+POST /v1/content/product-description
+POST /v1/content/social-caption
+POST /v1/content/headlines
+POST /v1/content/faq
+```
+
+---
+
+## Summarize
+
+`POST /v1/content/summarize` — condense long text into a short summary and key
+points.
+
+### Request body
+
+| Field | Type | Required | Default | Description |
+|---|---|---:|---|---|
+| `text` | `string` | Yes | — | Source text to summarize. Minimum 20 characters. |
+| `max_words` | `integer` | No | `150` | Target length, `20`–`1000`. |
+| `format` | `string` | No | `paragraph` | Output shape, e.g. `paragraph` or `bullets`. |
+
+### Example
+
+```bash
+curl --request POST \
+  --url https://ai-content-generator-api.p.rapidapi.com/v1/content/summarize \
+  --header "Content-Type: application/json" \
+  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
+  --header "X-RapidAPI-Host: ai-content-generator-api.p.rapidapi.com" \
+  --data '{"text":"ApiMask is a platform of production-ready APIs for developers and startups building SaaS, AI, and automation products. It bundles content, QR, and developer utilities.","max_words":60,"format":"paragraph"}'
+```
+
+```json
+{
+  "success": true,
+  "data": {
+    "format": "paragraph",
+    "summary": "ApiMask offers production-ready APIs for developers and startups, bundling content generation, QR code, and developer utility tools.",
+    "key_points": [
+      "Production-ready API platform",
+      "Targets developers and startups",
+      "Bundles content, QR, and developer utilities"
+    ]
+  },
+  "error": null,
+  "meta": { "request_id": "req_3f1c9a2b7d10", "model": "gpt-4o-mini" }
+}
+```
+
+### Response fields
+
+| Field | Type | Description |
+|---|---|---|
+| `format` | `string` | Format that was applied. |
+| `summary` | `string` or `null` | Summary text. |
+| `key_points` | `string[]` | Extracted bullet points. |
+
+---
+
+## Rewrite
+
+`POST /v1/content/rewrite` — rephrase text in a target tone while preserving
+meaning.
+
+### Request body
+
+| Field | Type | Required | Default | Description |
+|---|---|---:|---|---|
+| `text` | `string` | Yes | — | Text to rewrite. Minimum 10 characters. |
+| `tone` | `string` | No | `professional` | Target tone, e.g. `friendly`, `formal`, `confident`. |
+| `audience` | `string` | No | `null` | Intended audience for context. |
+| `preserve_meaning` | `boolean` | No | `true` | Keep the original meaning intact. |
+
+### Example
+
+```bash
+curl --request POST \
+  --url https://ai-content-generator-api.p.rapidapi.com/v1/content/rewrite \
+  --header "Content-Type: application/json" \
+  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
+  --header "X-RapidAPI-Host: ai-content-generator-api.p.rapidapi.com" \
+  --data '{"text":"Our API is fast and easy to use.","tone":"confident","audience":"developers"}'
+```
+
+```json
+{
+  "success": true,
+  "data": {
+    "rewritten_text": "Built for developers, our API delivers low-latency responses and a setup you can finish in minutes.",
+    "notes": ["Strengthened value proposition", "Added developer framing"]
+  },
+  "error": null,
+  "meta": { "request_id": "req_8b21d4e0f9aa", "model": "gpt-4o-mini" }
+}
+```
+
+### Response fields
+
+| Field | Type | Description |
+|---|---|---|
+| `rewritten_text` | `string` | Rewritten text. |
+| `notes` | `string[]` | Notes on what changed. |
+
+---
+
+## SEO meta tags
+
+`POST /v1/content/meta-tags` — generate an SEO title, meta description, and
+keywords from page content. See the focused [SEO Meta Tags API](/apis/seo-meta-tags-api)
+page for the full field reference.
+
+### Request body
+
+| Field | Type | Required | Default | Description |
+|---|---|---:|---|---|
+| `page_content` | `string` | Yes | — | Page, product, or article content. Minimum 20 characters. |
+| `page_url` | `string` | No | `null` | Page URL for context. |
+| `target_keyword` | `string` | No | `null` | Primary keyword to target. |
+
+### Example
+
+```bash
+curl --request POST \
+  --url https://ai-content-generator-api.p.rapidapi.com/v1/content/meta-tags \
+  --header "Content-Type: application/json" \
+  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
+  --header "X-RapidAPI-Host: ai-content-generator-api.p.rapidapi.com" \
+  --data '{"page_content":"ApiMask is a platform of production-ready APIs for developers and startups building SaaS, AI, and automation products.","page_url":"https://apimask.dev","target_keyword":"developer APIs"}'
+```
+
+```json
+{
+  "success": true,
+  "data": {
+    "title": "Production-ready Developer APIs for SaaS, AI & Automation | ApiMask",
+    "description": "Build faster with ApiMask, a platform of production-ready developer APIs for SaaS, AI, and automation products.",
+    "keywords": ["developer APIs", "SaaS APIs", "AI APIs", "automation APIs"]
+  },
+  "error": null,
+  "meta": { "request_id": "req_5d7a1c0e23bb", "model": "gpt-4o-mini" }
+}
+```
+
+### Response fields
+
+| Field | Type | Description |
+|---|---|---|
+| `title` | `string` | SEO page title. |
+| `description` | `string` | Meta description. |
+| `keywords` | `string[]` | Suggested keywords. |
+
+---
+
+## Blog outline
+
+`POST /v1/content/blog/outline` — generate a structured blog outline from a topic.
+
+### Request body
+
+| Field | Type | Required | Default | Description |
+|---|---|---:|---|---|
+| `topic` | `string` | Yes | — | Blog topic. Minimum 5 characters. |
+| `target_keyword` | `string` | No | `null` | Primary SEO keyword. |
+| `audience` | `string` | No | `null` | Intended audience. |
+| `tone` | `string` | No | `professional` | Writing tone. |
+| `sections` | `integer` | No | `6` | Number of sections, `3`–`12`. |
+
+### Example
+
+```bash
+curl --request POST \
+  --url https://ai-content-generator-api.p.rapidapi.com/v1/content/blog/outline \
+  --header "Content-Type: application/json" \
+  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
+  --header "X-RapidAPI-Host: ai-content-generator-api.p.rapidapi.com" \
+  --data '{"topic":"How to validate emails at signup","target_keyword":"email validation","audience":"developers","sections":5}'
+```
+
+```json
+{
+  "success": true,
+  "data": {
+    "title": "How to Validate Emails at Signup: A Developer's Guide",
+    "introduction_angle": "Why invalid signups cost you money and how validation fixes it",
+    "sections": [
+      {
+        "heading": "Syntax vs. deliverability checks",
+        "talking_points": ["Regex limits", "Why MX checks matter"]
+      }
+    ],
+    "conclusion_angle": "Ship validation in an afternoon",
+    "seo_keywords": ["email validation", "signup flow", "MX records"]
+  },
+  "error": null,
+  "meta": { "request_id": "req_a1b2c3d4e5f6", "model": "gpt-4o-mini" }
+}
+```
+
+### Response fields
+
+| Field | Type | Description |
+|---|---|---|
+| `title` | `string` | Proposed post title. |
+| `introduction_angle` | `string` | Suggested intro angle. |
+| `sections` | `object[]` | Each has `heading` and `talking_points` (`string[]`). |
+| `conclusion_angle` | `string` | Suggested conclusion angle. |
+| `seo_keywords` | `string[]` | Suggested keywords. |
+
+---
+
+## Product description
+
+`POST /v1/content/product-description` — generate ecommerce product copy.
+
+### Request body
+
+| Field | Type | Required | Default | Description |
+|---|---|---:|---|---|
+| `product_name` | `string` | Yes | — | Product name. Minimum 2 characters. |
+| `product_details` | `string` | Yes | — | Features, specs, or context. Minimum 20 characters. |
+| `audience` | `string` | No | `null` | Target buyer. |
+| `tone` | `string` | No | `persuasive` | Copy tone. |
+| `target_keyword` | `string` | No | `null` | Primary keyword. |
+| `length` | `string` | No | `medium` | `short`, `medium`, or `long`. |
+
+### Example
+
+```bash
+curl --request POST \
+  --url https://ai-content-generator-api.p.rapidapi.com/v1/content/product-description \
+  --header "Content-Type: application/json" \
+  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
+  --header "X-RapidAPI-Host: ai-content-generator-api.p.rapidapi.com" \
+  --data '{"product_name":"TrailLight 500","product_details":"Rechargeable USB-C headlamp, 500 lumens, 12-hour runtime, IPX6 waterproof.","audience":"hikers","length":"medium"}'
+```
+
+```json
+{
+  "success": true,
+  "data": {
+    "title": "TrailLight 500: 500-Lumen USB-C Headlamp Built for the Backcountry",
+    "description": "Light up the trail with the TrailLight 500. Its 500-lumen beam and 12-hour runtime keep you moving from dusk to dawn, while IPX6 waterproofing shrugs off rain and creek crossings.",
+    "bullet_points": [
+      "500 lumens of adjustable brightness",
+      "12-hour runtime on a single charge",
+      "USB-C rechargeable",
+      "IPX6 waterproof"
+    ],
+    "seo_keywords": ["USB-C headlamp", "waterproof headlamp", "hiking headlamp"]
+  },
+  "error": null,
+  "meta": { "request_id": "req_9c8b7a6d5e4f", "model": "gpt-4o-mini" }
+}
+```
+
+### Response fields
+
+| Field | Type | Description |
+|---|---|---|
+| `title` | `string` | Product title. |
+| `description` | `string` | Long-form description. |
+| `bullet_points` | `string[]` | Feature bullets. |
+| `seo_keywords` | `string[]` | Suggested keywords. |
+
+---
+
+## Social caption
+
+`POST /v1/content/social-caption` — generate platform-specific captions with
+optional hashtags.
+
+### Request body
+
+| Field | Type | Required | Default | Description |
+|---|---|---:|---|---|
+| `content` | `string` | Yes | — | Source content or message. Minimum 10 characters. |
+| `platform` | `string` | No | `linkedin` | Target platform, e.g. `linkedin`, `x`, `instagram`. |
+| `tone` | `string` | No | `professional` | Caption tone. |
+| `include_hashtags` | `boolean` | No | `true` | Include suggested hashtags. |
+| `call_to_action` | `string` | No | `null` | CTA to append. |
+| `variants` | `integer` | No | `3` | Number of variants, `1`–`10`. |
+
+### Example
+
+```bash
+curl --request POST \
+  --url https://ai-content-generator-api.p.rapidapi.com/v1/content/social-caption \
+  --header "Content-Type: application/json" \
+  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
+  --header "X-RapidAPI-Host: ai-content-generator-api.p.rapidapi.com" \
+  --data '{"content":"We launched a new developer utilities API on RapidAPI.","platform":"x","variants":2,"call_to_action":"Try the free plan"}'
+```
+
+```json
+{
+  "success": true,
+  "data": {
+    "platform": "x",
+    "variants": [
+      {
+        "caption": "Just shipped our Developer Utilities API on RapidAPI. Email validation, JSON tools, hashing, and more in one subscription. Try the free plan 👇",
+        "hashtags": ["#API", "#DevTools", "#BuildInPublic"]
+      },
+      {
+        "caption": "One API, a dozen developer utilities. Now live on RapidAPI. Try the free plan.",
+        "hashtags": ["#developers", "#API", "#SaaS"]
+      }
+    ]
+  },
+  "error": null,
+  "meta": { "request_id": "req_2e4f6a8c0b1d", "model": "gpt-4o-mini" }
+}
+```
+
+### Response fields
+
+| Field | Type | Description |
+|---|---|---|
+| `platform` | `string` | Platform the captions target. |
+| `variants` | `object[]` | Each has `caption` and `hashtags` (`string[]`). |
+
+---
+
+## Headlines
+
+`POST /v1/content/headlines` — generate headline variants with an angle and a
+predicted click score.
+
+### Request body
+
+| Field | Type | Required | Default | Description |
+|---|---|---:|---|---|
+| `topic` | `string` | Yes | — | Headline topic. Minimum 5 characters. |
+| `audience` | `string` | No | `null` | Target audience. |
+| `goal` | `string` | No | `increase clicks` | Optimization goal. |
+| `count` | `integer` | No | `10` | Number of variants, `3`–`20`. |
+
+### Example
+
+```bash
+curl --request POST \
+  --url https://ai-content-generator-api.p.rapidapi.com/v1/content/headlines \
+  --header "Content-Type: application/json" \
+  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
+  --header "X-RapidAPI-Host: ai-content-generator-api.p.rapidapi.com" \
+  --data '{"topic":"Developer utilities API on RapidAPI","audience":"developers","count":3}'
+```
+
+```json
+{
+  "success": true,
+  "data": {
+    "variants": [
+      {
+        "headline": "12 Developer Utilities, One API Subscription",
+        "angle": "consolidation",
+        "predicted_ctr_score": 0.72
+      },
+      {
+        "headline": "Stop Rebuilding the Same Dev Helpers",
+        "angle": "pain point",
+        "predicted_ctr_score": 0.68
+      }
+    ]
+  },
+  "error": null,
+  "meta": { "request_id": "req_7a9b1c3d5e7f", "model": "gpt-4o-mini" }
+}
+```
+
+### Response fields
+
+| Field | Type | Description |
+|---|---|---|
+| `variants` | `object[]` | Each has `headline`, `angle`, and `predicted_ctr_score` (`0`–`1`). |
+
+---
+
+## FAQ
+
+`POST /v1/content/faq` — generate question-and-answer pairs from source text.
+
+### Request body
+
+| Field | Type | Required | Default | Description |
+|---|---|---:|---|---|
+| `source_text` | `string` | Yes | — | Source content. Minimum 30 characters. |
+| `audience` | `string` | No | `null` | Target audience. |
+| `count` | `integer` | No | `6` | Number of FAQs, `3`–`15`. |
+
+### Example
+
+```bash
+curl --request POST \
+  --url https://ai-content-generator-api.p.rapidapi.com/v1/content/faq \
+  --header "Content-Type: application/json" \
+  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
+  --header "X-RapidAPI-Host: ai-content-generator-api.p.rapidapi.com" \
+  --data '{"source_text":"ApiMask APIs are billed through RapidAPI. The free plan includes 100 requests per month. Paid plans add higher quotas and priority support.","count":2}'
+```
+
+```json
+{
+  "success": true,
+  "data": {
+    "faqs": [
+      {
+        "question": "How is ApiMask billed?",
+        "answer": "ApiMask APIs are billed through RapidAPI subscriptions."
+      },
+      {
+        "question": "What does the free plan include?",
+        "answer": "The free plan includes 100 requests per month."
+      }
+    ]
+  },
+  "error": null,
+  "meta": { "request_id": "req_4b6d8f0a2c4e", "model": "gpt-4o-mini" }
+}
+```
+
+### Response fields
+
+| Field | Type | Description |
+|---|---|---|
+| `faqs` | `object[]` | Each has `question` and `answer`. |
+
+---
+
+## Errors
+
+Validation failures return `INVALID_REQUEST` (HTTP 400); auth and quota issues
+return `UNAUTHORIZED` (401) or `RATE_LIMIT_EXCEEDED` (429). See [Errors](/errors)
+for the full list and envelope shape.
+
+## Related docs
+
+- [SEO Meta Tags API](/apis/seo-meta-tags-api)
+- [API Catalog](/apis)

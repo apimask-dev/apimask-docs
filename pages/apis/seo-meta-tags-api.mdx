@@ -1,0 +1,103 @@
+---
+title: SEO Meta Tags API
+description: Generate SEO titles, meta descriptions, and keyword sets from page content with a single JSON endpoint through RapidAPI.
+---
+
+# SEO Meta Tags API
+
+Turn any page, product, or article into an SEO title, meta description, and
+keyword set in one call. Use it in CMS tools, page builders, ecommerce platforms,
+and content automation workflows to keep metadata consistent and on-keyword
+without manual copywriting.
+
+This endpoint is part of the [AI Content Generator API](/apis/ai-content-generator-api).
+
+[Open AI Content Generator API on RapidAPI](https://rapidapi.com/aftaab/api/ai-content-generator-api)
+
+## Base URL and authentication
+
+```http
+https://ai-content-generator-api.p.rapidapi.com
+```
+
+| Header | Value |
+|---|---|
+| `Content-Type` | `application/json` |
+| `X-RapidAPI-Key` | Your RapidAPI key |
+| `X-RapidAPI-Host` | `ai-content-generator-api.p.rapidapi.com` |
+
+See [Authentication](/authentication), [Rate limits](/rate-limits), and
+[Errors](/errors) for shared behavior.
+
+## Endpoint
+
+```http
+POST /v1/content/meta-tags
+```
+
+## Request body
+
+| Field | Type | Required | Default | Description |
+|---|---|---:|---|---|
+| `page_content` | `string` | Yes | — | Page, product, or article content to summarize into metadata. Minimum 20 characters. |
+| `page_url` | `string` | No | `null` | Page URL, used for context and branding cues. |
+| `target_keyword` | `string` | No | `null` | Primary keyword the title and description should target. |
+
+## Example request
+
+```bash
+curl --request POST \
+  --url https://ai-content-generator-api.p.rapidapi.com/v1/content/meta-tags \
+  --header "Content-Type: application/json" \
+  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
+  --header "X-RapidAPI-Host: ai-content-generator-api.p.rapidapi.com" \
+  --data '{"page_content":"ApiMask is a platform of production-ready APIs for developers and startups building SaaS, AI, and automation products.","page_url":"https://apimask.dev","target_keyword":"developer APIs"}'
+```
+
+## Example response
+
+```json
+{
+  "success": true,
+  "data": {
+    "title": "Production-ready Developer APIs for SaaS, AI & Automation | ApiMask",
+    "description": "Build faster with ApiMask, a platform of production-ready developer APIs for SaaS, AI, and automation products.",
+    "keywords": ["developer APIs", "SaaS APIs", "AI APIs", "automation APIs"]
+  },
+  "error": null,
+  "meta": {
+    "request_id": "req_5d7a1c0e23bb",
+    "model": "gpt-4o-mini",
+    "prompt_tokens": 220,
+    "completion_tokens": 96,
+    "cost_usd": 0.00006120
+  }
+}
+```
+
+## Response fields
+
+| Field | Type | Description |
+|---|---|---|
+| `title` | `string` | SEO-optimized page title, sized for search result display. |
+| `description` | `string` | Meta description summarizing the page for search snippets. |
+| `keywords` | `string[]` | Suggested keywords related to the content and target keyword. |
+
+## Tips
+
+- Pass `target_keyword` to bias the title and description toward a specific
+  ranking term.
+- Send clean, representative `page_content` (the main copy, not navigation or
+  boilerplate) for the sharpest output.
+- Include `page_url` so brand and domain cues can appear in the title.
+
+## Errors
+
+Validation failures return `INVALID_REQUEST` (HTTP 400); auth and quota issues
+return `UNAUTHORIZED` (401) or `RATE_LIMIT_EXCEEDED` (429). See [Errors](/errors)
+for the full list.
+
+## Related docs
+
+- [AI Content Generator API](/apis/ai-content-generator-api)
+- [API Catalog](/apis)

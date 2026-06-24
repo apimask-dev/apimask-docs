@@ -1,0 +1,114 @@
+---
+title: QR Code API with Logo
+description: Generate branded QR codes with a centered logo overlay, custom colors, sizing, and error correction through RapidAPI.
+---
+
+# QR Code API with Logo
+
+Generate branded QR codes with your logo centered on the code, plus custom
+colors, sizing, and error correction. Logo overlay is available for **PNG**
+output. Use it for marketing campaigns, packaging, business cards, event badges,
+and anywhere a branded code reads better than a plain one.
+
+This endpoint is part of the [QR Code Generator API](/apis/qr-code-generator-api).
+
+[Open QR Code Generator API with Logo on RapidAPI](https://rapidapi.com/aftaab/api/qr-code-generator-api-with-logo)
+
+## Base URL and authentication
+
+```http
+https://qr-code-generator-api-with-logo.p.rapidapi.com
+```
+
+| Header | Value |
+|---|---|
+| `Content-Type` | `application/json` |
+| `X-RapidAPI-Key` | Your RapidAPI key |
+| `X-RapidAPI-Host` | `qr-code-generator-api-with-logo.p.rapidapi.com` |
+
+See [Authentication](/authentication), [Rate limits](/rate-limits), and
+[Errors](/errors) for shared behavior.
+
+## Endpoint
+
+```http
+POST /v1/qr/generate
+```
+
+## Request body
+
+| Field | Type | Required | Default | Description |
+|---|---|---:|---|---|
+| `value` | `string` | Yes | — | Text or URL to encode. 1–4096 characters. |
+| `output` | `png` or `svg` | No | `png` | Use `png` for logo overlay. |
+| `logo_base64` | `string` | No | `null` | PNG/JPEG/WebP logo as raw base64 or a data URL. PNG output only. |
+| `logo_size_ratio` | `float` | No | `0.2` | Logo size as a fraction of the QR, `0.05`–`0.3`. |
+| `error_correction` | `L`, `M`, `Q`, `H` | No | `M` | Use `H` with a logo so the code still scans. |
+| `fill_color` | `string` | No | `#000000` | Foreground (module) color. |
+| `back_color` | `string` | No | `#ffffff` | Background color. |
+| `box_size` | `integer` | No | `10` | Pixel size of each module, `2`–`40`. |
+| `border` | `integer` | No | `4` | Quiet-zone width in modules, `0`–`12`. |
+
+## Example request
+
+```bash
+curl --request POST \
+  --url https://qr-code-generator-api-with-logo.p.rapidapi.com/v1/qr/generate \
+  --header "Content-Type: application/json" \
+  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
+  --header "X-RapidAPI-Host: qr-code-generator-api-with-logo.p.rapidapi.com" \
+  --data '{"value":"https://apimask.dev","output":"png","error_correction":"H","logo_base64":"iVBORw0KGgoAAAANSUhEUg...","logo_size_ratio":0.22,"fill_color":"#111111","back_color":"#ffffff"}'
+```
+
+## Example response
+
+```json
+{
+  "success": true,
+  "data": {
+    "payload": "https://apimask.dev",
+    "format": "png",
+    "mime_type": "image/png",
+    "data_base64": "iVBORw0KGgo...",
+    "data_url": "data:image/png;base64,iVBORw0KGgo...",
+    "size_px": 330
+  },
+  "error": null,
+  "meta": { "request_id": "req_6c2a9f0b1d34" }
+}
+```
+
+## Response fields
+
+| Field | Type | Description |
+|---|---|---|
+| `payload` | `string` | The encoded value. |
+| `format` | `png` or `svg` | Output format. |
+| `mime_type` | `string` | `image/png` or `image/svg+xml`. |
+| `data_base64` | `string` | Image bytes as base64. |
+| `data_url` | `string` | Ready-to-embed `data:` URL. |
+| `size_px` | `integer` or `null` | Rendered width in pixels for PNG; `null` for SVG. |
+
+## Logo tips
+
+- **Use `output: "png"`.** Logo overlay is not applied to SVG output.
+- **Set `error_correction` to `H`.** The logo covers part of the code; the
+  highest correction level keeps it scannable.
+- **Keep `logo_size_ratio` at or below `0.3`.** Larger logos can make the code
+  unreadable.
+- **Pass a square logo with a transparent or solid background** for the cleanest
+  result. Both raw base64 and `data:` URLs are accepted.
+- **Test the output** by scanning it after changing colors — low contrast between
+  `fill_color` and `back_color` reduces scan reliability.
+
+## Errors
+
+Validation failures return `INVALID_REQUEST` (HTTP 400); auth and quota issues
+return `UNAUTHORIZED` (401) or `RATE_LIMIT_EXCEEDED` (429). See [Errors](/errors)
+for the full list.
+
+## Related docs
+
+- [QR Code Generator API](/apis/qr-code-generator-api)
+- [WiFi QR Code API](/apis/wifi-qr-code-api)
+- [API Catalog](/apis)

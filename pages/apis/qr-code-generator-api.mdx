@@ -1,0 +1,235 @@
+---
+title: QR Code Generator API
+description: Generate QR codes as PNG or SVG for URLs, text, WiFi, vCards, email, and SMS, with branded colors and logo overlay, through RapidAPI.
+---
+
+# QR Code Generator API
+
+Generate QR codes from text, URLs, WiFi credentials, vCards, email links, and SMS
+messages. Every endpoint returns a ready-to-use image as base64 and a data URL,
+with full control over colors, size, error correction, and an optional logo
+overlay. Use it in event tools, venue WiFi flows, ecommerce apps, CMS plugins,
+internal dashboards, and marketing automation.
+
+[Open QR Code Generator API on RapidAPI](https://rapidapi.com/aftaab/api/qr-code-generator-api-with-logo)
+
+## Base URL and authentication
+
+```http
+https://qr-code-generator-api-with-logo.p.rapidapi.com
+```
+
+All requests are `POST` with a JSON body and authenticate through RapidAPI. Send
+these headers on every call:
+
+| Header | Value |
+|---|---|
+| `Content-Type` | `application/json` |
+| `X-RapidAPI-Key` | Your RapidAPI key |
+| `X-RapidAPI-Host` | `qr-code-generator-api-with-logo.p.rapidapi.com` |
+
+See [Authentication](/authentication), [Rate limits](/rate-limits), and
+[Errors](/errors) for shared behavior.
+
+## Rendering options
+
+Every endpoint accepts these optional rendering fields in addition to its own
+payload fields:
+
+| Field | Type | Default | Description |
+|---|---|---|---|
+| `output` | `png` or `svg` | `png` | Output image format. |
+| `box_size` | `integer` | `10` | Pixel size of each QR module, `2`–`40`. PNG only. |
+| `border` | `integer` | `4` | Quiet-zone width in modules, `0`–`12`. |
+| `fill_color` | `string` | `#000000` | Foreground (module) color. |
+| `back_color` | `string` | `#ffffff` | Background color. |
+| `error_correction` | `L`, `M`, `Q`, `H` | `M` | Error correction level. Use `H` when adding a logo. |
+| `logo_base64` | `string` | `null` | PNG/JPEG/WebP logo as raw base64 or a data URL. PNG output only. |
+| `logo_size_ratio` | `float` | `0.2` | Logo size as a fraction of the QR, `0.05`–`0.3`. |
+
+See [QR Code API with Logo](/apis/qr-code-api-with-logo) for branded output.
+
+## Response envelope
+
+Every endpoint returns the same image payload inside the standard envelope:
+
+```json
+{
+  "success": true,
+  "data": {
+    "payload": "https://apimask.dev",
+    "format": "png",
+    "mime_type": "image/png",
+    "data_base64": "iVBORw0KGgo...",
+    "data_url": "data:image/png;base64,iVBORw0KGgo...",
+    "size_px": 330
+  },
+  "error": null,
+  "meta": { "request_id": "req_6c2a9f0b1d34" }
+}
+```
+
+| Field | Type | Description |
+|---|---|---|
+| `payload` | `string` | The encoded value (URL, WiFi string, vCard, etc.). |
+| `format` | `png` or `svg` | Output format. |
+| `mime_type` | `string` | `image/png` or `image/svg+xml`. |
+| `data_base64` | `string` | Image bytes as base64. |
+| `data_url` | `string` | Ready-to-embed `data:` URL. |
+| `size_px` | `integer` or `null` | Rendered width in pixels for PNG; `null` for SVG. |
+
+## Endpoints
+
+```http
+POST /v1/qr/generate
+POST /v1/qr/wifi
+POST /v1/qr/vcard
+POST /v1/qr/email
+POST /v1/qr/sms
+POST /v1/qr/url
+```
+
+---
+
+## Generate (text or URL)
+
+`POST /v1/qr/generate` — encode any text or URL. Plus all [rendering options](#rendering-options).
+
+| Field | Type | Required | Description |
+|---|---|---:|---|
+| `value` | `string` | Yes | Text or URL to encode. 1–4096 characters. |
+
+```bash
+curl --request POST \
+  --url https://qr-code-generator-api-with-logo.p.rapidapi.com/v1/qr/generate \
+  --header "Content-Type: application/json" \
+  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
+  --header "X-RapidAPI-Host: qr-code-generator-api-with-logo.p.rapidapi.com" \
+  --data '{"value":"https://apimask.dev","output":"png","box_size":10,"border":4}'
+```
+
+---
+
+## URL
+
+`POST /v1/qr/url` — encode a URL with validation. Plus all [rendering options](#rendering-options).
+
+| Field | Type | Required | Description |
+|---|---|---:|---|
+| `url` | `string` | Yes | URL to encode. 3–2048 characters. |
+
+```bash
+curl --request POST \
+  --url https://qr-code-generator-api-with-logo.p.rapidapi.com/v1/qr/url \
+  --header "Content-Type: application/json" \
+  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
+  --header "X-RapidAPI-Host: qr-code-generator-api-with-logo.p.rapidapi.com" \
+  --data '{"url":"https://apimask.dev/pricing","output":"svg"}'
+```
+
+---
+
+## WiFi
+
+`POST /v1/qr/wifi` — encode WiFi credentials so a scan connects automatically.
+See the focused [WiFi QR Code API](/apis/wifi-qr-code-api) page. Plus all
+[rendering options](#rendering-options).
+
+| Field | Type | Required | Default | Description |
+|---|---|---:|---|---|
+| `ssid` | `string` | Yes | — | Network name. 1–128 characters. |
+| `password` | `string` | No | `null` | Network password. Up to 256 characters. |
+| `encryption` | `WPA`, `WEP`, `nopass` | No | `WPA` | Network security type. |
+| `hidden` | `boolean` | No | `false` | Whether the SSID is hidden. |
+
+```bash
+curl --request POST \
+  --url https://qr-code-generator-api-with-logo.p.rapidapi.com/v1/qr/wifi \
+  --header "Content-Type: application/json" \
+  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
+  --header "X-RapidAPI-Host: qr-code-generator-api-with-logo.p.rapidapi.com" \
+  --data '{"ssid":"Guest WiFi","password":"secret123","encryption":"WPA","hidden":false}'
+```
+
+---
+
+## vCard
+
+`POST /v1/qr/vcard` — encode contact details as a scannable vCard. Plus all
+[rendering options](#rendering-options).
+
+| Field | Type | Required | Description |
+|---|---|---:|---|
+| `full_name` | `string` | Yes | Contact name. 1–160 characters. |
+| `phone` | `string` | No | Phone number. Up to 64 characters. |
+| `email` | `string` | No | Email address. Up to 254 characters. |
+| `organization` | `string` | No | Company or organization. Up to 160 characters. |
+| `title` | `string` | No | Job title. Up to 160 characters. |
+| `website` | `string` | No | Website URL. Up to 512 characters. |
+| `address` | `string` | No | Postal address. Up to 512 characters. |
+
+```bash
+curl --request POST \
+  --url https://qr-code-generator-api-with-logo.p.rapidapi.com/v1/qr/vcard \
+  --header "Content-Type: application/json" \
+  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
+  --header "X-RapidAPI-Host: qr-code-generator-api-with-logo.p.rapidapi.com" \
+  --data '{"full_name":"Aftaab","organization":"ApiMask","email":"hello@apimask.dev","website":"https://apimask.dev"}'
+```
+
+---
+
+## Email
+
+`POST /v1/qr/email` — encode a pre-filled email link. Plus all
+[rendering options](#rendering-options).
+
+| Field | Type | Required | Description |
+|---|---|---:|---|
+| `to` | `string` | Yes | Recipient email. 3–254 characters. |
+| `subject` | `string` | No | Pre-filled subject. Up to 200 characters. |
+| `body` | `string` | No | Pre-filled body. Up to 1000 characters. |
+
+```bash
+curl --request POST \
+  --url https://qr-code-generator-api-with-logo.p.rapidapi.com/v1/qr/email \
+  --header "Content-Type: application/json" \
+  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
+  --header "X-RapidAPI-Host: qr-code-generator-api-with-logo.p.rapidapi.com" \
+  --data '{"to":"hello@apimask.dev","subject":"API question","body":"Hi, I have a question about your API."}'
+```
+
+---
+
+## SMS
+
+`POST /v1/qr/sms` — encode a pre-filled SMS. Plus all
+[rendering options](#rendering-options).
+
+| Field | Type | Required | Description |
+|---|---|---:|---|
+| `phone` | `string` | Yes | Destination number. 3–64 characters. |
+| `message` | `string` | No | Pre-filled message. Up to 500 characters. |
+
+```bash
+curl --request POST \
+  --url https://qr-code-generator-api-with-logo.p.rapidapi.com/v1/qr/sms \
+  --header "Content-Type: application/json" \
+  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
+  --header "X-RapidAPI-Host: qr-code-generator-api-with-logo.p.rapidapi.com" \
+  --data '{"phone":"+15551234567","message":"START"}'
+```
+
+---
+
+## Errors
+
+Validation failures return `INVALID_REQUEST` (HTTP 400); auth and quota issues
+return `UNAUTHORIZED` (401) or `RATE_LIMIT_EXCEEDED` (429). See [Errors](/errors)
+for the full list and envelope shape.
+
+## Related docs
+
+- [QR Code API with Logo](/apis/qr-code-api-with-logo)
+- [WiFi QR Code API](/apis/wifi-qr-code-api)
+- [API Catalog](/apis)
