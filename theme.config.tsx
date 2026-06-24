@@ -15,7 +15,7 @@ const config: DocsThemeConfig = {
   navbar: {
     extraContent: (
       <a
-        href="https://rapidapi.com/search/ApiMask"
+        href="https://rapidapi.com/user/aftaab"
         target="_blank"
         rel="noreferrer"
         style={{

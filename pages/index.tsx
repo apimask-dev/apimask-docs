@@ -71,7 +71,7 @@ export default function LandingPage() {
             <Link href="/api">APIs</Link>
             <Link href="/quickstart">Quickstart</Link>
             <Link href="/authentication">Docs</Link>
-            <a href="https://rapidapi.com/search/ApiMask">RapidAPI</a>
+            <a href="https://rapidapi.com/user/aftaab">RapidAPI</a>
           </div>
         </nav>
 
@@ -90,7 +90,7 @@ export default function LandingPage() {
               and everyday developer utilities — all available through RapidAPI.
             </p>
             <div className="actions">
-              <a className="primaryAction" href="https://rapidapi.com/search/ApiMask">
+              <a className="primaryAction" href="https://rapidapi.com/user/aftaab">
                 Find ApiMask on RapidAPI
               </a>
               <Link className="secondaryAction" href="/api">
@@ -300,7 +300,7 @@ export default function LandingPage() {
             gives you the product overview, schemas, examples, and endpoint behavior.
           </p>
           <div className="actions compact">
-            <a className="primaryAction" href="https://rapidapi.com/search/ApiMask">
+            <a className="primaryAction" href="https://rapidapi.com/user/aftaab">
               Open RapidAPI
             </a>
             <Link className="secondaryAction" href="/quickstart">
