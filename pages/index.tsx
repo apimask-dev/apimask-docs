@@ -248,13 +248,18 @@ export default function LandingPage() {
         </section>
 
         <section className="productBand">
-          <div className="productIntro">
-            <p className="eyebrow">Product groups</p>
-            <h2>Built for marketplace discovery and direct developer intent.</h2>
-            <p>
-              ApiMask is packaged around buyer intent so users can find the exact API set
-              they need on RapidAPI.
-            </p>
+          <div className="productBandHeader">
+            <div className="productBandIntro">
+              <p className="eyebrow">Product groups</p>
+              <h2>Built for marketplace discovery and direct developer intent.</h2>
+              <p className="productBandLead">
+                ApiMask is packaged around buyer intent so teams can find the exact API
+                set they need on RapidAPI.
+              </p>
+            </div>
+            <Link href="/api" className="browseAll">
+              Browse all APIs
+            </Link>
           </div>
           <div className="productGrid">
             {productGroups.map((group) => (
@@ -722,33 +727,64 @@ export default function LandingPage() {
         }
 
         .productBand {
-          display: grid;
-          grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.18fr);
-          gap: 56px;
-          align-items: start;
+          display: block;
           border-top: 1px solid #e2e5dd;
           border-bottom: 1px solid #e2e5dd;
         }
 
-        .productIntro {
-          position: sticky;
-          top: 96px;
+        .productBandHeader {
+          display: flex;
+          align-items: flex-end;
+          justify-content: space-between;
+          gap: 28px;
+          flex-wrap: wrap;
+          margin-bottom: 44px;
         }
 
-        .productIntro h2 {
-          max-width: 560px;
-          margin-bottom: 18px;
+        .productBandIntro h2 {
+          max-width: 640px;
+          margin-bottom: 16px;
         }
 
-        .productIntro p:last-child {
-          max-width: 470px;
+        .productBandLead {
+          max-width: 520px;
+          margin: 0;
           color: #5c6258;
           font-size: 17px;
           line-height: 1.65;
         }
 
+        .browseAll {
+          display: inline-flex;
+          align-items: center;
+          white-space: nowrap;
+          border: 1px solid #d2d7cc;
+          border-radius: 7px;
+          background: #ffffff;
+          padding: 11px 16px;
+          color: #11140f;
+          font-size: 14px;
+          font-weight: 720;
+          text-decoration: none;
+          transition:
+            border-color 160ms ease,
+            transform 160ms ease;
+        }
+
+        .browseAll:after {
+          margin-left: 8px;
+          content: "->";
+          font-family: var(--apimask-mono);
+          font-size: 12px;
+        }
+
+        .browseAll:hover {
+          border-color: rgba(50, 18, 106, 0.4);
+          transform: translateY(-1px);
+        }
+
         .productGrid {
-          grid-template-columns: repeat(2, minmax(0, 1fr));
+          grid-template-columns: repeat(auto-fill, minmax(255px, 1fr));
           gap: 18px;
         }
 
