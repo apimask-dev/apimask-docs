@@ -19,6 +19,45 @@ const useCases = [
   "Security checks",
 ];
 
+const productGroups = [
+  {
+    icon: "QR",
+    count: 6,
+    title: "QR Code Generator API with Logo",
+    copy: "PNG/SVG QR codes for URLs, WiFi, vCards, email, and SMS, with branded colors and optional logo overlay.",
+    tags: ["Logo", "WiFi", "vCard", "SVG"],
+    docs: "/api/qr-code-generator-api",
+    rapidapi: "https://rapidapi.com/aftaab/api/qr-code-generator-api-with-logo",
+  },
+  {
+    icon: "AI",
+    count: 8,
+    title: "AI Content Generator API",
+    copy: "Summaries, rewrites, SEO meta tags, blog outlines, product descriptions, social captions, headlines, and FAQs.",
+    tags: ["SEO", "Rewrite", "Captions", "FAQ"],
+    docs: "/api/ai-content-generator-api",
+    rapidapi: "https://rapidapi.com/aftaab/api/ai-content-generator-api",
+  },
+  {
+    icon: "{}",
+    count: 12,
+    title: "Developer Utilities API",
+    copy: "Regex, stacktrace, README, changelog, JSON, Base64, hashes, IDs, and URL parsing.",
+    tags: ["Regex", "JSON", "Base64", "Stacktrace"],
+    docs: "/api/developer-utilities",
+    rapidapi: "https://rapidapi.com/aftaab/api/apimask-developer-utilities-api",
+  },
+  {
+    icon: "@",
+    count: 8,
+    title: "Email, Domain & Website Utilities",
+    copy: "Email validation, DNS analysis, SSL checks, URL safety, security headers, robots.txt, sitemap, and CORS checks.",
+    tags: ["Email", "DNS", "SSL", "CORS"],
+    docs: "/api/email-domain-validation",
+    rapidapi: "https://rapidapi.com/aftaab/api/email-domain-validation-api",
+  },
+];
+
 export default function LandingPage() {
   return (
     <>
@@ -218,77 +257,34 @@ export default function LandingPage() {
             </p>
           </div>
           <div className="productGrid">
-            <Link href="/api/qr-code-generator-api" className="productCard">
-              <div className="productTop">
-                <span className="productIcon">QR</span>
-                <span className="productCount">6 endpoints</span>
-              </div>
-              <h3>QR Code Generator API with Logo</h3>
-              <p>
-                PNG/SVG QR codes for URLs, WiFi, vCards, email, and SMS, with branded
-                colors and optional logo overlay.
-              </p>
-              <div className="tagRow">
-                <span>Logo</span>
-                <span>WiFi</span>
-                <span>vCard</span>
-                <span>SVG</span>
-              </div>
-              <strong>View docs</strong>
-            </Link>
-            <Link href="/api/ai-content-generator-api" className="productCard">
-              <div className="productTop">
-                <span className="productIcon">AI</span>
-                <span className="productCount">8 endpoints</span>
-              </div>
-              <h3>AI Content Generator API</h3>
-              <p>
-                Summaries, rewrites, SEO meta tags, blog outlines, product descriptions,
-                social captions, headlines, and FAQs.
-              </p>
-              <div className="tagRow">
-                <span>SEO</span>
-                <span>Rewrite</span>
-                <span>Captions</span>
-                <span>FAQ</span>
-              </div>
-              <strong>View docs</strong>
-            </Link>
-            <Link href="/api/developer-utilities" className="productCard">
-              <div className="productTop">
-                <span className="productIcon">{"{}"}</span>
-                <span className="productCount">12 endpoints</span>
-              </div>
-              <h3>Developer Utilities API</h3>
-              <p>
-                Regex, stacktrace, README, changelog, JSON, Base64, hashes, IDs, and URL parsing.
-              </p>
-              <div className="tagRow">
-                <span>Regex</span>
-                <span>JSON</span>
-                <span>Base64</span>
-                <span>Stacktrace</span>
-              </div>
-              <strong>View docs</strong>
-            </Link>
-            <Link href="/api/email-domain-validation" className="productCard">
-              <div className="productTop">
-                <span className="productIcon">@</span>
-                <span className="productCount">8 endpoints</span>
-              </div>
-              <h3>Email, Domain, and Website Utilities</h3>
-              <p>
-                Email validation, DNS analysis, SSL checks, URL safety, security headers,
-                robots.txt, sitemap, and CORS checks.
-              </p>
-              <div className="tagRow">
-                <span>Email</span>
-                <span>DNS</span>
-                <span>SSL</span>
-                <span>CORS</span>
-              </div>
-              <strong>View docs</strong>
-            </Link>
+            {productGroups.map((group) => (
+              <article className="productCard" key={group.title}>
+                <div className="productTop">
+                  <span className="productIcon">{group.icon}</span>
+                  <span className="productCount">{group.count} endpoints</span>
+                </div>
+                <h3>{group.title}</h3>
+                <p>{group.copy}</p>
+                <div className="tagRow">
+                  {group.tags.map((tag) => (
+                    <span key={tag}>{tag}</span>
+                  ))}
+                </div>
+                <div className="cardActions">
+                  <Link href={group.docs} className="cardDocs">
+                    View docs
+                  </Link>
+                  <a
+                    className="cardRapid"
+                    href={group.rapidapi}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    Subscribe on RapidAPI
+                  </a>
+                </div>
+              </article>
+            ))}
           </div>
         </section>
 
@@ -752,13 +748,14 @@ export default function LandingPage() {
         }
 
         .productGrid {
-          grid-template-columns: 1fr;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
           gap: 18px;
         }
 
         .productCard {
-          display: grid;
-          gap: 16px;
+          display: flex;
+          flex-direction: column;
+          gap: 14px;
           color: inherit;
           text-decoration: none;
           transition:
@@ -828,18 +825,46 @@ export default function LandingPage() {
           font-weight: 650;
         }
 
-        .productCard strong {
-          display: inline-flex;
+        .cardActions {
+          display: flex;
           align-items: center;
-          color: #11140f;
-          font-size: 14px;
+          flex-wrap: wrap;
+          gap: 10px 18px;
+          margin-top: auto;
+          padding-top: 4px;
         }
 
-        .productCard strong:after {
-          margin-left: 8px;
+        .cardDocs,
+        .cardRapid {
+          display: inline-flex;
+          align-items: center;
+          font-size: 14px;
+          font-weight: 720;
+          text-decoration: none;
+        }
+
+        .cardDocs {
+          color: #4c5148;
+        }
+
+        .cardDocs:hover {
+          color: #11140f;
+        }
+
+        .cardRapid {
+          color: #32126a;
+        }
+
+        .cardRapid:after {
+          margin-left: 7px;
           content: "->";
           font-family: var(--apimask-mono);
           font-size: 12px;
+          transition: transform 160ms ease;
+        }
+
+        .cardRapid:hover:after {
+          transform: translateX(3px);
         }
 
         .cta {
@@ -916,7 +941,8 @@ export default function LandingPage() {
             font-size: 17px;
           }
 
-          .apiGrid {
+          .apiGrid,
+          .productGrid {
             grid-template-columns: 1fr;
           }
 
