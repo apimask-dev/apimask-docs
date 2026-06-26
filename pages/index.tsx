@@ -19,6 +19,24 @@ const useCases = [
   "Security checks",
 ];
 
+// Forward-looking category map. "Live" groups are shippable today; the rest are
+// on the public roadmap as ApiMask expands across categories. Kept honest with
+// explicit status so we capture category search intent without overpromising.
+const categories = [
+  { name: "Developer utilities", status: "Live", note: "Regex, JSON, Base64, hashing, IDs, URL parsing" },
+  { name: "AI content", status: "Live", note: "SEO meta tags, summaries, rewrites, descriptions" },
+  { name: "Email & domain", status: "Live", note: "Validation, MX/DNS, deliverability" },
+  { name: "Website & security", status: "Live", note: "SSL, security headers, robots.txt, sitemap, CORS" },
+  { name: "QR codes", status: "Live", note: "URL, WiFi, vCard, branded logo QR codes" },
+  { name: "SEO", status: "Live", note: "Meta tags, site audits, structured data checks" },
+  { name: "OCR & PDF", status: "Soon", note: "PDF-to-Markdown, table & field extraction, OCR cleanup" },
+  { name: "Resume & ATS", status: "Soon", note: "ATS scoring, keyword gaps, resume rewrite" },
+  { name: "App Store / ASO", status: "Soon", note: "Metadata, keywords, release notes, review sentiment" },
+  { name: "Data enrichment", status: "Soon", note: "Company, email, and domain enrichment" },
+  { name: "Security & threat intel", status: "Soon", note: "URL safety, breach checks, header hardening" },
+  { name: "AI agents & workflows", status: "Soon", note: "Tool endpoints and structured extraction for agents" },
+];
+
 const productGroups = [
   {
     icon: "QR",
@@ -62,7 +80,7 @@ export default function LandingPage() {
   return (
     <>
       <Head>
-        <title>ApiMask - Developer and Website Utility APIs</title>
+        <title>ApiMask — Developer, AI, Email, Domain &amp; Website APIs</title>
         <link rel="canonical" href="https://apimask.dev" />
         <link rel="shortcut icon" href="/favicon.ico" />
         <link rel="icon" href="/favicon-32x32.png" sizes="32x32" type="image/png" />
@@ -79,9 +97,9 @@ export default function LandingPage() {
         />
         <meta
           name="description"
-          content="ApiMask provides production-ready developer utility, email validation, DNS, SSL, security header, sitemap, and website audit APIs through RapidAPI."
+          content="ApiMask is a growing platform of production-ready APIs — developer utilities, AI content, email & domain validation, SEO, security, and website intelligence — with clean JSON responses, available through RapidAPI."
         />
-        <meta property="og:title" content="ApiMask - Developer and Website Utility APIs" />
+        <meta property="og:title" content="ApiMask — Developer, AI, Email, Domain & Website APIs" />
         <meta
           property="og:description"
           content="Focused APIs for developers, SaaS teams, SEO tools, and website audit workflows. Available through RapidAPI."
@@ -98,6 +116,66 @@ export default function LandingPage() {
           content="Focused APIs for developers, SaaS teams, SEO tools, and website audit workflows. Available through RapidAPI."
         />
         <meta name="twitter:image" content="https://apimask.dev/apimask-logo.png" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@graph": [
+                {
+                  "@type": "Organization",
+                  "@id": "https://apimask.dev/#organization",
+                  name: "ApiMask",
+                  url: "https://apimask.dev",
+                  logo: "https://apimask.dev/apimask-logo.png",
+                  description:
+                    "ApiMask is a growing platform of production-ready APIs for developers, startups, and AI-powered apps.",
+                  sameAs: [
+                    "https://rapidapi.com/user/aftaab",
+                    "https://github.com/apimask-dev",
+                  ],
+                },
+                {
+                  "@type": "WebSite",
+                  "@id": "https://apimask.dev/#website",
+                  name: "ApiMask",
+                  url: "https://apimask.dev",
+                  publisher: { "@id": "https://apimask.dev/#organization" },
+                  potentialAction: {
+                    "@type": "SearchAction",
+                    target: {
+                      "@type": "EntryPoint",
+                      urlTemplate: "https://apimask.dev/api?q={search_term_string}",
+                    },
+                    "query-input": "required name=search_term_string",
+                  },
+                },
+                {
+                  "@type": "ItemList",
+                  name: "ApiMask APIs",
+                  itemListElement: productGroups.map((group, index) => ({
+                    "@type": "ListItem",
+                    position: index + 1,
+                    item: {
+                      "@type": "SoftwareApplication",
+                      name: group.title,
+                      applicationCategory: "DeveloperApplication",
+                      operatingSystem: "Any",
+                      url: `https://apimask.dev${group.docs}`,
+                      description: group.copy,
+                      offers: {
+                        "@type": "Offer",
+                        price: "0",
+                        priceCurrency: "USD",
+                        url: group.rapidapi,
+                      },
+                    },
+                  })),
+                },
+              ],
+            }),
+          }}
+        />
       </Head>
 
       <main className="landing">
@@ -288,6 +366,35 @@ export default function LandingPage() {
                     Subscribe on RapidAPI
                   </a>
                 </div>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section className="section categories">
+          <div className="sectionHeader">
+            <p className="eyebrow">The roadmap</p>
+            <h2>One API key. A platform that keeps expanding.</h2>
+            <p>
+              ApiMask is built as a modular API ecosystem. Today it covers developer
+              utilities, AI content, email and domain validation, SEO, security, and
+              website intelligence — and it is expanding into OCR, PDF, resume and ATS,
+              app store intelligence, data enrichment, and AI agent tooling.
+            </p>
+          </div>
+
+          <div className="categoryGrid">
+            {categories.map((category) => (
+              <article className="categoryCard" key={category.name}>
+                <div className="categoryTop">
+                  <h3>{category.name}</h3>
+                  <span
+                    className={`statusPill ${category.status === "Live" ? "live" : "soon"}`}
+                  >
+                    {category.status}
+                  </span>
+                </div>
+                <p>{category.note}</p>
               </article>
             ))}
           </div>
@@ -901,6 +1008,62 @@ export default function LandingPage() {
 
         .cardRapid:hover:after {
           transform: translateX(3px);
+        }
+
+        .categories {
+          border-top: 1px solid #e2e5dd;
+        }
+
+        .categoryGrid {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(255px, 1fr));
+          gap: 14px;
+        }
+
+        .categoryCard {
+          border: 1px solid #d8ddd2;
+          border-radius: 8px;
+          background: #ffffff;
+          padding: 18px 20px;
+        }
+
+        .categoryTop {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 12px;
+          margin-bottom: 8px;
+        }
+
+        .categoryCard h3 {
+          margin: 0;
+          font-size: 16px;
+          font-weight: 760;
+        }
+
+        .categoryCard p {
+          margin: 0;
+          font-size: 14px;
+        }
+
+        .statusPill {
+          flex-shrink: 0;
+          border-radius: 999px;
+          padding: 4px 9px;
+          font-size: 11px;
+          font-weight: 740;
+          text-transform: uppercase;
+          letter-spacing: 0.02em;
+        }
+
+        .statusPill.live {
+          background: #e6f4ea;
+          color: #276749;
+        }
+
+        .statusPill.soon {
+          background: #f1edf8;
+          color: #32126a;
         }
 
         .cta {
