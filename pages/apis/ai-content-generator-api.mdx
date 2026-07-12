@@ -67,14 +67,14 @@ POST /v1/content/faq
 
 ## Summarize
 
-`POST /v1/content/summarize` — condense long text into a short summary and key
+`POST /v1/content/summarize` condenses long text into a short summary and key
 points.
 
 ### Request body
 
 | Field | Type | Required | Default | Description |
 |---|---|---:|---|---|
-| `text` | `string` | Yes | — | Source text to summarize. Minimum 20 characters. |
+| `text` | `string` | Yes | - | Source text to summarize. Minimum 20 characters. |
 | `max_words` | `integer` | No | `150` | Target length, `20`–`1000`. |
 | `format` | `string` | No | `paragraph` | Output shape, e.g. `paragraph` or `bullets`. |
 
@@ -118,14 +118,14 @@ curl --request POST \
 
 ## Rewrite
 
-`POST /v1/content/rewrite` — rephrase text in a target tone while preserving
+`POST /v1/content/rewrite` rephrases text in a target tone while preserving
 meaning.
 
 ### Request body
 
 | Field | Type | Required | Default | Description |
 |---|---|---:|---|---|
-| `text` | `string` | Yes | — | Text to rewrite. Minimum 10 characters. |
+| `text` | `string` | Yes | - | Text to rewrite. Minimum 10 characters. |
 | `tone` | `string` | No | `professional` | Target tone, e.g. `friendly`, `formal`, `confident`. |
 | `audience` | `string` | No | `null` | Intended audience for context. |
 | `preserve_meaning` | `boolean` | No | `true` | Keep the original meaning intact. |
@@ -164,7 +164,7 @@ curl --request POST \
 
 ## SEO meta tags
 
-`POST /v1/content/meta-tags` — generate an SEO title, meta description, and
+`POST /v1/content/meta-tags` generates an SEO title, meta description, and
 keywords from page content. See the focused [SEO Meta Tags API](/apis/seo-meta-tags-api)
 page for the full field reference.
 
@@ -172,7 +172,7 @@ page for the full field reference.
 
 | Field | Type | Required | Default | Description |
 |---|---|---:|---|---|
-| `page_content` | `string` | Yes | — | Page, product, or article content. Minimum 20 characters. |
+| `page_content` | `string` | Yes | - | Page, product, or article content. Minimum 20 characters. |
 | `page_url` | `string` | No | `null` | Page URL for context. |
 | `target_keyword` | `string` | No | `null` | Primary keyword to target. |
 
@@ -212,13 +212,13 @@ curl --request POST \
 
 ## Blog outline
 
-`POST /v1/content/blog/outline` — generate a structured blog outline from a topic.
+`POST /v1/content/blog/outline` generates a structured blog outline from a topic.
 
 ### Request body
 
 | Field | Type | Required | Default | Description |
 |---|---|---:|---|---|
-| `topic` | `string` | Yes | — | Blog topic. Minimum 5 characters. |
+| `topic` | `string` | Yes | - | Blog topic. Minimum 5 characters. |
 | `target_keyword` | `string` | No | `null` | Primary SEO keyword. |
 | `audience` | `string` | No | `null` | Intended audience. |
 | `tone` | `string` | No | `professional` | Writing tone. |
@@ -269,14 +269,14 @@ curl --request POST \
 
 ## Product description
 
-`POST /v1/content/product-description` — generate ecommerce product copy.
+`POST /v1/content/product-description` generates ecommerce product copy.
 
 ### Request body
 
 | Field | Type | Required | Default | Description |
 |---|---|---:|---|---|
-| `product_name` | `string` | Yes | — | Product name. Minimum 2 characters. |
-| `product_details` | `string` | Yes | — | Features, specs, or context. Minimum 20 characters. |
+| `product_name` | `string` | Yes | - | Product name. Minimum 2 characters. |
+| `product_details` | `string` | Yes | - | Features, specs, or context. Minimum 20 characters. |
 | `audience` | `string` | No | `null` | Target buyer. |
 | `tone` | `string` | No | `persuasive` | Copy tone. |
 | `target_keyword` | `string` | No | `null` | Primary keyword. |
@@ -325,14 +325,14 @@ curl --request POST \
 
 ## Social caption
 
-`POST /v1/content/social-caption` — generate platform-specific captions with
+`POST /v1/content/social-caption` generates platform-specific captions with
 optional hashtags.
 
 ### Request body
 
 | Field | Type | Required | Default | Description |
 |---|---|---:|---|---|
-| `content` | `string` | Yes | — | Source content or message. Minimum 10 characters. |
+| `content` | `string` | Yes | - | Source content or message. Minimum 10 characters. |
 | `platform` | `string` | No | `linkedin` | Target platform, e.g. `linkedin`, `x`, `instagram`. |
 | `tone` | `string` | No | `professional` | Caption tone. |
 | `include_hashtags` | `boolean` | No | `true` | Include suggested hashtags. |
@@ -382,14 +382,14 @@ curl --request POST \
 
 ## Headlines
 
-`POST /v1/content/headlines` — generate headline variants with an angle and a
+`POST /v1/content/headlines` generates headline variants with an angle and a
 predicted click score.
 
 ### Request body
 
 | Field | Type | Required | Default | Description |
 |---|---|---:|---|---|
-| `topic` | `string` | Yes | — | Headline topic. Minimum 5 characters. |
+| `topic` | `string` | Yes | - | Headline topic. Minimum 5 characters. |
 | `audience` | `string` | No | `null` | Target audience. |
 | `goal` | `string` | No | `increase clicks` | Optimization goal. |
 | `count` | `integer` | No | `10` | Number of variants, `3`–`20`. |
@@ -437,13 +437,13 @@ curl --request POST \
 
 ## FAQ
 
-`POST /v1/content/faq` — generate question-and-answer pairs from source text.
+`POST /v1/content/faq` generates question-and-answer pairs from source text.
 
 ### Request body
 
 | Field | Type | Required | Default | Description |
 |---|---|---:|---|---|
-| `source_text` | `string` | Yes | — | Source content. Minimum 30 characters. |
+| `source_text` | `string` | Yes | - | Source content. Minimum 30 characters. |
 | `audience` | `string` | No | `null` | Target audience. |
 | `count` | `integer` | No | `6` | Number of FAQs, `3`–`15`. |
 

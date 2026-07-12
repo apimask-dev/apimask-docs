@@ -39,7 +39,7 @@ POST /v1/qr/generate
 
 | Field | Type | Required | Default | Description |
 |---|---|---:|---|---|
-| `value` | `string` | Yes | — | Text or URL to encode. 1–4096 characters. |
+| `value` | `string` | Yes | - | Text or URL to encode. 1–4096 characters. |
 | `output` | `png` or `svg` | No | `png` | Use `png` for logo overlay. |
 | `logo_base64` | `string` | No | `null` | PNG/JPEG/WebP logo as raw base64 or a data URL. PNG output only. |
 | `logo_size_ratio` | `float` | No | `0.2` | Logo size as a fraction of the QR, `0.05`–`0.3`. |
@@ -98,7 +98,7 @@ curl --request POST \
   unreadable.
 - **Pass a square logo with a transparent or solid background** for the cleanest
   result. Both raw base64 and `data:` URLs are accepted.
-- **Test the output** by scanning it after changing colors — low contrast between
+- **Test the output** by scanning it after changing colors. Low contrast between
   `fill_color` and `back_color` reduces scan reliability.
 
 ## Errors

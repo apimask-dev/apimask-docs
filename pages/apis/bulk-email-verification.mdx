@@ -1,0 +1,192 @@
+---
+title: Bulk Email Verification API
+description: Validate email lists, upload CSVs, detect disposable addresses and role accounts, and check MX, SPF, and DMARC records through RapidAPI.
+---
+
+# Bulk Email Verification API
+
+Validate email lists, clean CRM imports, detect disposable and role-account
+addresses, and check whether domains have MX, SPF, and DMARC records. The API
+supports JSON batches and CSV uploads through RapidAPI.
+
+[Open Bulk Email Verification API on RapidAPI](https://rapidapi.com/aftaab/api/bulk-email-verification-api)
+
+## Base URL and authentication
+
+```http
+https://bulk-email-verification-api.p.rapidapi.com
+```
+
+All requests authenticate through RapidAPI. JSON endpoints use these headers:
+
+| Header | Value |
+|---|---|
+| `Content-Type` | `application/json` |
+| `X-RapidAPI-Key` | Your RapidAPI key |
+| `X-RapidAPI-Host` | `bulk-email-verification-api.p.rapidapi.com` |
+
+CSV uploads use `multipart/form-data`; your HTTP client usually sets the exact
+`Content-Type` boundary automatically.
+
+See [Authentication](/authentication), [Rate limits](/rate-limits), and
+[Errors](/errors) for shared behavior.
+
+## Response envelope
+
+All endpoints return the standard ApiMask envelope:
+
+```json
+{
+  "success": true,
+  "data": {},
+  "error": null,
+  "meta": {
+    "request_id": "req_example"
+  }
+}
+```
+
+## Endpoints
+
+| Endpoint | Method | Description |
+|---|---:|---|
+| `/v1/email/bulk/validate` | `POST` | Validate up to 500 emails from JSON |
+| `/v1/email/bulk/validate-csv` | `POST` | Validate up to 1,000 emails from a CSV upload |
+| `/v1/email/domain/health` | `POST` | Check MX, SPF, and DMARC records for domains |
+| `/v1/email/disposable/check` | `POST` | Batch-check disposable email domains |
+| `/v1/email/role-account/check` | `POST` | Batch-check role-account addresses |
+
+---
+
+## Bulk validate emails
+
+`POST /v1/email/bulk/validate` validates email syntax and can optionally check MX
+records, disposable domains, and role-account local parts.
+
+### Request body
+
+| Field | Type | Required | Default | Description |
+|---|---|---:|---|---|
+| `emails` | `string[]` | Yes | - | Email addresses to validate. 1-500 items. |
+| `check_mx` | `boolean` | No | `true` | Check whether each domain has MX records. |
+| `check_disposable` | `boolean` | No | `true` | Detect disposable email domains. |
+| `check_role_account` | `boolean` | No | `true` | Detect role accounts such as `support@`, `sales@`, and `info@`. |
+
+### Example
+
+```bash
+curl --request POST \
+  --url https://bulk-email-verification-api.p.rapidapi.com/v1/email/bulk/validate \
+  --header "Content-Type: application/json" \
+  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
+  --header "X-RapidAPI-Host: bulk-email-verification-api.p.rapidapi.com" \
+  --data '{"emails":["hello@example.com","support@example.com","test@mailinator.com"],"check_mx":true,"check_disposable":true,"check_role_account":true}'
+```
+
+```json
+{
+  "success": true,
+  "data": {
+    "results": [
+      {
+        "input": "hello@example.com",
+        "is_valid": true,
+        "email": "hello@example.com",
+        "local_part": "hello",
+        "domain": "example.com",
+        "is_disposable": false,
+        "has_mx_records": true,
+        "is_role_account": false,
+        "reason": null
+      }
+    ],
+    "summary": {
+      "total": 3,
+      "valid": 3,
+      "invalid": 0,
+      "disposable": 1,
+      "role_accounts": 1,
+      "domains_with_mx": 3,
+      "duplicates": 0
+    }
+  },
+  "error": null,
+  "meta": { "request_id": "req_example" }
+}
+```
+
+---
+
+## CSV upload
+
+`POST /v1/email/bulk/validate-csv` validates email addresses from an uploaded CSV
+file. The CSV can contain an `email` column; if it does not, the first column is
+treated as the email column.
+
+### Limits
+
+| Limit | Value |
+|---|---:|
+| Rows | 1,000 maximum |
+| File size | 512 KB maximum |
+
+### Example
+
+```bash
+curl --request POST \
+  --url https://bulk-email-verification-api.p.rapidapi.com/v1/email/bulk/validate-csv \
+  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
+  --header "X-RapidAPI-Host: bulk-email-verification-api.p.rapidapi.com" \
+  --form "file=@emails.csv"
+```
+
+```csv
+email,name
+hello@example.com,Ada
+support@example.com,Support
+```
+
+---
+
+## Domain health
+
+`POST /v1/email/domain/health` checks MX, SPF, and DMARC readiness for email
+domains.
+
+### Request body
+
+| Field | Type | Required | Description |
+|---|---|---:|---|
+| `domains` | `string[]` | Yes | Domains to check. 1-500 items. |
+
+### Example
+
+```bash
+curl --request POST \
+  --url https://bulk-email-verification-api.p.rapidapi.com/v1/email/domain/health \
+  --header "Content-Type: application/json" \
+  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
+  --header "X-RapidAPI-Host: bulk-email-verification-api.p.rapidapi.com" \
+  --data '{"domains":["example.com","apimask.dev"]}'
+```
+
+---
+
+## Disposable and role-account checks
+
+Use these focused endpoints when you only need a single classification pass.
+
+| Endpoint | Body |
+|---|---|
+| `/v1/email/disposable/check` | `{ "emails": ["test@mailinator.com"] }` |
+| `/v1/email/role-account/check` | `{ "emails": ["support@example.com"] }` |
+
+Both endpoints accept 1-500 email addresses.
+
+## Notes
+
+- This API checks syntax, domains, MX records, disposable providers, role
+  accounts, SPF, and DMARC.
+- SMTP mailbox probing is not included in V1.
+- Validation improves list quality but does not guarantee that a mailbox exists
+  or that an email will be delivered.

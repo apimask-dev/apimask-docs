@@ -93,7 +93,7 @@ POST /v1/qr/url
 
 ## Generate (text or URL)
 
-`POST /v1/qr/generate` — encode any text or URL. Plus all [rendering options](#rendering-options).
+`POST /v1/qr/generate` encodes any text or URL. Plus all [rendering options](#rendering-options).
 
 | Field | Type | Required | Description |
 |---|---|---:|---|
@@ -112,7 +112,7 @@ curl --request POST \
 
 ## URL
 
-`POST /v1/qr/url` — encode a URL with validation. Plus all [rendering options](#rendering-options).
+`POST /v1/qr/url` encodes a URL with validation. Plus all [rendering options](#rendering-options).
 
 | Field | Type | Required | Description |
 |---|---|---:|---|
@@ -131,13 +131,13 @@ curl --request POST \
 
 ## WiFi
 
-`POST /v1/qr/wifi` — encode WiFi credentials so a scan connects automatically.
+`POST /v1/qr/wifi` encodes WiFi credentials so a scan connects automatically.
 See the focused [WiFi QR Code API](/apis/wifi-qr-code-api) page. Plus all
 [rendering options](#rendering-options).
 
 | Field | Type | Required | Default | Description |
 |---|---|---:|---|---|
-| `ssid` | `string` | Yes | — | Network name. 1–128 characters. |
+| `ssid` | `string` | Yes | - | Network name. 1–128 characters. |
 | `password` | `string` | No | `null` | Network password. Up to 256 characters. |
 | `encryption` | `WPA`, `WEP`, `nopass` | No | `WPA` | Network security type. |
 | `hidden` | `boolean` | No | `false` | Whether the SSID is hidden. |
@@ -155,7 +155,7 @@ curl --request POST \
 
 ## vCard
 
-`POST /v1/qr/vcard` — encode contact details as a scannable vCard. Plus all
+`POST /v1/qr/vcard` encodes contact details as a scannable vCard. Plus all
 [rendering options](#rendering-options).
 
 | Field | Type | Required | Description |
@@ -181,7 +181,7 @@ curl --request POST \
 
 ## Email
 
-`POST /v1/qr/email` — encode a pre-filled email link. Plus all
+`POST /v1/qr/email` encodes a pre-filled email link. Plus all
 [rendering options](#rendering-options).
 
 | Field | Type | Required | Description |
@@ -203,7 +203,7 @@ curl --request POST \
 
 ## SMS
 
-`POST /v1/qr/sms` — encode a pre-filled SMS. Plus all
+`POST /v1/qr/sms` encodes a pre-filled SMS. Plus all
 [rendering options](#rendering-options).
 
 | Field | Type | Required | Description |

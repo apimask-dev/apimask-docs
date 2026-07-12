@@ -5,9 +5,9 @@ import type { DocsThemeConfig } from "nextra-theme-docs";
 
 const SITE_URL = "https://apimask.dev";
 const SITE_NAME = "ApiMask";
-const DEFAULT_TITLE = "ApiMask — Developer, AI, Email, Domain & Website APIs";
+const DEFAULT_TITLE = "ApiMask - Developer, AI, Email, Domain & Website APIs";
 const DEFAULT_DESCRIPTION =
-  "ApiMask is a growing platform of production-ready APIs — developer utilities, AI content, email & domain validation, SEO, security, and website intelligence — available through RapidAPI with clean JSON responses and copy-paste examples.";
+  "ApiMask is a growing platform of production-ready APIs: developer utilities, AI content, bulk email verification, domain validation, SEO, security, and website intelligence. Available through RapidAPI with clean JSON responses and copy-paste examples.";
 const OG_IMAGE = `${SITE_URL}/apimask-logo.png`;
 
 // Site-wide structured data. Organization + WebSite (with a SearchAction) help
@@ -55,7 +55,7 @@ function useSeoHead() {
 
   // Per-page title from frontmatter, with the brand as a suffix. Fall back to
   // the site default only when a page provides no title at all.
-  const title = pageTitle ? `${pageTitle} — ${SITE_NAME}` : DEFAULT_TITLE;
+  const title = pageTitle ? `${pageTitle} - ${SITE_NAME}` : DEFAULT_TITLE;
   const description = (frontMatter.description as string) || DEFAULT_DESCRIPTION;
   const image = (frontMatter.image as string) || OG_IMAGE;
 
@@ -84,7 +84,7 @@ function useSeoHead() {
       <meta name="robots" content="index,follow" />
       <meta
         name="keywords"
-        content="ApiMask, RapidAPI, developer utilities API, AI content API, email validation API, domain analysis API, DNS analyzer API, SSL checker API, security headers API, SEO meta tags API, QR code API, JSON formatter API"
+        content="ApiMask, RapidAPI, developer utilities API, AI content API, bulk email verification API, email validation API, domain analysis API, DNS analyzer API, SSL checker API, security headers API, SEO meta tags API, QR code API, JSON formatter API"
       />
       <link rel="shortcut icon" href="/favicon.ico" />
       <link rel="icon" href="/favicon-32x32.png" sizes="32x32" type="image/png" />
@@ -146,7 +146,7 @@ const config: DocsThemeConfig = {
   },
   footer: {
     content:
-      "ApiMask — developer utility, AI content, email, domain, security, SEO, and website intelligence APIs available through RapidAPI.",
+      "ApiMask - developer utility, AI content, email, domain, security, SEO, and website intelligence APIs available through RapidAPI.",
   },
   // `head` is rendered inside a React component, so a function head can use
   // hooks (useConfig/useRouter) to emit per-page SEO. Returning a static node

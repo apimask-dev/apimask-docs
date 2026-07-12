@@ -131,13 +131,6 @@ html[class~="dark"] :not(pre) > code.nextra-code {
   text-decoration: none;
 }
 
-.secondaryAction::after {
-  margin-left: 8px;
-  content: "->";
-  font-family: var(--apimask-mono);
-  font-size: 13px;
-}
-
 .browseAll {
   display: inline-flex;
   align-items: center;
@@ -153,13 +146,6 @@ html[class~="dark"] :not(pre) > code.nextra-code {
   transition:
     border-color 160ms ease,
     transform 160ms ease;
-}
-
-.browseAll::after {
-  margin-left: 8px;
-  content: "->";
-  font-family: var(--apimask-mono);
-  font-size: 12px;
 }
 
 .browseAll:hover {

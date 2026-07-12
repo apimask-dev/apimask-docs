@@ -2,6 +2,7 @@ export default {
   index: "API Catalog",
   "developer-utilities": "Developer Utilities",
   "email-domain-validation": "Email & Domain",
+  "bulk-email-verification": "Bulk Email Verification",
   "qr-code-generator-api": "QR Code Generator API",
   "qr-code-api-with-logo": "QR Code API with Logo",
   "wifi-qr-code-api": "WiFi QR Code API",

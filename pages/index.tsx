@@ -1,13 +1,22 @@
 import Head from "next/head";
 import Link from "next/link";
 
+function ArrowIcon() {
+  return (
+    <svg className="linkIcon" viewBox="0 0 16 16" aria-hidden="true">
+      <path d="M5 3.5 9.5 8 5 12.5" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" />
+      <path d="M9.5 8H2.75" fill="none" stroke="currentColor" strokeLinecap="round" strokeWidth="1.8" />
+    </svg>
+  );
+}
+
 const popularApis = [
   ["QR Code Generator", "Create PNG/SVG QR codes for URLs, WiFi, and vCards with optional logo overlay."],
   ["AI Content Generator", "Generate SEO meta tags, summaries, rewrites, and product descriptions."],
+  ["Bulk Email Verification", "Validate CSVs and lead lists with disposable, role-account, MX, SPF, and DMARC checks."],
   ["Email Validation", "Verify syntax, MX records, disposable domains, and role accounts."],
   ["Regex Generator", "Turn plain English descriptions into usable regular expressions."],
   ["DNS Analyzer", "Inspect A, AAAA, MX, TXT, NS, CNAME, SPF, and DMARC records."],
-  ["SSL Checker", "Check certificate validity, issuer, SANs, and expiration windows."],
 ];
 
 const useCases = [
@@ -25,7 +34,7 @@ const useCases = [
 const categories = [
   { name: "Developer utilities", status: "Live", note: "Regex, JSON, Base64, hashing, IDs, URL parsing" },
   { name: "AI content", status: "Live", note: "SEO meta tags, summaries, rewrites, descriptions" },
-  { name: "Email & domain", status: "Live", note: "Validation, MX/DNS, deliverability" },
+  { name: "Email & domain", status: "Live", note: "Validation, bulk lists, MX/DNS, deliverability" },
   { name: "Website & security", status: "Live", note: "SSL, security headers, robots.txt, sitemap, CORS" },
   { name: "QR codes", status: "Live", note: "URL, WiFi, vCard, branded logo QR codes" },
   { name: "SEO", status: "Live", note: "Meta tags, site audits, structured data checks" },
@@ -57,22 +66,13 @@ const productGroups = [
     rapidapi: "https://rapidapi.com/aftaab/api/ai-content-generator-api",
   },
   {
-    icon: "{}",
-    count: 12,
-    title: "Developer Utilities API",
-    copy: "Regex, stacktrace, README, changelog, JSON, Base64, hashes, IDs, and URL parsing.",
-    tags: ["Regex", "JSON", "Base64", "Stacktrace"],
-    docs: "/api/developer-utilities",
-    rapidapi: "https://rapidapi.com/aftaab/api/apimask-developer-utilities-api",
-  },
-  {
     icon: "@",
-    count: 8,
-    title: "Email, Domain & Website Utilities",
-    copy: "Email validation, DNS analysis, SSL checks, URL safety, security headers, robots.txt, sitemap, and CORS checks.",
-    tags: ["Email", "DNS", "SSL", "CORS"],
-    docs: "/api/email-domain-validation",
-    rapidapi: "https://rapidapi.com/aftaab/api/email-domain-validation-api",
+    count: 5,
+    title: "Bulk Email Verification API",
+    copy: "Validate JSON batches and CSV uploads, flag disposable and role-account emails, and check MX, SPF, and DMARC readiness.",
+    tags: ["CSV", "MX", "SPF", "DMARC"],
+    docs: "/api/bulk-email-verification",
+    rapidapi: "https://rapidapi.com/aftaab/api/bulk-email-verification-api",
   },
 ];
 
@@ -80,7 +80,7 @@ export default function LandingPage() {
   return (
     <>
       <Head>
-        <title>ApiMask — Developer, AI, Email, Domain &amp; Website APIs</title>
+        <title>ApiMask - Developer, AI, Email, Domain &amp; Website APIs</title>
         <link rel="canonical" href="https://apimask.dev" />
         <link rel="shortcut icon" href="/favicon.ico" />
         <link rel="icon" href="/favicon-32x32.png" sizes="32x32" type="image/png" />
@@ -93,13 +93,13 @@ export default function LandingPage() {
         <meta name="robots" content="index,follow" />
         <meta
           name="keywords"
-          content="ApiMask, RapidAPI APIs, developer utilities API, email validation API, DNS analyzer API, SSL checker API, security headers analyzer API, JSON formatter API"
+          content="ApiMask, RapidAPI APIs, developer utilities API, bulk email verification API, email validation API, DNS analyzer API, SSL checker API, security headers analyzer API, JSON formatter API"
         />
         <meta
           name="description"
-          content="ApiMask is a growing platform of production-ready APIs — developer utilities, AI content, email & domain validation, SEO, security, and website intelligence — with clean JSON responses, available through RapidAPI."
+          content="ApiMask is a growing platform of production-ready APIs: developer utilities, AI content, bulk email verification, domain validation, SEO, security, and website intelligence. Clean JSON responses, available through RapidAPI."
         />
-        <meta property="og:title" content="ApiMask — Developer, AI, Email, Domain & Website APIs" />
+        <meta property="og:title" content="ApiMask - Developer, AI, Email, Domain & Website APIs" />
         <meta
           property="og:description"
           content="Focused APIs for developers, SaaS teams, SEO tools, and website audit workflows. Available through RapidAPI."
@@ -196,15 +196,15 @@ export default function LandingPage() {
           <div className="heroCopy">
             <div className="heroBadges" aria-label="ApiMask launch details">
               <span>Available through RapidAPI</span>
-              <span>4 API products</span>
+              <span>5 API products</span>
             </div>
             <h1>
               Practical APIs for <span>developer tools</span> and website intelligence.
             </h1>
             <p className="lead">
               ApiMask gives teams focused JSON APIs for QR code generation, AI content,
-              email validation, regex generation, DNS and SSL checks, security headers,
-              and everyday developer utilities — all available through RapidAPI.
+              bulk email verification, regex generation, DNS and SSL checks, security
+              headers, and everyday developer utilities. All available through RapidAPI.
             </p>
             <div className="actions">
               <a className="primaryAction" href="https://rapidapi.com/user/aftaab">
@@ -212,6 +212,7 @@ export default function LandingPage() {
               </a>
               <Link className="secondaryAction" href="/api">
                 Explore API docs
+                <ArrowIcon />
               </Link>
             </div>
             <p className="integrationNote">
@@ -220,11 +221,11 @@ export default function LandingPage() {
             </p>
             <div className="metrics" aria-label="ApiMask launch metrics">
               <span>
-                <strong>34</strong>
+                <strong>39</strong>
                 live endpoints
               </span>
               <span>
-                <strong>4</strong>
+                <strong>5</strong>
                 API products
               </span>
               <span>
@@ -328,15 +329,16 @@ export default function LandingPage() {
         <section className="productBand">
           <div className="productBandHeader">
             <div className="productBandIntro">
-              <p className="eyebrow">Product groups</p>
-              <h2>Built for marketplace discovery and direct developer intent.</h2>
+              <p className="eyebrow">Featured products</p>
+              <h2>Start with the collections buyers search for first.</h2>
               <p className="productBandLead">
-                ApiMask is packaged around buyer intent so teams can find the exact API
-                set they need on RapidAPI.
+                These are highlighted collections. The complete API catalog stays one
+                click away for teams comparing the full platform.
               </p>
             </div>
             <Link href="/api" className="browseAll">
               Browse all APIs
+              <ArrowIcon />
             </Link>
           </div>
           <div className="productGrid">
@@ -364,6 +366,7 @@ export default function LandingPage() {
                     rel="noreferrer"
                   >
                     Subscribe on RapidAPI
+                    <ArrowIcon />
                   </a>
                 </div>
               </article>
@@ -377,8 +380,8 @@ export default function LandingPage() {
             <h2>One API key. A platform that keeps expanding.</h2>
             <p>
               ApiMask is built as a modular API ecosystem. Today it covers developer
-              utilities, AI content, email and domain validation, SEO, security, and
-              website intelligence — and it is expanding into OCR, PDF, resume and ATS,
+              utilities, AI content, bulk email validation, SEO, security, and
+              website intelligence. It is expanding into OCR, PDF, resume and ATS,
               app store intelligence, data enrichment, and AI agent tooling.
             </p>
           </div>
@@ -597,11 +600,17 @@ export default function LandingPage() {
           color: #171a14;
         }
 
-        .secondaryAction:after {
-          margin-left: 8px;
-          content: "->";
-          font-family: var(--apimask-mono);
-          font-size: 13px;
+        :global(.linkIcon) {
+          width: 15px;
+          height: 15px;
+          margin-left: 7px;
+          transition: transform 160ms ease;
+        }
+
+        .secondaryAction:hover :global(.linkIcon),
+        .browseAll:hover :global(.linkIcon),
+        .cardRapid:hover :global(.linkIcon) {
+          transform: translateX(3px);
         }
 
         .integrationNote {
@@ -878,20 +887,13 @@ export default function LandingPage() {
             transform 160ms ease;
         }
 
-        .browseAll:after {
-          margin-left: 8px;
-          content: "->";
-          font-family: var(--apimask-mono);
-          font-size: 12px;
-        }
-
         .browseAll:hover {
           border-color: rgba(50, 18, 106, 0.4);
           transform: translateY(-1px);
         }
 
         .productGrid {
-          grid-template-columns: repeat(auto-fill, minmax(255px, 1fr));
+          grid-template-columns: repeat(3, minmax(0, 1fr));
           gap: 18px;
         }
 
@@ -996,18 +998,6 @@ export default function LandingPage() {
 
         .cardRapid {
           color: #32126a;
-        }
-
-        .cardRapid:after {
-          margin-left: 7px;
-          content: "->";
-          font-family: var(--apimask-mono);
-          font-size: 12px;
-          transition: transform 160ms ease;
-        }
-
-        .cardRapid:hover:after {
-          transform: translateX(3px);
         }
 
         .categories {
@@ -1118,6 +1108,10 @@ export default function LandingPage() {
           }
 
           .apiGrid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+          }
+
+          .productGrid {
             grid-template-columns: repeat(2, minmax(0, 1fr));
           }
         }

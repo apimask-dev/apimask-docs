@@ -5,7 +5,7 @@ description: Generate scannable WiFi QR codes for guest networks, venues, office
 
 # WiFi QR Code API
 
-Generate WiFi QR codes that connect a phone to a network on scan — no typing the
+Generate WiFi QR codes that connect a phone to a network on scan, with no typing the
 password. Use it for guest networks, offices, cafes, venues, vacation rentals,
 events, and onboarding flows. Output is a ready-to-use PNG or SVG image.
 
@@ -38,7 +38,7 @@ POST /v1/qr/wifi
 
 | Field | Type | Required | Default | Description |
 |---|---|---:|---|---|
-| `ssid` | `string` | Yes | — | WiFi network name. 1–128 characters. |
+| `ssid` | `string` | Yes | - | WiFi network name. 1–128 characters. |
 | `password` | `string` | No | `null` | WiFi password. Up to 256 characters. Omit for open networks. |
 | `encryption` | `WPA`, `WEP`, `nopass` | No | `WPA` | Network security type. Use `nopass` for open networks. |
 | `hidden` | `boolean` | No | `false` | Whether the SSID is hidden (non-broadcasting). |
@@ -95,7 +95,7 @@ curl --request POST \
 - **Hidden networks:** set `hidden` to `true` so the device knows to search for a
   non-broadcasting SSID.
 - **Special characters:** the API escapes `;`, `,`, `:`, and `\` in the SSID and
-  password for you — send them as-is.
+  password for you. Send them as-is.
 - **Print large:** for posters, raise `box_size` or use `output: "svg"` so the
   code stays crisp at any size.
 
