@@ -1,0 +1,140 @@
+---
+title: How to Check If a Website Has Proper Security Headers
+description: Learn what website security headers are, which headers matter most, and how to automate checks with a security headers analyzer API.
+theme:
+  layout: raw
+  navbar: false
+  footer: false
+  sidebar: false
+  toc: false
+  pagination: false
+  timestamp: false
+  breadcrumb: false
+---
+
+import BlogPostLayout from '../../components/BlogPostLayout'
+
+<BlogPostLayout slug="check-website-security-headers">
+
+# How to Check If a Website Has Proper Security Headers
+
+Security headers are small HTTP response headers that can have a large impact on browser security. They tell the browser how to handle content, scripts, frames, HTTPS behavior, referrer data, permissions, and cross-origin isolation.
+
+Many teams spend time scanning application code but forget that the browser also needs clear instructions. A missing header can make a site easier to clickjack, easier to load inside an unwanted frame, more likely to leak referrer data, or less protected against content injection.
+
+The good news is that security headers are easy to audit and often easy to improve. The challenge is consistency. A website may have the right headers on the homepage but miss them on a subdomain, marketing page, app route, API response, or CDN path.
+
+## What are security headers?
+
+Security headers are HTTP headers returned by a server along with the page or resource. The browser reads them before deciding how to handle the response.
+
+For example, a site can use a header to say `only load scripts from these trusted sources`, or `do not allow this page to be embedded in a frame`, or `always use HTTPS for this domain`.
+
+Headers are not a replacement for secure code. They are a defense layer. When they are configured well, they reduce the impact of certain classes of bugs and misconfigurations.
+
+## Headers worth checking first
+
+There are many HTTP headers, but a practical website security audit usually starts with these.
+
+### Content-Security-Policy
+
+`Content-Security-Policy`, often called CSP, controls where scripts, styles, images, frames, and other resources can load from. A strong CSP can reduce the impact of cross-site scripting by limiting what injected content is allowed to execute.
+
+CSP can be complex because modern websites load assets from analytics tools, CDNs, payment providers, embedded widgets, and customer support tools. A good rollout often starts in report-only mode, then moves to enforcement once violations are understood.
+
+### Strict-Transport-Security
+
+`Strict-Transport-Security`, or HSTS, tells browsers to use HTTPS for a domain after the first secure visit. This helps prevent downgrade attacks where a user is forced onto insecure HTTP.
+
+HSTS should be used carefully. Once enabled with a long max age and subdomain coverage, mistakes can lock users out if HTTPS is not correctly configured everywhere.
+
+### X-Frame-Options or frame-ancestors
+
+These controls help prevent clickjacking. Clickjacking happens when an attacker embeds your site in a hidden or misleading frame and tricks users into clicking something they did not intend.
+
+Modern CSP uses `frame-ancestors` for this. Older systems may still use `X-Frame-Options`.
+
+### X-Content-Type-Options
+
+`X-Content-Type-Options: nosniff` tells browsers not to guess a different content type from the one declared by the server. This helps avoid certain script execution risks caused by MIME type confusion.
+
+### Referrer-Policy
+
+`Referrer-Policy` controls how much URL information is sent when a user clicks from your site to another site. Without a careful policy, sensitive path or query information can leak to third parties.
+
+### Permissions-Policy
+
+`Permissions-Policy` controls browser features such as camera, microphone, geolocation, fullscreen, and payment APIs. If your site does not use a feature, the policy can disable it.
+
+## Why security headers are often missing
+
+Security headers fall between application code, hosting, CDN, framework configuration, and reverse proxy configuration. That makes ownership unclear.
+
+A backend developer may assume the CDN adds them. A DevOps engineer may assume the framework adds them. A marketing site may use a separate hosting provider with a different header policy. A subdomain may be created quickly for a campaign and never audited.
+
+This is why automated checks are valuable. They turn header presence into a repeatable test instead of a one time review.
+
+## Manual checking with browser tools
+
+You can inspect headers manually in most browsers:
+
+1. Open developer tools.
+2. Go to the Network tab.
+3. Reload the page.
+4. Click the main document request.
+5. Review the Response Headers section.
+
+This is useful for debugging, but it does not scale. If you need to check many URLs, compare environments, monitor drift, or include checks in CI, use an API.
+
+## Automating checks with ApiMask
+
+ApiMask provides a [Security Headers Analyzer API](/api/security-headers-analyzer) that can inspect a URL and return structured information about security headers. This lets you build audits, dashboards, deployment checks, and internal tools without writing custom HTTP parsing logic each time.
+
+Example request:
+
+```bash
+curl --request POST \
+  --url https://apimask-email-domain-validation-api.p.rapidapi.com/v1/website/security-headers \
+  --header "Content-Type: application/json" \
+  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
+  --header "X-RapidAPI-Host: apimask-email-domain-validation-api.p.rapidapi.com" \
+  --data '{"url":"https://example.com"}'
+```
+
+The response can power a simple checklist in your product: present, missing, weak, or needs review.
+
+## What to do with the results
+
+Not every missing header has the same severity. A missing CSP on a complex app may be a high priority, but deploying a strict CSP without testing can break production scripts. A missing `Referrer-Policy` is often easier to fix quickly. HSTS may require confidence that HTTPS works across subdomains.
+
+The best workflow ranks findings by risk and effort:
+
+1. Fix simple low-risk headers first, such as `X-Content-Type-Options` and `Referrer-Policy`.
+2. Confirm frame protection for authenticated pages.
+3. Plan CSP carefully, starting with report-only mode if needed.
+4. Enable HSTS only after HTTPS coverage is verified.
+5. Recheck after deployment.
+
+## Where to include header checks
+
+Security header checks can fit into several workflows.
+
+Engineering teams can run them during release checks. Agencies can include them in client website audits. SEO and technical audit tools can combine them with SSL, sitemap, robots.txt, and performance checks. SaaS products can check customer domains during onboarding.
+
+Because headers can drift when infrastructure changes, periodic monitoring is better than a single launch review.
+
+## Common mistakes
+
+One mistake is checking only the homepage. Important headers should be reviewed across app pages, login pages, API routes, and key subdomains.
+
+Another mistake is copying a CSP from another website. CSP should match the resources your application actually uses. A policy that is too loose may provide little protection. A policy that is too strict may break scripts, styles, images, payments, or analytics.
+
+A third mistake is treating security headers as a checkbox. Headers should support a broader security model that also includes input validation, output encoding, authentication, authorization, dependency updates, and monitoring.
+
+## Final thoughts
+
+Security headers are a practical, visible way to improve browser security. They are also easy to forget because they live outside normal feature code.
+
+If you need to audit one site, browser tools are enough to start. If you need repeatable checks, reporting, customer domain onboarding, or CI automation, use the [ApiMask Security Headers Analyzer API](/api/security-headers-analyzer). You can combine it with [SSL Checker](/api/ssl-checker), [DNS Analyzer](/api/dns-analyzer), [CORS Checker](/api/cors-checker), and [Sitemap Validator](/api/sitemap-validator) for a broader website health workflow.
+
+</BlogPostLayout>

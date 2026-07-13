@@ -8,6 +8,7 @@ export default {
   "wifi-qr-code-api": "WiFi QR Code API",
   "ai-content-generator-api": "AI Content Generator API",
   "seo-meta-tags-api": "SEO Meta Tags API",
+  twitter: "Twitter/X API",
   "email-validation": "Email Validation",
   "regex-generator": "Regex Generator",
   "regex-explainer": "Regex Explainer",

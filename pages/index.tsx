@@ -187,6 +187,7 @@ export default function LandingPage() {
           <div className="navLinks">
             <Link href="/api">APIs</Link>
             <Link href="/quickstart">Quickstart</Link>
+            <Link href="/blog">Blog</Link>
             <Link href="/authentication">Docs</Link>
             <a href="https://rapidapi.com/user/aftaab">RapidAPI</a>
           </div>

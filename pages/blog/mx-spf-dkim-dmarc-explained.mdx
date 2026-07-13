@@ -1,0 +1,128 @@
+---
+title: MX, SPF, DKIM, and DMARC Explained for Developers
+description: A practical guide to MX, SPF, DKIM, and DMARC records for developers building email validation, domain checks, onboarding, and deliverability workflows.
+theme:
+  layout: raw
+  navbar: false
+  footer: false
+  sidebar: false
+  toc: false
+  pagination: false
+  timestamp: false
+  breadcrumb: false
+---
+
+import BlogPostLayout from '../../components/BlogPostLayout'
+
+<BlogPostLayout slug="mx-spf-dkim-dmarc-explained">
+
+# MX, SPF, DKIM, and DMARC Explained for Developers
+
+Email infrastructure looks simple from the outside. A user enters an address, your application sends a message, and the message either arrives or does not. Behind that simple flow is a set of DNS records and authentication checks that decide whether a domain can receive email and whether other servers should trust messages from that domain.
+
+Four terms show up again and again: MX, SPF, DKIM, and DMARC. They are often discussed together, but they solve different problems.
+
+MX tells the internet where email for a domain should be delivered. SPF tells receivers which servers are allowed to send email for a domain. DKIM adds a cryptographic signature to prove that a message was not changed and was signed by an authorized sender. DMARC tells receivers what to do when SPF or DKIM checks fail.
+
+If you build signup forms, lead import tools, email marketing systems, security dashboards, or domain onboarding flows, understanding these records helps you make better product decisions.
+
+## MX records: can this domain receive email?
+
+MX stands for mail exchange. An MX record points to the mail servers that handle incoming email for a domain.
+
+For example, a company using Google Workspace will usually have MX records that point to Google mail servers. A company using Microsoft 365 will have a different set of mail servers. If a domain has no MX records, it may not be able to receive email in the normal way.
+
+This matters for email validation. If a user signs up with `person@company.com` and `company.com` has no mail infrastructure, your activation email may bounce. Checking MX records before accepting the address can prevent obvious failures.
+
+An MX check is not the same as confirming that a specific mailbox exists. It only tells you that the domain appears configured to receive mail. That is still a useful signal, especially for signup validation and lead list quality.
+
+## SPF records: who is allowed to send for this domain?
+
+SPF stands for Sender Policy Framework. It is published as a TXT record in DNS. SPF lists the IP addresses or services that are allowed to send mail for a domain.
+
+For example, if a company sends email through Google Workspace and a marketing platform, its SPF record may include both providers. When a receiving mail server gets a message claiming to be from that company, it can check whether the sending server is included in the SPF policy.
+
+SPF helps reduce spoofing, but it has limits. Forwarded email can break SPF checks because the forwarding server may not be authorized by the original domain. SPF also validates the envelope sender, which is not always the same address a user sees in the `From` header.
+
+For developers, the key point is this: SPF is a sending trust signal, not a receiving signal. It helps assess whether a domain has configured outbound email authentication.
+
+## DKIM records: was this message signed by the domain?
+
+DKIM stands for DomainKeys Identified Mail. It lets a sending system attach a digital signature to an email. The receiving system can use the public key in DNS to verify that signature.
+
+DKIM helps answer two questions:
+
+- Was the message signed by a sender connected to the domain?
+- Was the message changed after it was signed?
+
+DKIM records usually use selectors. A selector is a label that lets a domain publish multiple DKIM keys. For example, a marketing platform and a transactional email provider may use different selectors.
+
+Developers often encounter DKIM during email provider setup. A provider asks the user to add one or more DNS records. The product then checks whether those records exist before allowing the user to send from a custom domain.
+
+## DMARC records: what should happen when authentication fails?
+
+DMARC stands for Domain-based Message Authentication, Reporting, and Conformance. It builds on SPF and DKIM. DMARC lets a domain owner publish a policy that tells receivers what to do when a message fails authentication checks.
+
+The common DMARC policies are:
+
+- `none`: monitor only, do not enforce.
+- `quarantine`: treat failing messages as suspicious, often spam.
+- `reject`: reject failing messages.
+
+DMARC also supports reporting. Domain owners can receive reports that show who is sending mail using their domain and whether those messages pass authentication.
+
+For product teams, DMARC is important because it shows whether a domain is serious about email security. A domain with no DMARC policy may be easier to spoof. A domain with `reject` is more protected but also requires correct sending configuration.
+
+## How these records fit together
+
+Think of these records as layers:
+
+1. MX answers whether the domain can receive mail.
+2. SPF answers whether a server is allowed to send for the domain.
+3. DKIM answers whether a message was signed and unchanged.
+4. DMARC answers how failures should be handled.
+
+For a signup form, MX is usually the first useful check. For a domain onboarding flow, SPF, DKIM, and DMARC become more important. For a security audit, all four records can provide useful signals.
+
+## Common product use cases
+
+Email and domain checks appear in many products.
+
+A SaaS signup form may check MX records before sending activation email. A CRM import tool may flag leads whose domains have no mail records. A cold email platform may check SPF, DKIM, and DMARC before allowing a user to send from a custom domain. A security product may report domains with missing or weak email authentication policies.
+
+Marketing teams also care because deliverability depends on trust. If a domain is missing SPF, DKIM, or DMARC, messages may be filtered more aggressively. That can affect onboarding emails, product announcements, invoices, and password resets.
+
+## Using ApiMask for domain and email checks
+
+ApiMask includes APIs for email and domain intelligence. Start with the [Email Validation API](/api/email-validation) when you need to validate user supplied addresses. Use the [DNS Analyzer API](/api/dns-analyzer) when you need to inspect domain records more broadly.
+
+A simple DNS analysis request can help you inspect important records without building DNS lookup handling yourself:
+
+```bash
+curl --request POST \
+  --url https://apimask-email-domain-validation-api.p.rapidapi.com/v1/domain/dns \
+  --header "Content-Type: application/json" \
+  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
+  --header "X-RapidAPI-Host: apimask-email-domain-validation-api.p.rapidapi.com" \
+  --data '{"domain":"example.com"}'
+```
+
+The application can use the response to show a setup checklist, block risky configurations, or record domain health over time.
+
+## What to show users
+
+If you expose DNS checks to users, avoid turning raw DNS output into a confusing wall of text. Translate it into actions.
+
+Instead of saying `No DMARC TXT record found`, say `Add a DMARC policy so receiving mail servers know how to handle suspicious messages from your domain.`
+
+Instead of saying `MX lookup returned empty`, say `This domain does not appear to have mail servers configured, so email delivery may fail.`
+
+Good developer tools explain the result, the risk, and the next action.
+
+## Final thoughts
+
+MX, SPF, DKIM, and DMARC are core building blocks for email reliability and domain trust. Developers do not need to become email infrastructure experts, but they should understand what each record means and which product decisions depend on it.
+
+If your product accepts email addresses, checks domains, sends mail, imports leads, or audits websites, automate these checks early. ApiMask can help with [Email Validation](/api/email-validation), [Bulk Email Verification](/api/bulk-email-verification), and [DNS Analyzer](/api/dns-analyzer) workflows.
+
+</BlogPostLayout>

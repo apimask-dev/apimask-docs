@@ -1,0 +1,202 @@
+---
+title: Website Audit API Checklist for SEO, Security, and Technical Health
+description: A practical website audit checklist for SEO tools, agencies, SaaS products, and developers who want to automate SSL, DNS, security headers, CORS, robots.txt, and sitemap checks.
+theme:
+  layout: raw
+  navbar: false
+  footer: false
+  sidebar: false
+  toc: false
+  pagination: false
+  timestamp: false
+  breadcrumb: false
+---
+
+import BlogPostLayout from '../../components/BlogPostLayout'
+
+<BlogPostLayout slug="website-audit-api-checklist">
+
+# Website Audit API Checklist for SEO, Security, and Technical Health
+
+A website audit is not one check. It is a collection of signals that help answer a bigger question: is this website technically healthy enough for users, search engines, and business workflows?
+
+Many audits focus only on visible SEO problems, such as missing meta descriptions or broken headings. Those matter, but a useful audit should also check infrastructure, security, crawlability, and integration readiness.
+
+For agencies, SaaS platforms, SEO tools, hosting dashboards, and internal engineering teams, the challenge is repeatability. A manual review can find issues once. An API-based audit can check many sites, run on a schedule, power dashboards, and catch regressions after deployment.
+
+## What a good website audit should cover
+
+A practical website audit should include these categories:
+
+1. SSL and HTTPS health
+2. DNS visibility
+3. Security headers
+4. CORS behavior
+5. Robots.txt rules
+6. Sitemap availability and validity
+7. URL safety signals
+8. SEO metadata
+9. Response behavior
+10. Clear recommendations
+
+The last point is the difference between raw data and a useful product. Users do not only need to know that something failed. They need to know why it matters and what to fix next.
+
+## SSL and HTTPS checks
+
+SSL is foundational. If a certificate is expired, invalid, misconfigured, or near expiration, users may see browser warnings and search engines may reduce trust.
+
+An SSL audit should check:
+
+- Whether the site supports HTTPS
+- Certificate issuer
+- Valid from and valid until dates
+- Expiration status
+- Hostname match
+- Chain validity
+- Redirect behavior from HTTP to HTTPS
+
+SSL issues are high visibility because browsers warn users directly. They are also operationally preventable if monitored.
+
+ApiMask provides an [SSL Checker API](/api/ssl-checker) that can help automate these checks.
+
+## DNS checks
+
+DNS tells the internet where a domain points and how services are configured. DNS issues can break websites, email, verification flows, and third-party integrations.
+
+A DNS audit may inspect:
+
+- A and AAAA records
+- CNAME records
+- MX records
+- TXT records
+- SPF and DMARC records
+- NS records
+- Missing or unexpected records
+
+For business domains, DNS is also a trust signal. A domain with working website records but broken mail records may still cause product and communication problems.
+
+Use the [DNS Analyzer API](/api/dns-analyzer) when you need structured DNS inspection.
+
+## Security headers
+
+Security headers tell browsers how to handle content, scripts, frames, referrers, permissions, and HTTPS behavior. Missing headers do not always mean a site is immediately vulnerable, but they often indicate weaker browser-level protections.
+
+Important headers include:
+
+- `Content-Security-Policy`
+- `Strict-Transport-Security`
+- `X-Frame-Options`
+- `X-Content-Type-Options`
+- `Referrer-Policy`
+- `Permissions-Policy`
+
+For a deeper explanation, read [How to Check If a Website Has Proper Security Headers](/blog/check-website-security-headers). To automate the check, use the [Security Headers Analyzer API](/api/security-headers-analyzer).
+
+## CORS behavior
+
+CORS affects browser-based applications that call APIs across origins. A marketing site may not care much about CORS, but a SaaS application, customer portal, API platform, or embedded widget often does.
+
+A CORS audit should check whether the target allows expected origins, methods, headers, and credential behavior. It should also flag risky patterns, such as overly broad origins combined with credentials.
+
+Use the [CORS Checker API](/api/cors-checker) when CORS behavior is part of your site or API audit.
+
+## Robots.txt
+
+`robots.txt` gives crawlers instructions about which paths they may crawl. It does not enforce privacy or security, but it can influence how search engines access a site.
+
+An audit should check:
+
+- Whether `robots.txt` exists
+- Whether important paths are accidentally blocked
+- Whether sitemap locations are declared
+- Whether syntax appears valid
+- Whether rules differ across environments
+
+A common mistake is blocking staging paths correctly, then accidentally shipping the same disallow rules to production.
+
+Use the [Robots.txt Analyzer API](/api/robots-txt-analyzer) to inspect this behavior.
+
+## Sitemap validation
+
+A sitemap helps search engines discover important URLs. It is especially useful for large sites, new sites, ecommerce catalogs, content libraries, and pages that are not easily found through links.
+
+A sitemap audit should check:
+
+- Whether the sitemap exists
+- Whether it is valid XML
+- Whether URLs are absolute and canonical
+- Whether listed URLs return successful responses
+- Whether the sitemap is referenced from `robots.txt`
+- Whether there are stale, redirected, or blocked URLs
+
+Use the [Sitemap Validator API](/api/sitemap-validator) for automated sitemap checks.
+
+## URL safety
+
+If your product accepts URLs from users, shows external links, audits customer sites, or scans third-party resources, URL safety checks matter.
+
+A URL safety check can help flag suspicious schemes, private network targets, malformed URLs, or known risky patterns. This is important for both user trust and backend security.
+
+Use the [URL Safety Checker API](/api/url-safety-checker) when user-supplied URLs enter your workflow.
+
+## SEO metadata
+
+SEO metadata helps search engines and users understand a page. A technical audit should inspect whether pages have clear titles, meta descriptions, canonical URLs, Open Graph tags, and relevant structured data.
+
+Metadata alone will not make a page rank, but missing or duplicated metadata can reduce click-through rate and make large sites harder to manage.
+
+ApiMask provides an [SEO Meta Tags API](/api/seo-meta-tags-api) and AI content endpoints that can help generate and review metadata at scale.
+
+## Building an API-based audit workflow
+
+A useful automated workflow might look like this:
+
+1. Accept a domain or URL from the user.
+2. Normalize and validate the URL.
+3. Run SSL, DNS, security header, CORS, robots.txt, sitemap, URL safety, and SEO metadata checks.
+4. Store raw results for debugging.
+5. Convert raw results into human-readable recommendations.
+6. Rank findings by severity and confidence.
+7. Recheck on a schedule or after deployment.
+
+This workflow is valuable because it turns a one-time audit into ongoing monitoring.
+
+## Example ApiMask audit request
+
+Each ApiMask endpoint focuses on a specific check, which keeps responses easier to understand and combine.
+
+Example SSL check:
+
+```bash
+curl --request POST \
+  --url https://apimask-email-domain-validation-api.p.rapidapi.com/v1/website/ssl \
+  --header "Content-Type: application/json" \
+  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
+  --header "X-RapidAPI-Host: apimask-email-domain-validation-api.p.rapidapi.com" \
+  --data '{"url":"https://example.com"}'
+```
+
+You can combine this with [DNS Analyzer](/api/dns-analyzer), [Security Headers Analyzer](/api/security-headers-analyzer), [CORS Checker](/api/cors-checker), [Robots.txt Analyzer](/api/robots-txt-analyzer), and [Sitemap Validator](/api/sitemap-validator) to build a fuller audit report.
+
+## Reporting recommendations clearly
+
+The best audit reports are specific. Instead of saying `Security headers missing`, say which headers are missing and why they matter. Instead of saying `Sitemap invalid`, show whether the XML is malformed, blocked, redirected, or full of broken URLs.
+
+Group findings by severity:
+
+- Critical: site unavailable, invalid SSL, dangerous URL behavior.
+- High: blocked crawl access, expired certificate, broken sitemap.
+- Medium: missing security headers, weak metadata coverage.
+- Low: cleanup opportunities, optional improvements.
+
+Also include confidence. Some checks are definitive. Others are advisory and need human review.
+
+## Final thoughts
+
+A strong website audit combines SEO, security, infrastructure, and browser behavior. Manual audits are useful for investigation, but API-based checks make audits repeatable, scalable, and product-ready.
+
+ApiMask gives developers focused APIs for the building blocks of a technical website audit: [SSL Checker](/api/ssl-checker), [DNS Analyzer](/api/dns-analyzer), [Security Headers Analyzer](/api/security-headers-analyzer), [CORS Checker](/api/cors-checker), [Robots.txt Analyzer](/api/robots-txt-analyzer), [Sitemap Validator](/api/sitemap-validator), [URL Safety Checker](/api/url-safety-checker), and [SEO Meta Tags API](/api/seo-meta-tags-api).
+
+If you are building a website audit tool, agency dashboard, customer onboarding flow, or internal health monitor, start with the checks that catch the most expensive failures: SSL, DNS, crawlability, and security headers.
+
+</BlogPostLayout>

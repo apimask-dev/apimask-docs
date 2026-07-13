@@ -1,0 +1,149 @@
+---
+title: "CORS Explained: Common Errors and How to Debug Them"
+description: Understand what CORS is, why browsers block cross-origin requests, common CORS errors, and how to debug CORS issues with a checker API.
+theme:
+  layout: raw
+  navbar: false
+  footer: false
+  sidebar: false
+  toc: false
+  pagination: false
+  timestamp: false
+  breadcrumb: false
+---
+
+import BlogPostLayout from '../../components/BlogPostLayout'
+
+<BlogPostLayout slug="cors-errors-explained">
+
+# CORS Explained: Common Errors and How to Debug Them
+
+CORS is one of the most common sources of frontend and API confusion. A backend endpoint works in curl. It works in Postman. It may even work from a server side script. Then the browser blocks it with an error about `Access-Control-Allow-Origin`, and the team loses time trying random header changes.
+
+CORS stands for Cross-Origin Resource Sharing. It is a browser security mechanism that controls when JavaScript running on one origin can read responses from another origin.
+
+The important word is browser. CORS is not a general API authentication system. It does not stop every client from calling your API. It controls whether browser-based JavaScript is allowed to access a cross-origin response.
+
+## What is an origin?
+
+An origin is the combination of scheme, host, and port.
+
+These are different origins:
+
+- `https://app.example.com`
+- `https://api.example.com`
+- `http://app.example.com`
+- `https://app.example.com:8443`
+
+Even if two domains belong to the same company, the browser treats them as different origins if the scheme, host, or port is different.
+
+If JavaScript running on `https://app.example.com` calls `https://api.example.com`, that is a cross-origin request.
+
+## Why browsers enforce CORS
+
+Browsers protect users who are logged into websites. Without origin restrictions, a malicious page could silently make requests to another site where the user is authenticated and read private responses.
+
+CORS lets the API server decide which browser origins are allowed to read its responses. The browser asks for permission using request headers. The server responds with CORS headers. If the headers do not allow the request, the browser blocks JavaScript from reading the response.
+
+## Simple requests and preflight requests
+
+Some cross-origin requests are simple enough that the browser sends them directly. Others require a preflight request.
+
+A preflight request is an `OPTIONS` request sent before the real request. The browser uses it to ask whether the actual method and headers are allowed.
+
+Preflight usually happens when the request uses:
+
+- Methods such as `PUT`, `PATCH`, or `DELETE`
+- Custom headers such as `Authorization` or `X-API-Key`
+- Certain content types, such as `application/json`
+
+The server must respond to the preflight with the right headers. If it does not, the browser never sends the actual request.
+
+## Important CORS response headers
+
+The main CORS headers are:
+
+- `Access-Control-Allow-Origin`: which origin can read the response.
+- `Access-Control-Allow-Methods`: which HTTP methods are allowed.
+- `Access-Control-Allow-Headers`: which request headers are allowed.
+- `Access-Control-Allow-Credentials`: whether cookies or credentials are allowed.
+- `Access-Control-Max-Age`: how long the browser can cache the preflight result.
+
+Most CORS bugs come from one of these being missing, too strict, too broad, or inconsistent between preflight and actual responses.
+
+## Common CORS errors
+
+### Missing Access-Control-Allow-Origin
+
+This is the classic error. The browser made the request, but the response did not include a header allowing the requesting origin.
+
+For a public API, the server may return `Access-Control-Allow-Origin: *`. For an authenticated application, the server usually returns a specific origin such as `https://app.example.com`.
+
+### Wildcard origin with credentials
+
+If the frontend sends cookies or credentials, the server cannot use `Access-Control-Allow-Origin: *`. It must return the specific requesting origin and include `Access-Control-Allow-Credentials: true`.
+
+This is a common mistake when teams move from token-only APIs to cookie-based sessions.
+
+### Preflight does not allow the method
+
+The browser may ask whether `PATCH` is allowed, but the server only returns `GET, POST`. The actual request is blocked.
+
+### Preflight does not allow a custom header
+
+If the frontend sends `Authorization`, `X-Request-ID`, or another custom header, the preflight response must include that header in `Access-Control-Allow-Headers`.
+
+### Redirects break the preflight
+
+If an `OPTIONS` request is redirected from HTTP to HTTPS, or from one path to another, some browsers and setups may fail the preflight. CORS checks are sensitive to exact responses.
+
+### Error responses miss CORS headers
+
+The success path may include CORS headers, but `401`, `403`, `404`, or `500` responses may not. This makes debugging harder because the browser hides the actual response from JavaScript.
+
+## How to debug CORS issues
+
+Start by reproducing the request in the browser, then inspect the Network tab.
+
+Look for an `OPTIONS` request before the failing request. If it exists, inspect the response headers. Confirm that the method, headers, origin, and credentials settings match the real request.
+
+Then compare the actual API response. The preflight can pass while the real response still fails if the actual response does not include `Access-Control-Allow-Origin`.
+
+Finally, check whether the failing response is an error path. If the backend returns `401` without CORS headers, the frontend will see a CORS error instead of the real authentication error.
+
+## Using ApiMask to check CORS behavior
+
+ApiMask provides a [CORS Checker API](/api/cors-checker) that can inspect how a target URL responds to cross-origin checks. This is useful for debugging customer APIs, validating deployment changes, or adding CORS checks to a website audit tool.
+
+Example request:
+
+```bash
+curl --request POST \
+  --url https://apimask-email-domain-validation-api.p.rapidapi.com/v1/website/cors \
+  --header "Content-Type: application/json" \
+  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
+  --header "X-RapidAPI-Host: apimask-email-domain-validation-api.p.rapidapi.com" \
+  --data '{"url":"https://api.example.com","origin":"https://app.example.com"}'
+```
+
+The result can help show whether the target allows the expected origin, methods, headers, and credentials behavior.
+
+## Secure CORS defaults
+
+CORS should be specific by default. For internal applications, allow only known production, staging, and local development origins. Avoid reflecting any origin without validation. Be careful with credentials. Do not combine broad origins with cookies unless you fully understand the risk.
+
+For public APIs, CORS policy depends on the product. If the API is meant to be called from browsers by many customers, a wildcard may be reasonable for unauthenticated public data. If the API uses private user data, tokens, cookies, or customer-specific responses, be more restrictive.
+
+## CORS is not authentication
+
+One of the biggest misunderstandings is treating CORS as an access control system for all clients. A request blocked by CORS in the browser can still be sent by curl, servers, scripts, or mobile apps.
+
+Your API still needs authentication, authorization, rate limits, request validation, and abuse protection. CORS is only one browser-facing layer.
+
+## Final thoughts
+
+CORS errors are frustrating because the browser protects users by hiding details from frontend code. Once you understand origins, preflight requests, and the key response headers, debugging becomes much more systematic.
+
+Use browser developer tools for local debugging. Use the [ApiMask CORS Checker API](/api/cors-checker) when you need repeatable checks, customer domain validation, deployment verification, or broader website audits. For a fuller site health workflow, combine CORS checks with [Security Headers](/api/security-headers-analyzer), [SSL Checker](/api/ssl-checker), and [DNS Analyzer](/api/dns-analyzer).
+
+</BlogPostLayout>

@@ -18,6 +18,7 @@ const TOP_LEVEL = [
   "pricing",
   "errors",
   "rate-limits",
+  "blog",
   "changelog",
 ];
 
@@ -53,18 +54,40 @@ function discoverApiRoutes(): string[] {
   return Array.from(new Set(routes));
 }
 
+function discoverBlogRoutes(): string[] {
+  const blogDir = path.join(process.cwd(), "pages", "blog");
+  const routes: string[] = [];
+
+  let entries: fs.Dirent[];
+  try {
+    entries = fs.readdirSync(blogDir, { withFileTypes: true });
+  } catch {
+    return routes;
+  }
+
+  for (const entry of entries) {
+    if (entry.name.startsWith("_")) continue;
+    if (!entry.isFile() || !/\.mdx?$/.test(entry.name) || entry.name === "index.mdx") continue;
+    routes.push(`blog/${entry.name.replace(/\.mdx?$/, "")}`);
+  }
+
+  return routes;
+}
+
 function entryFor(route: string): SitemapEntry {
   const loc = route ? `${BASE_URL}/${route}` : BASE_URL;
   if (route === "") return { loc, priority: 1.0, changefreq: "weekly" };
   if (route === "api") return { loc, priority: 0.9, changefreq: "weekly" };
   if (route.startsWith("api/")) return { loc, priority: 0.8, changefreq: "weekly" };
+  if (route === "blog") return { loc, priority: 0.8, changefreq: "weekly" };
+  if (route.startsWith("blog/")) return { loc, priority: 0.7, changefreq: "monthly" };
   if (route === "quickstart" || route === "pricing")
     return { loc, priority: 0.7, changefreq: "monthly" };
   return { loc, priority: 0.6, changefreq: "monthly" };
 }
 
 function generateSitemap(): string {
-  const routes = [...TOP_LEVEL, ...discoverApiRoutes()];
+  const routes = [...TOP_LEVEL, ...discoverApiRoutes(), ...discoverBlogRoutes()];
   const urls = routes
     .map((route) => {
       const { loc, priority, changefreq } = entryFor(route);

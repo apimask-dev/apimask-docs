@@ -1,0 +1,160 @@
+---
+title: Twitter/X API Collection
+description: Get Twitter/X profiles, tweets, search results, tweet details, and replies through normalized JSON endpoints.
+---
+
+# Twitter/X API Collection
+
+Build social listening tools, trend dashboards, lead research workflows, and AI
+data pipelines with normalized Twitter/X data. This collection wraps a third-party
+Twitter data provider behind ApiMask-owned response schemas so integrations stay
+stable if the upstream provider changes.
+
+[Open Twitter/X API on RapidAPI](https://rapidapi.com/aftaab/api/twitter-x-api)
+
+## Base URL and authentication
+
+```http
+https://twitter-x-api.p.rapidapi.com
+```
+
+| Header | Value |
+|---|---|
+| `X-RapidAPI-Key` | Your RapidAPI key |
+| `X-RapidAPI-Host` | `twitter-x-api.p.rapidapi.com` |
+
+See [Authentication](/authentication), [Rate limits](/rate-limits), and
+[Errors](/errors) for shared behavior.
+
+## Endpoints
+
+| Endpoint | Method | Description |
+|---|---:|---|
+| `/v1/twitter/profile` | GET | Get a profile by username |
+| `/v1/twitter/user-tweets` | GET | Get latest tweets for a username |
+| `/v1/twitter/search` | GET | Search tweets by keyword, hashtag, or advanced query |
+| `/v1/twitter/tweet` | GET | Get tweet details by tweet ID |
+| `/v1/twitter/replies` | GET | Get replies for a tweet |
+
+## Get profile
+
+```http
+GET /v1/twitter/profile?username=elonmusk
+```
+
+```bash
+curl --request GET \
+  --url "https://twitter-x-api.p.rapidapi.com/v1/twitter/profile?username=elonmusk" \
+  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
+  --header "X-RapidAPI-Host: twitter-x-api.p.rapidapi.com"
+```
+
+## Get user tweets
+
+```http
+GET /v1/twitter/user-tweets?username=elonmusk&limit=20&include_replies=false
+```
+
+Query params:
+
+| Field | Type | Required | Description |
+|---|---|---:|---|
+| `username` | `string` | Yes | Twitter/X username, with or without `@`. |
+| `limit` | `number` | No | Number of tweets to return, max `20`. |
+| `cursor` | `string` | No | Pagination cursor from the previous response. |
+| `include_replies` | `boolean` | No | Include replies in the user timeline. |
+
+## Search tweets
+
+```http
+GET /v1/twitter/search?query=AI&type=latest&limit=20
+```
+
+Query params:
+
+| Field | Type | Required | Description |
+|---|---|---:|---|
+| `query` | `string` | Yes | Keyword, hashtag, or Twitter advanced search query. |
+| `type` | `latest \| top` | No | Sort mode. Defaults to `latest`. |
+| `limit` | `number` | No | Number of tweets to return, max `20`. |
+| `cursor` | `string` | No | Pagination cursor from the previous response. |
+
+## Get tweet
+
+```http
+GET /v1/twitter/tweet?tweet_id=123456789
+```
+
+## Get replies
+
+```http
+GET /v1/twitter/replies?tweet_id=123456789&sort=relevance&limit=20
+```
+
+Query params:
+
+| Field | Type | Required | Description |
+|---|---|---:|---|
+| `tweet_id` | `string` | Yes | Tweet ID to fetch replies for. |
+| `sort` | `relevance \| latest \| likes` | No | Reply sort mode. Defaults to `relevance`. |
+| `limit` | `number` | No | Number of replies to return, max `20`. |
+| `cursor` | `string` | No | Pagination cursor from the previous response. |
+
+## Example response
+
+```json
+{
+  "success": true,
+  "data": {
+    "tweets": [
+      {
+        "id": "123456789",
+        "url": "https://x.com/user/status/123456789",
+        "text": "Example tweet text",
+        "created_at": "Tue Dec 10 07:00:30 +0000 2024",
+        "author": {
+          "id": "44196397",
+          "username": "example",
+          "display_name": "Example User",
+          "verified": true
+        },
+        "metrics": {
+          "retweet_count": 10,
+          "reply_count": 5,
+          "like_count": 100,
+          "quote_count": 2,
+          "view_count": 1000
+        },
+        "data_source": "twitterapi_io",
+        "as_of": "2026-01-01T00:00:00+00:00"
+      }
+    ],
+    "page_info": {
+      "has_next_page": true,
+      "next_cursor": "cursor"
+    },
+    "result_count": 1,
+    "data_source": "twitterapi_io",
+    "as_of": "2026-01-01T00:00:00+00:00"
+  },
+  "error": null,
+  "meta": {
+    "request_id": "req_5d7a1c0e23bb"
+  }
+}
+```
+
+## Use cases
+
+- Social listening and brand monitoring
+- Twitter/X search dashboards
+- Creator and influencer research
+- Tweet reply analysis
+- Market and sentiment research
+- AI and LLM data workflows
+
+## Related docs
+
+- [API Catalog](/apis)
+- [Rate limits](/rate-limits)
+- [Errors](/errors)
