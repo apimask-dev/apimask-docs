@@ -52,7 +52,7 @@ curl --request GET \
 ## Get user tweets
 
 ```http
-GET /v1/twitter/user-tweets?username=elonmusk&limit=20&include_replies=false
+GET /v1/twitter/user-tweets?username=OpenAI&limit=20&include_replies=false
 ```
 
 Query params:
@@ -82,13 +82,13 @@ Query params:
 ## Get tweet
 
 ```http
-GET /v1/twitter/tweet?tweet_id=123456789
+GET /v1/twitter/tweet?tweet_id=2075367885438890134
 ```
 
 ## Get replies
 
 ```http
-GET /v1/twitter/replies?tweet_id=123456789&sort=relevance&limit=20
+GET /v1/twitter/replies?tweet_id=2075367885438890134&sort=relevance&limit=20
 ```
 
 Query params:
@@ -108,8 +108,8 @@ Query params:
   "data": {
     "tweets": [
       {
-        "id": "123456789",
-        "url": "https://x.com/user/status/123456789",
+        "id": "2075367885438890134",
+        "url": "https://x.com/user/status/2075367885438890134",
         "text": "Example tweet text",
         "created_at": "Tue Dec 10 07:00:30 +0000 2024",
         "author": {
