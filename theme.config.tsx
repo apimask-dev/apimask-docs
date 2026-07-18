@@ -94,9 +94,6 @@ function useSeoHead() {
       <meta name="theme-color" content="#32126a" />
       <meta name="application-name" content={SITE_NAME} />
       <meta name="apple-mobile-web-app-title" content={SITE_NAME} />
-      <link rel="preconnect" href="https://fonts.googleapis.com" />
-      <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
-
       {/* Structured data */}
       <script
         type="application/ld+json"

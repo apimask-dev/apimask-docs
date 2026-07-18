@@ -1,0 +1,725 @@
+/* Shared blog index + post styles (static CSS — no styled-jsx runtime cost). */
+
+/* ---------- Shell ---------- */
+
+.blogShell,
+.blogPage {
+  min-height: 100vh;
+  background: #f4f5f1;
+  color: #12140f;
+  font-family: var(--apimask-sans);
+  color-scheme: only light;
+}
+
+/* Scroll-driven reading progress (no JS). Unsupported browsers simply hide it. */
+.blogProgress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 50;
+  width: 100%;
+  height: 3px;
+  transform-origin: 0 50%;
+  background: #32126a;
+  pointer-events: none;
+  transform: scaleX(0);
+}
+
+@supports (animation-timeline: scroll()) {
+  .blogProgress {
+    animation: blog-progress linear;
+    animation-timeline: scroll(root);
+  }
+
+  @keyframes blog-progress {
+    from {
+      transform: scaleX(0);
+    }
+    to {
+      transform: scaleX(1);
+    }
+  }
+}
+
+/* ---------- Shared chrome ---------- */
+
+.blogShell .blogNav,
+.blogShell .blogHeader,
+.blogShell .blogArticle,
+.blogShell .blogFooter {
+  max-width: 720px;
+  margin: 0 auto;
+  padding-right: 28px;
+  padding-left: 28px;
+}
+
+.blogShell .blogNav,
+.blogPage .blogNav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 22px;
+  padding-bottom: 22px;
+}
+
+.blogPage .blogNav {
+  max-width: 860px;
+  margin: 0 auto;
+  padding-right: 28px;
+  padding-left: 28px;
+}
+
+.blogBrand,
+.blogNavLinks,
+.blogMeta,
+.blogApiLink,
+.blogHeroActions,
+.blogFeaturedMeta,
+.blogPostMeta,
+.blogReadCta,
+.blogApiLinks a {
+  display: flex;
+  align-items: center;
+}
+
+.blogBrand {
+  gap: 10px;
+  color: #12140f;
+  font-weight: 700;
+  font-family: var(--apimask-display);
+  text-decoration: none;
+}
+
+.blogBrandMark {
+  width: 34px;
+  height: 34px;
+  border-radius: 7px;
+  background: #ffffff;
+  object-fit: cover;
+  box-shadow: 0 10px 24px rgba(50, 18, 106, 0.12);
+  flex-shrink: 0;
+}
+
+.blogNavLinks {
+  gap: 22px;
+  font-size: 14px;
+}
+
+.blogNavLinks a {
+  color: #373b32;
+  text-decoration: none;
+}
+
+.blogNavLinks a[aria-current="page"] {
+  color: #12140f;
+  font-weight: 700;
+}
+
+/* ---------- Post header / article ---------- */
+
+.blogHeader {
+  padding-top: 28px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #d8ddd2;
+}
+
+.blogBack {
+  display: inline-block;
+  margin-bottom: 18px;
+  color: #5d6458;
+  font-size: 14px;
+  font-weight: 650;
+  text-decoration: none;
+}
+
+.blogBack:hover {
+  color: #32126a;
+}
+
+.blogMeta {
+  gap: 10px;
+  margin-bottom: 20px;
+  color: #696f65;
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.blogArticle {
+  padding-top: 28px;
+  padding-bottom: 48px;
+  /* Isolate layout work while scrolling long guides */
+  contain: content;
+}
+
+.blogArticle h1 {
+  margin: 0 0 24px;
+  font-size: clamp(32px, 5vw, 42px);
+  line-height: 1.12;
+  letter-spacing: 0;
+  font-family: var(--apimask-display);
+  font-weight: 700;
+  color: #12140f;
+  text-wrap: balance;
+}
+
+.blogArticle h2 {
+  margin: 2.25rem 0 0.85rem;
+  font-size: 1.4rem;
+  line-height: 1.25;
+  font-family: var(--apimask-display);
+  font-weight: 700;
+  color: #12140f;
+  scroll-margin-top: 1.5rem;
+  text-wrap: balance;
+}
+
+.blogArticle h3 {
+  margin: 1.75rem 0 0.65rem;
+  font-size: 1.1rem;
+  line-height: 1.3;
+  font-family: var(--apimask-display);
+  font-weight: 700;
+  color: #12140f;
+  scroll-margin-top: 1.5rem;
+}
+
+.blogArticle p,
+.blogArticle li {
+  color: #373b32;
+  font-size: 1.05rem;
+  line-height: 1.75;
+}
+
+.blogArticle p {
+  margin: 0 0 1.15rem;
+  text-wrap: pretty;
+}
+
+.blogArticle ul,
+.blogArticle ol {
+  margin: 0 0 1.25rem;
+  padding-left: 1.35rem;
+}
+
+.blogArticle li {
+  margin-bottom: 0.45rem;
+}
+
+.blogArticle a {
+  color: #32126a;
+  font-weight: 650;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.blogArticle a:hover {
+  color: #1f0a45;
+}
+
+.blogArticle strong {
+  color: #12140f;
+  font-weight: 700;
+}
+
+.blogArticle code {
+  font-family: var(--apimask-mono) !important;
+  font-size: 0.9em;
+}
+
+.blogArticle :not(pre) > code {
+  border: 1px solid rgba(17, 20, 15, 0.12);
+  border-radius: 5px;
+  background: rgba(17, 20, 15, 0.05);
+  padding: 0.12em 0.35em;
+  color: #11140f;
+}
+
+.blogArticle pre,
+.blogArticle [data-rehype-pretty-code-figure] {
+  /* Skip offscreen code blocks during scroll */
+  content-visibility: auto;
+  contain-intrinsic-size: auto 220px;
+}
+
+.blogArticle pre {
+  margin: 1.25rem 0 1.5rem;
+  border: 1px solid rgba(17, 20, 15, 0.1);
+  border-radius: 8px;
+  background: #11140f !important;
+  padding: 1rem 1.15rem;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.blogArticle pre code {
+  background: transparent !important;
+  color: #dfe8dc;
+  font-size: 0.875rem !important;
+  line-height: 1.7 !important;
+}
+
+.blogArticle [data-rehype-pretty-code-figure] {
+  margin: 1.25rem 0 1.5rem;
+}
+
+.blogArticle [data-rehype-pretty-code-figure] pre {
+  margin: 0;
+  box-shadow: none;
+}
+
+.blogArticle blockquote {
+  margin: 1.25rem 0;
+  border-left: 3px solid #32126a;
+  padding: 0.25rem 0 0.25rem 1rem;
+  color: #4c5148;
+}
+
+.blogArticle hr {
+  margin: 2rem 0;
+  border: 0;
+  border-top: 1px solid #d8ddd2;
+}
+
+/* ---------- Post footer ---------- */
+
+.blogFooter {
+  padding-bottom: 72px;
+}
+
+.blogApiCta {
+  margin-bottom: 28px;
+  border: 1px solid #d8ddd2;
+  border-radius: 10px;
+  background: #ffffff;
+  padding: 20px 22px;
+}
+
+.blogEyebrow {
+  margin: 0 0 8px;
+  color: #276749;
+  font-size: 12px;
+  font-weight: 760;
+  text-transform: uppercase;
+}
+
+.blogApiLink {
+  color: #12140f;
+  font-size: 16px;
+  font-weight: 720;
+  font-family: var(--apimask-display);
+  text-decoration: none;
+}
+
+.blogApiLink:hover {
+  color: #32126a;
+}
+
+.blogLinkIcon {
+  width: 15px;
+  height: 15px;
+  margin-left: 7px;
+  flex-shrink: 0;
+  transition: transform 160ms ease;
+}
+
+.blogApiLink:hover .blogLinkIcon,
+.blogReadCta:hover .blogLinkIcon,
+.blogFeaturedLink:hover .blogLinkIcon,
+.blogPostRow:hover .blogLinkIcon,
+.blogApiLinks a:hover .blogLinkIcon,
+.blogSecondaryAction:hover .blogLinkIcon {
+  transform: translateX(3px);
+}
+
+.blogAdjacent {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  border-top: 1px solid #d8ddd2;
+  padding-top: 28px;
+}
+
+.blogAdjacentLink {
+  display: grid;
+  gap: 6px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.blogAdjacentLink.next {
+  text-align: right;
+  justify-items: end;
+}
+
+.blogAdjacentLink span {
+  color: #696f65;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.blogAdjacentLink strong {
+  color: #12140f;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.35;
+  font-family: var(--apimask-display);
+}
+
+.blogAdjacentLink:hover strong {
+  color: #32126a;
+}
+
+/* ---------- Blog index ---------- */
+
+.blogPage .blogHero,
+.blogPage .blogFeatured,
+.blogPage .blogLatest,
+.blogPage .blogPaths,
+.blogPage .blogApiRail {
+  max-width: 860px;
+  margin: 0 auto;
+  padding-right: 28px;
+  padding-left: 28px;
+}
+
+.blogPage .blogHero {
+  padding-top: 48px;
+  padding-bottom: 40px;
+  border-bottom: 1px solid #d8ddd2;
+}
+
+.blogPage .blogEyebrow {
+  margin: 0 0 12px;
+  color: #276749;
+  font-size: 13px;
+  font-weight: 760;
+  text-transform: uppercase;
+}
+
+.blogPage h1,
+.blogPage h2,
+.blogPage h3,
+.blogPage p {
+  margin-top: 0;
+}
+
+.blogPage h1 {
+  max-width: 720px;
+  margin-bottom: 18px;
+  font-size: clamp(36px, 5vw, 52px);
+  line-height: 1.05;
+  font-family: var(--apimask-display);
+  text-wrap: balance;
+}
+
+.blogPage h2 {
+  margin-bottom: 12px;
+  font-size: clamp(26px, 3.5vw, 34px);
+  line-height: 1.12;
+  font-family: var(--apimask-display);
+  text-wrap: balance;
+}
+
+.blogPage h3 {
+  margin-bottom: 8px;
+  font-size: 20px;
+  line-height: 1.25;
+  font-family: var(--apimask-display);
+}
+
+.blogLead {
+  max-width: 620px;
+  margin-bottom: 24px;
+  color: #4c5148;
+  font-size: 17px;
+  line-height: 1.65;
+}
+
+.blogHeroActions {
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.blogPrimaryAction,
+.blogSecondaryAction {
+  display: inline-flex;
+  min-height: 48px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 7px;
+  padding: 0 20px;
+  font-size: 14px;
+  font-weight: 720;
+  text-decoration: none;
+}
+
+.blogPrimaryAction {
+  background: #11140f;
+  color: #ffffff;
+  box-shadow: 0 14px 28px rgba(17, 20, 15, 0.16);
+}
+
+.blogSecondaryAction {
+  color: #171a14;
+}
+
+.blogFeatured {
+  padding-top: 36px;
+  padding-bottom: 8px;
+}
+
+.blogFeaturedLink {
+  display: block;
+  padding: 8px 0 36px;
+  border-bottom: 1px solid #d8ddd2;
+  color: inherit;
+  text-decoration: none;
+}
+
+.blogFeaturedLink:hover h2,
+.blogPostRow:hover h3 {
+  color: #32126a;
+}
+
+.blogFeaturedMeta,
+.blogPostMeta {
+  gap: 10px;
+  margin-bottom: 12px;
+  color: #696f65;
+  font-size: 13px;
+  font-weight: 650;
+  flex-wrap: wrap;
+}
+
+.blogFeaturedMeta span:first-child {
+  color: #276749;
+  font-weight: 760;
+  text-transform: uppercase;
+}
+
+.blogFeaturedLink h2 {
+  max-width: 720px;
+  margin-bottom: 12px;
+  font-size: clamp(28px, 4vw, 36px);
+}
+
+.blogFeaturedLink p,
+.blogPostMain p,
+.blogPathCard p,
+.blogApiRail p,
+.blogSectionLead {
+  color: #4c5148;
+  line-height: 1.65;
+}
+
+.blogFeaturedLink p {
+  max-width: 640px;
+  margin-bottom: 18px;
+  font-size: 16px;
+}
+
+.blogReadCta {
+  color: #32126a;
+  font-size: 14px;
+  font-weight: 720;
+  white-space: nowrap;
+}
+
+.blogLatest,
+.blogPaths {
+  padding-top: 56px;
+}
+
+.blogSectionHead {
+  max-width: 640px;
+  margin-bottom: 8px;
+}
+
+.blogSectionLead {
+  margin-bottom: 8px;
+  font-size: 16px;
+}
+
+.blogPostList {
+  border-top: 1px solid #d8ddd2;
+}
+
+.blogPostRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 24px;
+  align-items: start;
+  padding: 28px 0;
+  border-bottom: 1px solid #d8ddd2;
+  color: inherit;
+  text-decoration: none;
+}
+
+.blogPostMain h3 {
+  max-width: 640px;
+  margin-bottom: 8px;
+  font-size: 22px;
+}
+
+.blogPostMain p {
+  max-width: 620px;
+  margin-bottom: 0;
+  font-size: 15px;
+}
+
+.blogPostRow .blogReadCta {
+  padding-top: 28px;
+}
+
+.blogPathGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 24px;
+}
+
+.blogPathCard {
+  border: 1px solid #d8ddd2;
+  border-radius: 10px;
+  background: #ffffff;
+  padding: 22px;
+}
+
+.blogPathCard p {
+  margin-bottom: 0;
+  font-size: 14px;
+}
+
+.blogChipRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.blogChipRow span {
+  border: 1px solid #d8ddd2;
+  border-radius: 999px;
+  background: #f8f9f6;
+  padding: 5px 10px;
+  color: #373b32;
+  font-size: 12px;
+  font-weight: 650;
+}
+
+.blogApiRail {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(240px, 0.7fr);
+  gap: 28px;
+  align-items: start;
+  margin-top: 56px;
+  margin-bottom: 72px;
+  border: 1px solid #d8ddd2;
+  border-radius: 10px;
+  background: #ffffff;
+  padding: 28px;
+}
+
+.blogApiRail p {
+  margin-bottom: 0;
+  font-size: 15px;
+}
+
+.blogApiLinks {
+  display: grid;
+  gap: 8px;
+}
+
+.blogApiLinks a {
+  justify-content: space-between;
+  border: 1px solid #d8ddd2;
+  border-radius: 7px;
+  background: #f8f9f6;
+  padding: 12px 14px;
+  color: #11140f;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.blogApiLinks a:hover {
+  border-color: rgba(50, 18, 106, 0.28);
+  background: #ffffff;
+}
+
+@media (max-width: 800px) {
+  .blogShell .blogNav,
+  .blogPage .blogNav {
+    align-items: flex-start;
+    gap: 16px;
+    flex-direction: column;
+  }
+
+  .blogNavLinks {
+    flex-wrap: wrap;
+    gap: 12px 18px;
+  }
+
+  .blogPostRow {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .blogPostRow .blogReadCta {
+    padding-top: 0;
+  }
+
+  .blogPathGrid,
+  .blogApiRail {
+    grid-template-columns: 1fr;
+  }
+
+  .blogAdjacent {
+    grid-template-columns: 1fr;
+  }
+
+  .blogAdjacentLink.next {
+    text-align: left;
+    justify-items: start;
+  }
+}
+
+@media (max-width: 640px) {
+  .blogShell .blogNav,
+  .blogShell .blogHeader,
+  .blogShell .blogArticle,
+  .blogShell .blogFooter,
+  .blogPage .blogNav,
+  .blogPage .blogHero,
+  .blogPage .blogFeatured,
+  .blogPage .blogLatest,
+  .blogPage .blogPaths,
+  .blogPage .blogApiRail {
+    padding-right: 18px;
+    padding-left: 18px;
+  }
+
+  .blogPage h1 {
+    font-size: 34px;
+  }
+
+  .blogLead {
+    font-size: 16px;
+  }
+
+  .blogApiRail {
+    padding: 22px 18px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .blogProgress {
+    animation: none;
+    display: none;
+  }
+
+  .blogLinkIcon {
+    transition: none;
+  }
+}

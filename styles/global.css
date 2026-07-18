@@ -1,9 +1,9 @@
-@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;450;500;600;700&family=IBM+Plex+Sans:wght@400;450;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap");
-
+/* Fonts are self-hosted via next/font (lib/fonts.ts + pages/_document.tsx).
+   --font-apimask-* variables resolve to the optimized face; system stacks are fallbacks. */
 :root {
-  --apimask-sans: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
-  --apimask-display: "Space Grotesk", "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
-  --apimask-mono: "IBM Plex Mono", "SFMono-Regular", "Cascadia Code", "Roboto Mono", Menlo, Monaco, Consolas, monospace;
+  --apimask-sans: var(--font-apimask-sans), "Helvetica Neue", Arial, sans-serif;
+  --apimask-display: var(--font-apimask-display), "Helvetica Neue", Arial, sans-serif;
+  --apimask-mono: var(--font-apimask-mono), "SFMono-Regular", "Cascadia Code", "Roboto Mono", Menlo, Monaco, Consolas, monospace;
   --apimask-ink: #12140f;
   --apimask-muted: #555c50;
   --apimask-line: #d9ded3;
@@ -22,6 +22,13 @@ body {
   font-family: var(--apimask-sans);
   letter-spacing: 0;
   font-size: 16px;
+  margin: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
 h1,
