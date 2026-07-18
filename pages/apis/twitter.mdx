@@ -1,14 +1,15 @@
 ---
-title: Twitter/X API Collection
-description: Get Twitter/X profiles, tweets, search results, tweet details, and replies through normalized JSON endpoints.
+title: Twitter/X Data API
+description: Get Twitter/X profiles, tweets, search results, replies, thread extraction, and deterministic social intelligence through normalized JSON endpoints.
 ---
 
-# Twitter/X API Collection
+# Twitter/X Data API
 
 Build social listening tools, trend dashboards, lead research workflows, and AI
-data pipelines with normalized Twitter/X data. This collection wraps a third-party
+data pipelines with normalized Twitter/X data. This API wraps a third-party
 Twitter data provider behind ApiMask-owned response schemas so integrations stay
-stable if the upstream provider changes.
+stable if the upstream provider changes. Intelligence endpoints use deterministic
+analysis for predictable engagement, sentiment, topic, and conversation signals.
 
 [Open Twitter/X API on RapidAPI](https://rapidapi.com/aftaab/api/twitter-x-api)
 
@@ -33,8 +34,13 @@ See [Authentication](/authentication), [Rate limits](/rate-limits), and
 | `/v1/twitter/profile` | GET | Get a profile by username |
 | `/v1/twitter/user-tweets` | GET | Get latest tweets for a username |
 | `/v1/twitter/search` | GET | Search tweets by keyword, hashtag, or advanced query |
+| `/v1/twitter/search/insights` | GET | Analyze search results with deterministic insights |
+| `/v1/twitter/brand/mentions` | GET | Monitor brand mentions and social listening signals |
+| `/v1/twitter/profile/insights` | GET | Analyze profile performance and recent tweet topics |
 | `/v1/twitter/tweet` | GET | Get tweet details by tweet ID |
 | `/v1/twitter/replies` | GET | Get replies for a tweet |
+| `/v1/twitter/tweet/conversation-insights` | GET | Analyze replies for sentiment, questions, objections, and controversy |
+| `/v1/twitter/thread` | GET | Extract a thread as normalized tweets, text, and markdown |
 
 ## Get profile
 
@@ -79,6 +85,48 @@ Query params:
 | `limit` | `number` | No | Number of tweets to return, max `20`. |
 | `cursor` | `string` | No | Pagination cursor from the previous response. |
 
+## Search insights
+
+```http
+GET /v1/twitter/search/insights?query=AI&type=latest&limit=20
+```
+
+Returns the matching tweets plus deterministic insight fields including
+`total_engagement`, `average_engagement`, `sentiment`, `top_hashtags`,
+`top_mentions`, `top_authors`, `common_terms`, and `top_tweets`.
+
+## Brand mentions
+
+```http
+GET /v1/twitter/brand/mentions?brand=OpenAI&keywords=ChatGPT,API&type=latest&limit=20
+```
+
+Query params:
+
+| Field | Type | Required | Description |
+|---|---|---:|---|
+| `brand` | `string` | Yes | Brand, product, company, or keyword to monitor. |
+| `keywords` | `string` | No | Comma-separated related terms to include. |
+| `exclude_keywords` | `string` | No | Comma-separated terms to exclude. |
+| `type` | `latest \| top` | No | Sort mode. Defaults to `latest`. |
+| `limit` | `number` | No | Number of mentions to analyze, max `20`. |
+| `cursor` | `string` | No | Pagination cursor from the previous response. |
+
+Returns mention tweets plus deterministic social listening fields including
+`mention_count`, `sentiment`, `top_complaints`, `top_praise`, `top_accounts`,
+`top_hashtags`, and `notable_mentions`.
+
+## Profile insights
+
+```http
+GET /v1/twitter/profile/insights?username=OpenAI&tweet_limit=20&include_replies=false
+```
+
+Returns the profile, recent tweets, and deterministic profile performance fields
+including `average_likes`, `average_replies`, `average_retweets`,
+`average_engagement`, `engagement_score`, `best_performing_tweets`,
+`common_topics`, `top_hashtags`, and `posting_style`.
+
 ## Get tweet
 
 ```http
@@ -98,6 +146,31 @@ Query params:
 | `tweet_id` | `string` | Yes | Tweet ID to fetch replies for. |
 | `sort` | `relevance \| latest \| likes` | No | Reply sort mode. Defaults to `relevance`. |
 | `limit` | `number` | No | Number of replies to return, max `20`. |
+| `cursor` | `string` | No | Pagination cursor from the previous response. |
+
+## Conversation insights
+
+```http
+GET /v1/twitter/tweet/conversation-insights?tweet_id=2075367885438890134&sort=relevance&reply_limit=20
+```
+
+Returns the original tweet, sampled replies, and deterministic conversation
+fields including `sentiment`, `top_questions`, `top_objections`,
+`notable_replies`, and `controversy_score`.
+
+## Thread extractor
+
+```http
+GET /v1/twitter/thread?tweet_id=2075367885438890134&format=markdown&limit=20
+```
+
+Query params:
+
+| Field | Type | Required | Description |
+|---|---|---:|---|
+| `tweet_id` | `string` | Yes | Tweet ID to extract thread context for. |
+| `format` | `json \| text \| markdown` | No | Preferred thread format. Defaults to `json`. |
+| `limit` | `number` | No | Number of thread tweets to return, max `20`. |
 | `cursor` | `string` | No | Pagination cursor from the previous response. |
 
 ## Example response
@@ -151,6 +224,8 @@ Query params:
 - Creator and influencer research
 - Tweet reply analysis
 - Market and sentiment research
+- Brand mention monitoring
+- Thread extraction for newsletters, research, and AI workflows
 - AI and LLM data workflows
 
 ## Related docs
