@@ -1,9 +1,8 @@
 import { Head, Html, Main, NextScript } from "next/document";
-import { fontVariableClassName } from "../lib/fonts";
 
 export default function Document() {
   return (
-    <Html lang="en" className={fontVariableClassName}>
+    <Html lang="en">
       <Head />
       <body>
         <Main />

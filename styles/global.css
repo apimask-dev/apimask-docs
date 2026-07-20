@@ -1,9 +1,8 @@
-/* Fonts are self-hosted via next/font (lib/fonts.ts + pages/_document.tsx).
+/* Fonts are self-hosted via next/font (lib/fonts.ts, applied in pages/_app.tsx).
+   next/font is not supported in _document.tsx — its CSS injection is tied to the
+   per-page render tree, so the variable classes must be applied there instead.
    --font-apimask-* variables resolve to the optimized face; system stacks are fallbacks. */
 :root {
-  --apimask-sans: var(--font-apimask-sans), "Helvetica Neue", Arial, sans-serif;
-  --apimask-display: var(--font-apimask-display), "Helvetica Neue", Arial, sans-serif;
-  --apimask-mono: var(--font-apimask-mono), "SFMono-Regular", "Cascadia Code", "Roboto Mono", Menlo, Monaco, Consolas, monospace;
   --apimask-ink: #12140f;
   --apimask-muted: #555c50;
   --apimask-line: #d9ded3;
@@ -12,17 +11,29 @@
 }
 
 html {
-  font-family: var(--apimask-sans);
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-  font-family: var(--apimask-sans);
   letter-spacing: 0;
   font-size: 16px;
   margin: 0;
+}
+
+/* --apimask-sans/-display/-mono must be declared on the same element that
+   carries the real --font-apimask-* variables (next/font's .variable classes,
+   applied to this element in _app.tsx). A custom property's var() references
+   are resolved once, at its point of declaration — if declared on :root, where
+   --font-apimask-* doesn't exist, it resolves to guaranteed-invalid there and
+   that invalid value is what inherits everywhere, even into elements that do
+   have --font-apimask-* set directly. */
+.font-root {
+  --apimask-sans: var(--font-apimask-sans), "Helvetica Neue", Arial, sans-serif;
+  --apimask-display: var(--font-apimask-display), "Helvetica Neue", Arial, sans-serif;
+  --apimask-mono: var(--font-apimask-mono), "SFMono-Regular", "Cascadia Code", "Roboto Mono", Menlo, Monaco, Consolas, monospace;
+  font-family: var(--apimask-sans);
 }
 
 @media (prefers-reduced-motion: no-preference) {
