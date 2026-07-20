@@ -5,10 +5,10 @@
 .blogShell,
 .blogPage {
   min-height: 100vh;
-  background: #f4f5f1;
-  color: #12140f;
+  background: var(--apimask-surface);
+  color: var(--apimask-ink);
   font-family: var(--apimask-sans);
-  color-scheme: only light;
+  color-scheme: light dark;
 }
 
 /* Scroll-driven reading progress (no JS). Unsupported browsers simply hide it. */
@@ -20,7 +20,7 @@
   width: 100%;
   height: 3px;
   transform-origin: 0 50%;
-  background: #32126a;
+  background: var(--apimask-accent-purple);
   pointer-events: none;
   transform: scaleX(0);
 }
@@ -43,7 +43,6 @@
 
 /* ---------- Shared chrome ---------- */
 
-.blogShell .blogNav,
 .blogShell .blogHeader,
 .blogShell .blogArticle,
 .blogShell .blogFooter {
@@ -53,24 +52,6 @@
   padding-left: 28px;
 }
 
-.blogShell .blogNav,
-.blogPage .blogNav {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-top: 22px;
-  padding-bottom: 22px;
-}
-
-.blogPage .blogNav {
-  max-width: 860px;
-  margin: 0 auto;
-  padding-right: 28px;
-  padding-left: 28px;
-}
-
-.blogBrand,
-.blogNavLinks,
 .blogMeta,
 .blogApiLink,
 .blogHeroActions,
@@ -82,64 +63,31 @@
   align-items: center;
 }
 
-.blogBrand {
-  gap: 10px;
-  color: #12140f;
-  font-weight: 700;
-  font-family: var(--apimask-display);
-  text-decoration: none;
-}
-
-.blogBrandMark {
-  width: 34px;
-  height: 34px;
-  border-radius: 7px;
-  background: #ffffff;
-  object-fit: cover;
-  box-shadow: 0 10px 24px rgba(50, 18, 106, 0.12);
-  flex-shrink: 0;
-}
-
-.blogNavLinks {
-  gap: 22px;
-  font-size: 14px;
-}
-
-.blogNavLinks a {
-  color: #373b32;
-  text-decoration: none;
-}
-
-.blogNavLinks a[aria-current="page"] {
-  color: #12140f;
-  font-weight: 700;
-}
-
 /* ---------- Post header / article ---------- */
 
 .blogHeader {
   padding-top: 28px;
   padding-bottom: 8px;
-  border-bottom: 1px solid #d8ddd2;
+  border-bottom: 1px solid var(--apimask-line);
 }
 
 .blogBack {
   display: inline-block;
   margin-bottom: 18px;
-  color: #5d6458;
+  color: var(--apimask-muted);
   font-size: 14px;
   font-weight: 650;
   text-decoration: none;
 }
 
 .blogBack:hover {
-  color: #32126a;
+  color: var(--apimask-accent-purple);
 }
 
 .blogMeta {
   gap: 10px;
   margin-bottom: 20px;
-  color: #696f65;
+  color: var(--apimask-muted);
   font-size: 13px;
   font-weight: 650;
 }
@@ -158,7 +106,7 @@
   letter-spacing: 0;
   font-family: var(--apimask-display);
   font-weight: 700;
-  color: #12140f;
+  color: var(--apimask-ink);
   text-wrap: balance;
 }
 
@@ -168,7 +116,7 @@
   line-height: 1.25;
   font-family: var(--apimask-display);
   font-weight: 700;
-  color: #12140f;
+  color: var(--apimask-ink);
   scroll-margin-top: 1.5rem;
   text-wrap: balance;
 }
@@ -179,13 +127,13 @@
   line-height: 1.3;
   font-family: var(--apimask-display);
   font-weight: 700;
-  color: #12140f;
+  color: var(--apimask-ink);
   scroll-margin-top: 1.5rem;
 }
 
 .blogArticle p,
 .blogArticle li {
-  color: #373b32;
+  color: var(--apimask-muted);
   font-size: 1.05rem;
   line-height: 1.75;
 }
@@ -206,7 +154,7 @@
 }
 
 .blogArticle a {
-  color: #32126a;
+  color: var(--apimask-accent-purple);
   font-weight: 650;
   text-decoration: underline;
   text-underline-offset: 2px;
@@ -216,8 +164,12 @@
   color: #1f0a45;
 }
 
+html.dark .blogArticle a:hover {
+  color: #d8c8fb;
+}
+
 .blogArticle strong {
-  color: #12140f;
+  color: var(--apimask-ink);
   font-weight: 700;
 }
 
@@ -231,7 +183,13 @@
   border-radius: 5px;
   background: rgba(17, 20, 15, 0.05);
   padding: 0.12em 0.35em;
-  color: #11140f;
+  color: var(--apimask-ink);
+}
+
+html.dark .blogArticle :not(pre) > code {
+  border-color: rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.1);
+  color: #f4f7f0;
 }
 
 .blogArticle pre,
@@ -245,7 +203,7 @@
   margin: 1.25rem 0 1.5rem;
   border: 1px solid rgba(17, 20, 15, 0.1);
   border-radius: 8px;
-  background: #11140f !important;
+  background: var(--apimask-code-bg) !important;
   padding: 1rem 1.15rem;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
@@ -269,15 +227,15 @@
 
 .blogArticle blockquote {
   margin: 1.25rem 0;
-  border-left: 3px solid #32126a;
+  border-left: 3px solid var(--apimask-accent-purple);
   padding: 0.25rem 0 0.25rem 1rem;
-  color: #4c5148;
+  color: var(--apimask-muted);
 }
 
 .blogArticle hr {
   margin: 2rem 0;
   border: 0;
-  border-top: 1px solid #d8ddd2;
+  border-top: 1px solid var(--apimask-line);
 }
 
 /* ---------- Post footer ---------- */
@@ -288,22 +246,22 @@
 
 .blogApiCta {
   margin-bottom: 28px;
-  border: 1px solid #d8ddd2;
+  border: 1px solid var(--apimask-line);
   border-radius: 10px;
-  background: #ffffff;
+  background: var(--apimask-card);
   padding: 20px 22px;
 }
 
 .blogEyebrow {
   margin: 0 0 8px;
-  color: #276749;
+  color: var(--apimask-accent-green);
   font-size: 12px;
   font-weight: 760;
   text-transform: uppercase;
 }
 
 .blogApiLink {
-  color: #12140f;
+  color: var(--apimask-ink);
   font-size: 16px;
   font-weight: 720;
   font-family: var(--apimask-display);
@@ -311,7 +269,7 @@
 }
 
 .blogApiLink:hover {
-  color: #32126a;
+  color: var(--apimask-accent-purple);
 }
 
 .blogLinkIcon {
@@ -326,8 +284,7 @@
 .blogReadCta:hover .blogLinkIcon,
 .blogFeaturedLink:hover .blogLinkIcon,
 .blogPostRow:hover .blogLinkIcon,
-.blogApiLinks a:hover .blogLinkIcon,
-.blogSecondaryAction:hover .blogLinkIcon {
+.blogApiLinks a:hover .blogLinkIcon {
   transform: translateX(3px);
 }
 
@@ -335,7 +292,7 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 16px;
-  border-top: 1px solid #d8ddd2;
+  border-top: 1px solid var(--apimask-line);
   padding-top: 28px;
 }
 
@@ -352,14 +309,14 @@
 }
 
 .blogAdjacentLink span {
-  color: #696f65;
+  color: var(--apimask-muted);
   font-size: 12px;
   font-weight: 700;
   text-transform: uppercase;
 }
 
 .blogAdjacentLink strong {
-  color: #12140f;
+  color: var(--apimask-ink);
   font-size: 15px;
   font-weight: 700;
   line-height: 1.35;
@@ -367,7 +324,7 @@
 }
 
 .blogAdjacentLink:hover strong {
-  color: #32126a;
+  color: var(--apimask-accent-purple);
 }
 
 /* ---------- Blog index ---------- */
@@ -386,12 +343,12 @@
 .blogPage .blogHero {
   padding-top: 48px;
   padding-bottom: 40px;
-  border-bottom: 1px solid #d8ddd2;
+  border-bottom: 1px solid var(--apimask-line);
 }
 
 .blogPage .blogEyebrow {
   margin: 0 0 12px;
-  color: #276749;
+  color: var(--apimask-accent-green);
   font-size: 13px;
   font-weight: 760;
   text-transform: uppercase;
@@ -431,7 +388,7 @@
 .blogLead {
   max-width: 620px;
   margin-bottom: 24px;
-  color: #4c5148;
+  color: var(--apimask-muted);
   font-size: 17px;
   line-height: 1.65;
 }
@@ -439,29 +396,6 @@
 .blogHeroActions {
   gap: 12px;
   flex-wrap: wrap;
-}
-
-.blogPrimaryAction,
-.blogSecondaryAction {
-  display: inline-flex;
-  min-height: 48px;
-  align-items: center;
-  justify-content: center;
-  border-radius: 7px;
-  padding: 0 20px;
-  font-size: 14px;
-  font-weight: 720;
-  text-decoration: none;
-}
-
-.blogPrimaryAction {
-  background: #11140f;
-  color: #ffffff;
-  box-shadow: 0 14px 28px rgba(17, 20, 15, 0.16);
-}
-
-.blogSecondaryAction {
-  color: #171a14;
 }
 
 .blogFeatured {
@@ -472,28 +406,28 @@
 .blogFeaturedLink {
   display: block;
   padding: 8px 0 36px;
-  border-bottom: 1px solid #d8ddd2;
+  border-bottom: 1px solid var(--apimask-line);
   color: inherit;
   text-decoration: none;
 }
 
 .blogFeaturedLink:hover h2,
 .blogPostRow:hover h3 {
-  color: #32126a;
+  color: var(--apimask-accent-purple);
 }
 
 .blogFeaturedMeta,
 .blogPostMeta {
   gap: 10px;
   margin-bottom: 12px;
-  color: #696f65;
+  color: var(--apimask-muted);
   font-size: 13px;
   font-weight: 650;
   flex-wrap: wrap;
 }
 
 .blogFeaturedMeta span:first-child {
-  color: #276749;
+  color: var(--apimask-accent-green);
   font-weight: 760;
   text-transform: uppercase;
 }
@@ -509,7 +443,7 @@
 .blogPathCard p,
 .blogApiRail p,
 .blogSectionLead {
-  color: #4c5148;
+  color: var(--apimask-muted);
   line-height: 1.65;
 }
 
@@ -520,7 +454,7 @@
 }
 
 .blogReadCta {
-  color: #32126a;
+  color: var(--apimask-accent-purple);
   font-size: 14px;
   font-weight: 720;
   white-space: nowrap;
@@ -542,7 +476,7 @@
 }
 
 .blogPostList {
-  border-top: 1px solid #d8ddd2;
+  border-top: 1px solid var(--apimask-line);
 }
 
 .blogPostRow {
@@ -551,7 +485,7 @@
   gap: 24px;
   align-items: start;
   padding: 28px 0;
-  border-bottom: 1px solid #d8ddd2;
+  border-bottom: 1px solid var(--apimask-line);
   color: inherit;
   text-decoration: none;
 }
@@ -580,9 +514,9 @@
 }
 
 .blogPathCard {
-  border: 1px solid #d8ddd2;
+  border: 1px solid var(--apimask-line);
   border-radius: 10px;
-  background: #ffffff;
+  background: var(--apimask-card);
   padding: 22px;
 }
 
@@ -599,11 +533,11 @@
 }
 
 .blogChipRow span {
-  border: 1px solid #d8ddd2;
+  border: 1px solid var(--apimask-line);
   border-radius: 999px;
-  background: #f8f9f6;
+  background: var(--apimask-card);
   padding: 5px 10px;
-  color: #373b32;
+  color: var(--apimask-muted);
   font-size: 12px;
   font-weight: 650;
 }
@@ -615,9 +549,9 @@
   align-items: start;
   margin-top: 56px;
   margin-bottom: 72px;
-  border: 1px solid #d8ddd2;
+  border: 1px solid var(--apimask-line);
   border-radius: 10px;
-  background: #ffffff;
+  background: var(--apimask-card);
   padding: 28px;
 }
 
@@ -633,11 +567,11 @@
 
 .blogApiLinks a {
   justify-content: space-between;
-  border: 1px solid #d8ddd2;
+  border: 1px solid var(--apimask-line);
   border-radius: 7px;
-  background: #f8f9f6;
+  background: var(--apimask-card);
   padding: 12px 14px;
-  color: #11140f;
+  color: var(--apimask-ink);
   font-size: 14px;
   font-weight: 700;
   text-decoration: none;
@@ -645,22 +579,14 @@
 
 .blogApiLinks a:hover {
   border-color: rgba(50, 18, 106, 0.28);
-  background: #ffffff;
+  background: var(--apimask-card);
+}
+
+html.dark .blogApiLinks a:hover {
+  border-color: rgba(185, 163, 245, 0.4);
 }
 
 @media (max-width: 800px) {
-  .blogShell .blogNav,
-  .blogPage .blogNav {
-    align-items: flex-start;
-    gap: 16px;
-    flex-direction: column;
-  }
-
-  .blogNavLinks {
-    flex-wrap: wrap;
-    gap: 12px 18px;
-  }
-
   .blogPostRow {
     grid-template-columns: 1fr;
     gap: 12px;
@@ -686,11 +612,9 @@
 }
 
 @media (max-width: 640px) {
-  .blogShell .blogNav,
   .blogShell .blogHeader,
   .blogShell .blogArticle,
   .blogShell .blogFooter,
-  .blogPage .blogNav,
   .blogPage .blogHero,
   .blogPage .blogFeatured,
   .blogPage .blogLatest,

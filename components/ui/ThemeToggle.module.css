@@ -1,0 +1,25 @@
+.toggle {
+  display: inline-flex;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--apimask-line);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--apimask-ink);
+  cursor: pointer;
+  transition:
+    border-color 160ms ease,
+    background 160ms ease;
+}
+
+.toggle:hover {
+  border-color: var(--apimask-accent-purple);
+}
+
+.toggle svg {
+  width: 17px;
+  height: 17px;
+}

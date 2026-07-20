@@ -1,0 +1,51 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  border-radius: var(--radius-pill);
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 740;
+  white-space: nowrap;
+}
+
+.brand {
+  border: 1px solid rgba(50, 18, 106, 0.16);
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--apimask-accent-purple);
+  text-transform: uppercase;
+}
+
+html.dark .brand {
+  border-color: rgba(185, 163, 245, 0.28);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.green {
+  background: #e6f4ea;
+  color: #276749;
+  text-transform: uppercase;
+}
+
+html.dark .green {
+  background: rgba(139, 214, 165, 0.16);
+  color: #8bd6a5;
+}
+
+.neutral {
+  border: 1px solid var(--apimask-line);
+  background: var(--apimask-card);
+  color: var(--apimask-muted);
+  font-weight: 650;
+}
+
+.soon {
+  background: #f1edf8;
+  color: var(--apimask-accent-purple);
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: 0.02em;
+}
+
+html.dark .soon {
+  background: rgba(185, 163, 245, 0.16);
+}

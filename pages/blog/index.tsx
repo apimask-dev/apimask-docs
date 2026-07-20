@@ -1,6 +1,9 @@
 import Head from "next/head";
 import Link from "next/link";
 import { blogPosts as posts } from "../../components/blog-posts";
+import { SiteNav } from "../../components/SiteNav";
+import { ArrowIcon } from "../../components/ui/ArrowIcon";
+import { Button } from "../../components/ui/Button";
 
 const paths = [
   {
@@ -19,28 +22,6 @@ const paths = [
     links: ["Sitemaps", "Robots.txt", "SEO metadata"],
   },
 ];
-
-function ArrowIcon() {
-  return (
-    <svg className="blogLinkIcon" viewBox="0 0 16 16" aria-hidden="true">
-      <path
-        d="M5 3.5 9.5 8 5 12.5"
-        fill="none"
-        stroke="currentColor"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth="1.8"
-      />
-      <path
-        d="M9.5 8H2.75"
-        fill="none"
-        stroke="currentColor"
-        strokeLinecap="round"
-        strokeWidth="1.8"
-      />
-    </svg>
-  );
-}
 
 export default function BlogPage() {
   const [featured, ...rest] = posts;
@@ -71,37 +52,7 @@ export default function BlogPage() {
       </Head>
 
       <main className="blogPage">
-        <nav className="blogNav" aria-label="Main navigation">
-          <Link href="/" className="blogBrand" aria-label="ApiMask home" prefetch={false}>
-            <img
-              className="blogBrandMark"
-              src="/apimask-logo.png"
-              alt=""
-              width={34}
-              height={34}
-              decoding="async"
-              aria-hidden="true"
-            />
-            <span>ApiMask</span>
-          </Link>
-          <div className="blogNavLinks">
-            <Link href="/api" prefetch={false}>
-              APIs
-            </Link>
-            <Link href="/quickstart" prefetch={false}>
-              Quickstart
-            </Link>
-            <Link href="/blog" aria-current="page">
-              Blog
-            </Link>
-            <Link href="/authentication" prefetch={false}>
-              Docs
-            </Link>
-            <a href="https://rapidapi.com/user/aftaab" rel="noopener noreferrer">
-              RapidAPI
-            </a>
-          </div>
-        </nav>
+        <SiteNav variant="blogIndex" />
 
         <section className="blogHero">
           <p className="blogEyebrow">ApiMask Blog</p>
@@ -110,12 +61,12 @@ export default function BlogPage() {
             Practical writing for developers, founders, SEO operators, and SaaS teams who need to understand the problem before automating it.
           </p>
           <div className="blogHeroActions">
-            <Link className="blogPrimaryAction" href="#latest">
+            <Button href="#latest" variant="primary">
               Start reading
-            </Link>
-            <Link className="blogSecondaryAction" href="/api" prefetch={false}>
-              Browse APIs <ArrowIcon />
-            </Link>
+            </Button>
+            <Button href="/api" variant="secondary" prefetch={false} icon={<ArrowIcon />}>
+              Browse APIs
+            </Button>
           </div>
         </section>
 
@@ -129,7 +80,7 @@ export default function BlogPage() {
             <h2>{featured.title}</h2>
             <p>{featured.description}</p>
             <span className="blogReadCta">
-              Read the article <ArrowIcon />
+              Read the article <ArrowIcon className="blogLinkIcon" />
             </span>
           </Link>
         </section>
@@ -156,7 +107,7 @@ export default function BlogPage() {
                   <p>{post.description}</p>
                 </div>
                 <span className="blogReadCta">
-                  Read <ArrowIcon />
+                  Read <ArrowIcon className="blogLinkIcon" />
                 </span>
               </Link>
             ))}
@@ -194,7 +145,7 @@ export default function BlogPage() {
           <div className="blogApiLinks">
             {posts.map((post) => (
               <Link key={post.api} href={post.api} prefetch={false}>
-                {post.category} <ArrowIcon />
+                {post.category} <ArrowIcon className="blogLinkIcon" />
               </Link>
             ))}
           </div>

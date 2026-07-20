@@ -1,0 +1,128 @@
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.icon {
+  display: inline-grid;
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  place-items: center;
+  border-radius: var(--radius-md);
+  background: #f1edf8;
+  color: var(--apimask-accent-purple);
+  font-family: var(--apimask-mono);
+  font-size: 15px;
+  font-weight: 800;
+}
+
+html.dark .icon {
+  background: rgba(185, 163, 245, 0.14);
+}
+
+.count {
+  border: 1px solid var(--apimask-line);
+  border-radius: var(--radius-pill);
+  padding: 6px 10px;
+  color: var(--apimask-accent-purple);
+  font-size: 12px;
+  font-weight: 740;
+}
+
+.title {
+  margin: var(--space-4) 0 0;
+  font-size: 18px;
+  font-weight: 760;
+}
+
+.copy {
+  margin: 0;
+  color: var(--apimask-muted);
+  line-height: 1.65;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tags span {
+  border: 1px solid var(--apimask-line);
+  border-radius: var(--radius-pill);
+  background: var(--apimask-surface);
+  padding: 5px 9px;
+  color: var(--apimask-muted);
+  font-size: 12px;
+  font-weight: 650;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px 18px;
+  margin-top: auto;
+  padding-top: 4px;
+}
+
+.docsLink,
+.rapidLink {
+  display: inline-flex;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 720;
+  text-decoration: none;
+}
+
+.docsLink {
+  color: var(--apimask-muted);
+}
+
+.docsLink:hover {
+  color: var(--apimask-ink);
+}
+
+.rapidLink {
+  color: var(--apimask-accent-purple);
+}
+
+.icon16 {
+  width: 15px;
+  height: 15px;
+  margin-left: 7px;
+  flex-shrink: 0;
+  transition: transform 160ms ease;
+}
+
+.docsLink:hover .icon16,
+.rapidLink:hover .icon16 {
+  transform: translateX(3px);
+}
+
+/* Lightweight variant for tools without a dedicated RapidAPI listing */
+.lite {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.liteTitle {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 16px;
+  font-weight: 760;
+}
+
+.liteCopy {
+  margin: 0;
+  color: var(--apimask-muted);
+  font-size: 14px;
+  line-height: 1.6;
+}

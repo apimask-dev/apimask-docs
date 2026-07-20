@@ -2,6 +2,7 @@ import React from "react";
 import { useRouter } from "next/router";
 import { useConfig } from "nextra-theme-docs";
 import type { DocsThemeConfig } from "nextra-theme-docs";
+import { Button } from "./components/ui/Button";
 
 const SITE_URL = "https://apimask.dev";
 const SITE_NAME = "ApiMask";
@@ -120,25 +121,9 @@ const config: DocsThemeConfig = {
   docsRepositoryBase: "https://github.com/apimask-dev/apimask-docs/tree/main",
   navbar: {
     extraContent: (
-      <a
-        href="https://rapidapi.com/user/aftaab"
-        target="_blank"
-        rel="noreferrer"
-        style={{
-          display: "inline-flex",
-          alignItems: "center",
-          whiteSpace: "nowrap",
-          borderRadius: "7px",
-          background: "#11140f",
-          color: "#ffffff",
-          padding: "7px 13px",
-          fontSize: "13px",
-          fontWeight: 700,
-          textDecoration: "none",
-        }}
-      >
+      <Button href="https://rapidapi.com/user/aftaab" variant="rapidapi" size="sm" external>
         Subscribe on RapidAPI
-      </a>
+      </Button>
     ),
   },
   footer: {

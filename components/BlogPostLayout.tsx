@@ -2,33 +2,13 @@ import Head from "next/head";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { getAdjacentPosts, getBlogPost } from "./blog-posts";
+import { SiteNav } from "./SiteNav";
+import { ArrowIcon } from "./ui/ArrowIcon";
 
 type BlogPostLayoutProps = {
   slug: string;
   children: ReactNode;
 };
-
-function ArrowIcon() {
-  return (
-    <svg className="blogLinkIcon" viewBox="0 0 16 16" aria-hidden="true">
-      <path
-        d="M5 3.5 9.5 8 5 12.5"
-        fill="none"
-        stroke="currentColor"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth="1.8"
-      />
-      <path
-        d="M9.5 8H2.75"
-        fill="none"
-        stroke="currentColor"
-        strokeLinecap="round"
-        strokeWidth="1.8"
-      />
-    </svg>
-  );
-}
 
 export default function BlogPostLayout({ slug, children }: BlogPostLayoutProps) {
   const post = getBlogPost(slug);
@@ -45,37 +25,7 @@ export default function BlogPostLayout({ slug, children }: BlogPostLayoutProps) 
 
       <div className="blogProgress" aria-hidden="true" />
 
-      <nav className="blogNav" aria-label="Main navigation">
-        <Link href="/" className="blogBrand" aria-label="ApiMask home" prefetch={false}>
-          <img
-            className="blogBrandMark"
-            src="/apimask-logo.png"
-            alt=""
-            width={34}
-            height={34}
-            decoding="async"
-            aria-hidden="true"
-          />
-          <span>ApiMask</span>
-        </Link>
-        <div className="blogNavLinks">
-          <Link href="/api" prefetch={false}>
-            APIs
-          </Link>
-          <Link href="/quickstart" prefetch={false}>
-            Quickstart
-          </Link>
-          <Link href="/blog" aria-current="page">
-            Blog
-          </Link>
-          <Link href="/authentication" prefetch={false}>
-            Docs
-          </Link>
-          <a href="https://rapidapi.com/user/aftaab" rel="noopener noreferrer">
-            RapidAPI
-          </a>
-        </div>
-      </nav>
+      <SiteNav variant="blogPost" />
 
       <header className="blogHeader">
         <Link href="/blog" className="blogBack">
@@ -98,7 +48,7 @@ export default function BlogPostLayout({ slug, children }: BlogPostLayoutProps) 
             <div className="blogApiCta">
               <p className="blogEyebrow">Related API</p>
               <Link href={post.api} className="blogApiLink" prefetch={false}>
-                {post.category} docs <ArrowIcon />
+                {post.category} docs <ArrowIcon className="blogLinkIcon" />
               </Link>
             </div>
           )}
