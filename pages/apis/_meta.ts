@@ -10,6 +10,7 @@ export default {
   "seo-meta-tags-api": "SEO Meta Tags API",
   twitter: "Twitter/X API",
   instagram: "Instagram API",
+  linkedin: "LinkedIn API",
   "email-validation": "Email Validation",
   "regex-generator": "Regex Generator",
   "regex-explainer": "Regex Explainer",

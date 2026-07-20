@@ -1,0 +1,167 @@
+---
+title: LinkedIn API Collection
+description: LinkedIn API for profile lookup, company data, employees, people search, and jobs search in normalized JSON.
+---
+
+# LinkedIn API Collection
+
+LinkedIn API Collection provides LinkedIn profile API, LinkedIn company API,
+LinkedIn people search API, and LinkedIn jobs API endpoints through one
+RapidAPI-ready surface. Use it for recruiting, lead generation, company
+enrichment, market research, hiring analytics, and AI data workflows.
+
+[Open LinkedIn API on RapidAPI](https://rapidapi.com/aftaab/api/linkedin-api)
+
+## Base URL and authentication
+
+```http
+https://linkedin-api.p.rapidapi.com
+```
+
+| Header | Value |
+|---|---|
+| `X-RapidAPI-Key` | Your RapidAPI key |
+| `X-RapidAPI-Host` | `linkedin-api.p.rapidapi.com` |
+
+See [Authentication](/authentication), [Rate limits](/rate-limits), and
+[Errors](/errors) for shared behavior.
+
+## Endpoints
+
+| Endpoint | Method | Description |
+|---|---:|---|
+| `/v1/linkedin/profile` | GET | Get a LinkedIn profile by public URL |
+| `/v1/linkedin/company` | GET | Get LinkedIn company data by company URL |
+| `/v1/linkedin/company/employees` | GET | Find employees for a LinkedIn company page |
+| `/v1/linkedin/people/search` | GET | Search LinkedIn people profiles by keyword and filters |
+| `/v1/linkedin/jobs/search` | GET | Search LinkedIn jobs by friendly query parameters |
+
+## Get LinkedIn profile by URL
+
+```http
+GET /v1/linkedin/profile?url=https://www.linkedin.com/in/ada-lovelace
+```
+
+```bash
+curl --request GET \
+  --url "https://linkedin-api.p.rapidapi.com/v1/linkedin/profile?url=https://www.linkedin.com/in/ada-lovelace" \
+  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
+  --header "X-RapidAPI-Host: linkedin-api.p.rapidapi.com"
+```
+
+Query params:
+
+| Field | Type | Required | Description |
+|---|---|---:|---|
+| `url` | `string` | Yes | Public LinkedIn profile URL containing `linkedin.com/in/`. |
+
+## Get LinkedIn company by URL
+
+```http
+GET /v1/linkedin/company?url=https://www.linkedin.com/company/apimask
+```
+
+Query params:
+
+| Field | Type | Required | Description |
+|---|---|---:|---|
+| `url` | `string` | Yes | Public LinkedIn company URL containing `linkedin.com/company/`. |
+
+Returns normalized company fields such as name, website, employee count,
+industries, follower count, locations, and headquarters when available.
+
+## Get LinkedIn company employees
+
+```http
+GET /v1/linkedin/company/employees?company_url=https://www.linkedin.com/company/apimask&limit=10&title=Engineer
+```
+
+Query params:
+
+| Field | Type | Required | Description |
+|---|---|---:|---|
+| `company_url` | `string` | Yes | Public LinkedIn company URL. |
+| `limit` | `number` | No | Number of employee profiles to return, max `100`. |
+| `query` | `string` | No | Fuzzy search query. |
+| `location` | `string` | No | Employee location filter. |
+| `title` | `string` | No | Current job title filter. |
+
+## Search LinkedIn people
+
+```http
+GET /v1/linkedin/people/search?query=founder&location=London&limit=10
+```
+
+Query params:
+
+| Field | Type | Required | Description |
+|---|---|---:|---|
+| `query` | `string` | Yes | People search keyword or role query. |
+| `limit` | `number` | No | Number of profiles to return, max `100`. |
+| `location` | `string` | No | Profile location filter. |
+| `current_company_url` | `string` | No | Current employer LinkedIn company URL. |
+| `current_title` | `string` | No | Current job title filter. |
+
+## Search LinkedIn jobs
+
+```http
+GET /v1/linkedin/jobs/search?query=python&location=Remote&limit=10&remote=true&posted_within=week
+```
+
+Query params:
+
+| Field | Type | Required | Description |
+|---|---|---:|---|
+| `query` | `string` | Yes | Job keyword or title. |
+| `location` | `string` | No | Job location. |
+| `limit` | `number` | No | Number of jobs to return, min `10`, max `100`. |
+| `remote` | `boolean` | No | Filter for remote jobs. |
+| `posted_within` | `any \| 24h \| week \| month` | No | Posted date filter. |
+| `scrape_company` | `boolean` | No | Include company details when supported. Defaults to `true`. |
+
+## Example response
+
+```json
+{
+  "success": true,
+  "data": {
+    "query": "python",
+    "location": "Remote",
+    "jobs": [
+      {
+        "id": "mock_job_1",
+        "title": "python Engineer 1",
+        "company_name": "ApiMask",
+        "location": "Remote",
+        "data_source": "mock_linkedin_provider",
+        "as_of": "2026-01-01T00:00:00+00:00"
+      }
+    ],
+    "result_count": 1,
+    "page_info": {
+      "has_next_page": false,
+      "next_cursor": null
+    },
+    "data_source": "mock_linkedin_provider",
+    "as_of": "2026-01-01T00:00:00+00:00"
+  },
+  "error": null,
+  "meta": {
+    "request_id": "req_abc123def456"
+  }
+}
+```
+
+## Use cases
+
+- Build recruiting and candidate sourcing tools.
+- Enrich CRM and sales intelligence records with company and profile data.
+- Monitor LinkedIn jobs for hiring signals and market research.
+- Feed public business data into AI enrichment and lead scoring workflows.
+
+## Notes
+
+- ApiMask normalizes provider-backed data into stable JSON response schemas.
+- Search endpoints can be slower than direct profile and company lookup because they
+  rely on upstream search actors.
+- Availability depends on public LinkedIn data and upstream provider coverage.
