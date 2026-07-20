@@ -38,8 +38,6 @@ See [Authentication](/authentication), [Rate limits](/rate-limits), and
 | `/v1/instagram/comments` | GET | Get comments for a post or reel |
 | `/v1/instagram/hashtag/search` | GET | Search public hashtag content |
 | `/v1/instagram/search` | GET | Search profiles or hashtag content |
-| `/v1/instagram/followers` | GET | Provider capability endpoint; unsupported by Apify launch actor |
-| `/v1/instagram/following` | GET | Provider capability endpoint; unsupported by Apify launch actor |
 | `/v1/instagram/ai/profile-insights` | POST | Generate AI insights from profile and posts |
 | `/v1/instagram/ai/comment-insights` | POST | Generate AI insights from comments |
 
@@ -168,14 +166,6 @@ moderation flags, evidence, confidence, limitations, and AI metadata in `meta`.
 
 AI responses include `meta.model`, `meta.prompt_tokens`,
 `meta.completion_tokens`, and `meta.cost_usd`.
-
-## Followers and following limitation
-
-`/v1/instagram/followers` and `/v1/instagram/following` are capability endpoints.
-The launch Apify actor does not support these lists reliably, so they return
-`INSTAGRAM_PROVIDER_FEATURE_UNSUPPORTED`. Do not use them for production
-follower/following workflows until ApiMask adds a provider that supports those
-lists.
 
 ## Example response
 
