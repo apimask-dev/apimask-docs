@@ -1,0 +1,218 @@
+---
+title: Instagram API Collection
+description: Instagram API and Instagram scraper API for profiles, posts, reels, comments, hashtag search, and AI insights in normalized JSON.
+---
+
+# Instagram API Collection
+
+Build social listening tools, creator analytics dashboards, influencer research
+workflows, competitor monitoring, and AI data pipelines with a normalized
+Instagram API. This collection wraps an Instagram scraper provider behind stable
+ApiMask response schemas for public profiles, posts, reels, comments, hashtag
+search, and AI insights.
+
+[Open Instagram API on RapidAPI](https://rapidapi.com/aftaab/api/instagram-api)
+
+## Base URL and authentication
+
+```http
+https://instagram-api.p.rapidapi.com
+```
+
+| Header | Value |
+|---|---|
+| `X-RapidAPI-Key` | Your RapidAPI key |
+| `X-RapidAPI-Host` | `instagram-api.p.rapidapi.com` |
+
+See [Authentication](/authentication), [Rate limits](/rate-limits), and
+[Errors](/errors) for shared behavior.
+
+## Endpoints
+
+| Endpoint | Method | Description |
+|---|---:|---|
+| `/v1/instagram/profile` | GET | Get a public Instagram profile by username |
+| `/v1/instagram/posts` | GET | Get recent Instagram posts by username |
+| `/v1/instagram/reels` | GET | Get recent Instagram reels by username |
+| `/v1/instagram/media` | GET | Get media details by shortcode or media ID |
+| `/v1/instagram/comments` | GET | Get comments for a post or reel |
+| `/v1/instagram/hashtag/search` | GET | Search public hashtag content |
+| `/v1/instagram/search` | GET | Search profiles or hashtag content |
+| `/v1/instagram/followers` | GET | Provider capability endpoint; unsupported by Apify launch actor |
+| `/v1/instagram/following` | GET | Provider capability endpoint; unsupported by Apify launch actor |
+| `/v1/instagram/ai/profile-insights` | POST | Generate AI insights from profile and posts |
+| `/v1/instagram/ai/comment-insights` | POST | Generate AI insights from comments |
+
+## Instagram Profile, Posts, and Reels API
+
+### Get Instagram profile
+
+```http
+GET /v1/instagram/profile?username=nasawebb
+```
+
+```bash
+curl --request GET \
+  --url "https://instagram-api.p.rapidapi.com/v1/instagram/profile?username=nasawebb" \
+  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
+  --header "X-RapidAPI-Host: instagram-api.p.rapidapi.com"
+```
+
+### Get Instagram posts
+
+```http
+GET /v1/instagram/posts?username=nasawebb&limit=2
+```
+
+Query params:
+
+| Field | Type | Required | Description |
+|---|---|---:|---|
+| `username` | `string` | Yes | Instagram username, with or without `@`. |
+| `limit` | `number` | No | Number of items to return, max `100`. |
+| `cursor` | `string` | No | Pagination cursor from the previous response. |
+
+### Get Instagram reels
+
+```http
+GET /v1/instagram/reels?username=nasawebb&limit=2
+```
+
+Returns normalized media objects filtered to reels where the provider exposes reel
+media.
+
+## Instagram Media and Comments API
+
+### Get media details
+
+```http
+GET /v1/instagram/media?shortcode=Da52uFrle-Y
+```
+
+Either `shortcode` or `media_id` is required. Shortcodes are preferred for the
+launch Apify provider.
+
+### Get comments
+
+```http
+GET /v1/instagram/comments?shortcode=Da52uFrle-Y&limit=2
+```
+
+Query params:
+
+| Field | Type | Required | Description |
+|---|---|---:|---|
+| `shortcode` | `string` | Conditional | Instagram shortcode. |
+| `media_id` | `string` | Conditional | Provider media ID. |
+| `limit` | `number` | No | Number of comments to return, max `100`. |
+| `cursor` | `string` | No | Pagination cursor from the previous response. |
+
+## Instagram Hashtag and Search API
+
+### Search hashtag content
+
+```http
+GET /v1/instagram/hashtag/search?hashtag=space&limit=2
+```
+
+### Search Instagram
+
+```http
+GET /v1/instagram/search?query=space&type=hashtag&limit=2
+```
+
+Query params:
+
+| Field | Type | Required | Description |
+|---|---|---:|---|
+| `query` | `string` | Yes | Username or hashtag query. |
+| `type` | `profile \| hashtag \| place` | No | Search target. Defaults to `profile`. |
+| `limit` | `number` | No | Number of items to return, max `100`. |
+| `cursor` | `string` | No | Pagination cursor from the previous response. |
+
+Place search is not supported by the Apify launch actor.
+
+## Instagram AI Insights API
+
+### Profile insights
+
+```http
+POST /v1/instagram/ai/profile-insights
+Content-Type: application/json
+
+{
+  "username": "nasawebb",
+  "media_limit": 1,
+  "analysis_goal": "Summarize content themes and engagement drivers"
+}
+```
+
+Returns content themes, posting patterns, engagement drivers, strengths,
+opportunities, evidence, confidence, limitations, and AI metadata in `meta`.
+
+### Comment insights
+
+```http
+POST /v1/instagram/ai/comment-insights
+Content-Type: application/json
+
+{
+  "shortcode": "Da52uFrle-Y",
+  "comment_limit": 2,
+  "analysis_focus": "sentiment, questions, objections"
+}
+```
+
+Returns aggregate sentiment, recurring topics, questions, objections,
+moderation flags, evidence, confidence, limitations, and AI metadata in `meta`.
+
+AI responses include `meta.model`, `meta.prompt_tokens`,
+`meta.completion_tokens`, and `meta.cost_usd`.
+
+## Followers and following limitation
+
+`/v1/instagram/followers` and `/v1/instagram/following` are capability endpoints.
+The launch Apify actor does not support these lists reliably, so they return
+`INSTAGRAM_PROVIDER_FEATURE_UNSUPPORTED`. Do not use them for production
+follower/following workflows until ApiMask adds a provider that supports those
+lists.
+
+## Example response
+
+```json
+{
+  "success": true,
+  "data": {
+    "id": "549313808",
+    "username": "nasawebb",
+    "full_name": "NASA Webb Telescope",
+    "is_verified": true,
+    "followers_count": 3547801,
+    "following_count": 35,
+    "media_count": 1302,
+    "source": "apify",
+    "fetched_at": "2026-07-20T10:10:24.746979+00:00"
+  },
+  "error": null,
+  "meta": {
+    "request_id": "req_f974d9290f00"
+  }
+}
+```
+
+## Use cases
+
+- Instagram profile API for creator and brand research
+- Instagram posts API for content analytics and feed monitoring
+- Instagram reels API for short-form content tracking
+- Instagram comments API for community and sentiment analysis
+- Instagram hashtag API for campaign and trend discovery
+- Instagram AI insights for profile audits and comment summaries
+- Social listening dashboards and influencer discovery tools
+- Dataset enrichment for LLM and marketing workflows
+
+## Related docs
+
+- [API Catalog](/apis)
+- [Rate limits](/rate-limits)
+- [Errors](/errors)

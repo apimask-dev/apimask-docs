@@ -9,6 +9,7 @@ export default {
   "ai-content-generator-api": "AI Content Generator API",
   "seo-meta-tags-api": "SEO Meta Tags API",
   twitter: "Twitter/X API",
+  instagram: "Instagram API",
   "email-validation": "Email Validation",
   "regex-generator": "Regex Generator",
   "regex-explainer": "Regex Explainer",
