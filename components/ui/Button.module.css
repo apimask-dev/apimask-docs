@@ -1,54 +1,65 @@
 .button {
   display: inline-flex;
-  min-height: 48px;
+  min-height: 44px;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 7px;
   border: 1px solid transparent;
   border-radius: var(--radius-sm);
-  padding: 0 20px;
+  padding: 0 18px;
   font-size: 14px;
-  font-weight: 720;
+  font-weight: 680;
+  letter-spacing: -0.01em;
   text-decoration: none;
+  white-space: nowrap;
   cursor: pointer;
   transition:
     transform 160ms ease,
     border-color 160ms ease,
     background 160ms ease,
+    box-shadow 160ms ease,
     color 160ms ease;
 }
 
+.button:focus-visible {
+  outline: 2px solid var(--am-ring);
+  outline-offset: 2px;
+}
+
 .sm {
-  min-height: 36px;
-  border-radius: var(--radius-sm);
+  min-height: 38px;
   padding: 0 14px;
   font-size: 13px;
 }
 
 .primary,
 .rapidapi {
-  background: #11140f;
-  color: #ffffff;
-  box-shadow: 0 14px 28px rgba(17, 20, 15, 0.16);
+  background: var(--am-primary);
+  color: var(--am-on-primary);
+  box-shadow: var(--am-primary-shadow);
 }
 
-html.dark .primary,
-html.dark .rapidapi {
-  background: #f4f7f0;
-  color: #11140f;
-  box-shadow: none;
+.primary:hover,
+.rapidapi:hover {
+  background: var(--am-primary-hover);
+  transform: translateY(-1px);
 }
 
 .secondary {
-  background: transparent;
-  color: var(--apimask-ink);
+  border-color: var(--am-line);
+  background: var(--am-card);
+  color: var(--am-ink);
+  box-shadow: var(--am-shadow-sm);
 }
 
 .secondary:hover {
-  color: var(--apimask-accent-purple);
+  border-color: color-mix(in srgb, var(--am-accent) 45%, var(--am-line));
+  color: var(--am-accent);
+  transform: translateY(-1px);
 }
 
 .icon {
+  display: inline-flex;
   width: 15px;
   height: 15px;
   flex-shrink: 0;

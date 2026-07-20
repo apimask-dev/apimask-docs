@@ -2,6 +2,7 @@ import Head from "next/head";
 import Link from "next/link";
 import { blogPosts as posts } from "../../components/blog-posts";
 import { SiteNav } from "../../components/SiteNav";
+import { SiteFooter } from "../../components/SiteFooter";
 import { ArrowIcon } from "../../components/ui/ArrowIcon";
 import { Button } from "../../components/ui/Button";
 
@@ -51,7 +52,7 @@ export default function BlogPage() {
         ))}
       </Head>
 
-      <main className="blogPage">
+      <main className="blogPage marketing">
         <SiteNav variant="blogIndex" />
 
         <section className="blogHero">
@@ -150,6 +151,8 @@ export default function BlogPage() {
             ))}
           </div>
         </section>
+
+        <SiteFooter />
       </main>
     </>
   );

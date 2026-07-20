@@ -1,11 +1,11 @@
 .terminal {
   position: relative;
   z-index: 1;
-  border: 1px solid #20251d;
-  border-radius: var(--radius-lg);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-xl);
   overflow: hidden;
-  background: var(--apimask-code-bg);
-  box-shadow: 0 34px 90px rgba(17, 20, 15, 0.22);
+  background: #0d0d14;
+  box-shadow: var(--am-shadow-lg);
 }
 
 .top {
@@ -73,6 +73,7 @@
 .tabActive {
   background: rgba(255, 255, 255, 0.06);
   color: #f4f7f0;
+  box-shadow: inset 0 -2px 0 #a78bfa;
 }
 
 .pre {

@@ -1,22 +1,24 @@
 .toggle {
   display: inline-flex;
-  width: 36px;
-  height: 36px;
+  width: 38px;
+  height: 38px;
   flex-shrink: 0;
   align-items: center;
   justify-content: center;
-  border: 1px solid var(--apimask-line);
+  border: 1px solid var(--am-line);
   border-radius: var(--radius-sm);
-  background: transparent;
-  color: var(--apimask-ink);
+  background: var(--am-card);
+  color: var(--am-ink);
   cursor: pointer;
   transition:
     border-color 160ms ease,
+    color 160ms ease,
     background 160ms ease;
 }
 
 .toggle:hover {
-  border-color: var(--apimask-accent-purple);
+  border-color: color-mix(in srgb, var(--am-accent) 45%, var(--am-line));
+  color: var(--am-accent);
 }
 
 .toggle svg {

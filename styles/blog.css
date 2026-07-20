@@ -161,7 +161,7 @@
 }
 
 .blogArticle a:hover {
-  color: #1f0a45;
+  color: #5b21b6;
 }
 
 html.dark .blogArticle a:hover {
@@ -247,14 +247,15 @@ html.dark .blogArticle :not(pre) > code {
 .blogApiCta {
   margin-bottom: 28px;
   border: 1px solid var(--apimask-line);
-  border-radius: 10px;
+  border-radius: var(--radius-lg);
   background: var(--apimask-card);
   padding: 20px 22px;
+  box-shadow: var(--am-shadow-sm);
 }
 
 .blogEyebrow {
   margin: 0 0 8px;
-  color: var(--apimask-accent-green);
+  color: var(--apimask-accent-purple);
   font-size: 12px;
   font-weight: 760;
   text-transform: uppercase;
@@ -335,7 +336,9 @@ html.dark .blogArticle :not(pre) > code {
 .blogPage .blogPaths,
 .blogPage .blogApiRail {
   max-width: 860px;
-  margin: 0 auto;
+  /* Center horizontally only — `margin: 0 auto` here would zero the vertical
+     margins that space these sections apart (e.g. .blogApiRail). */
+  margin-inline: auto;
   padding-right: 28px;
   padding-left: 28px;
 }
@@ -348,7 +351,7 @@ html.dark .blogArticle :not(pre) > code {
 
 .blogPage .blogEyebrow {
   margin: 0 0 12px;
-  color: var(--apimask-accent-green);
+  color: var(--apimask-accent-purple);
   font-size: 13px;
   font-weight: 760;
   text-transform: uppercase;
@@ -427,7 +430,7 @@ html.dark .blogArticle :not(pre) > code {
 }
 
 .blogFeaturedMeta span:first-child {
-  color: var(--apimask-accent-green);
+  color: var(--apimask-accent-purple);
   font-weight: 760;
   text-transform: uppercase;
 }
@@ -462,7 +465,7 @@ html.dark .blogArticle :not(pre) > code {
 
 .blogLatest,
 .blogPaths {
-  padding-top: 56px;
+  padding-top: 72px;
 }
 
 .blogSectionHead {
@@ -515,9 +518,10 @@ html.dark .blogArticle :not(pre) > code {
 
 .blogPathCard {
   border: 1px solid var(--apimask-line);
-  border-radius: 10px;
+  border-radius: var(--radius-lg);
   background: var(--apimask-card);
   padding: 22px;
+  box-shadow: var(--am-shadow-sm);
 }
 
 .blogPathCard p {
@@ -547,12 +551,13 @@ html.dark .blogArticle :not(pre) > code {
   grid-template-columns: minmax(0, 1fr) minmax(240px, 0.7fr);
   gap: 28px;
   align-items: start;
-  margin-top: 56px;
-  margin-bottom: 72px;
+  margin-top: 72px;
+  margin-bottom: 96px;
   border: 1px solid var(--apimask-line);
-  border-radius: 10px;
+  border-radius: var(--radius-lg);
   background: var(--apimask-card);
-  padding: 28px;
+  padding: 32px;
+  box-shadow: var(--am-shadow-sm);
 }
 
 .blogApiRail p {
@@ -568,8 +573,8 @@ html.dark .blogArticle :not(pre) > code {
 .blogApiLinks a {
   justify-content: space-between;
   border: 1px solid var(--apimask-line);
-  border-radius: 7px;
-  background: var(--apimask-card);
+  border-radius: var(--radius-sm);
+  background: var(--am-surface-2);
   padding: 12px 14px;
   color: var(--apimask-ink);
   font-size: 14px;
@@ -578,12 +583,8 @@ html.dark .blogArticle :not(pre) > code {
 }
 
 .blogApiLinks a:hover {
-  border-color: rgba(50, 18, 106, 0.28);
-  background: var(--apimask-card);
-}
-
-html.dark .blogApiLinks a:hover {
-  border-color: rgba(185, 163, 245, 0.4);
+  border-color: color-mix(in srgb, var(--apimask-accent-purple) 40%, var(--apimask-line));
+  color: var(--apimask-accent-purple);
 }
 
 @media (max-width: 800px) {

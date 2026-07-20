@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { Button } from "./ui/Button";
@@ -38,10 +38,19 @@ export function SiteNav({ variant }: { variant: Variant }) {
   const router = useRouter();
   const pathname = (router.pathname || "/").replace(/^\/apis(\/|$)/, "/api$1");
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  // Elevate the header (solid bg + shadow) once the page scrolls past the top.
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   return (
-    <nav className={cx(styles.nav, styles[variant])} aria-label="Main navigation">
-      <div className={styles.navRow}>
+    <header className={cx(styles.nav, scrolled && styles.scrolled)}>
+      <nav className={cx(styles.navRow, styles[variant])} aria-label="Main navigation">
         <Link href="/" className={styles.brand} aria-label="ApiMask home" prefetch={false}>
           <img className={styles.brandMark} src="/apimask-logo.png" alt="" aria-hidden="true" />
           <span>ApiMask</span>
@@ -52,6 +61,7 @@ export function SiteNav({ variant }: { variant: Variant }) {
             <Link
               key={item.href}
               href={item.href}
+              className={styles.navLink}
               aria-current={isActive(pathname, item.href) ? "page" : undefined}
             >
               {item.label}
@@ -61,9 +71,11 @@ export function SiteNav({ variant }: { variant: Variant }) {
 
         <div className={styles.right}>
           <ThemeToggle />
-          <Button href={RAPIDAPI_URL} variant="rapidapi" size="sm" external>
-            Subscribe on RapidAPI
-          </Button>
+          <span className={styles.ctaWrap}>
+            <Button href={RAPIDAPI_URL} variant="rapidapi" size="sm" external>
+              Subscribe on RapidAPI
+            </Button>
+          </span>
           <button
             type="button"
             className={styles.menuButton}
@@ -75,7 +87,7 @@ export function SiteNav({ variant }: { variant: Variant }) {
             <MenuIcon open={open} />
           </button>
         </div>
-      </div>
+      </nav>
 
       <div id="site-nav-mobile" className={cx(styles.mobilePanel, open && styles.open)}>
         <div className={styles.mobileLinks}>
@@ -89,8 +101,11 @@ export function SiteNav({ variant }: { variant: Variant }) {
               {item.label}
             </Link>
           ))}
+          <a href={RAPIDAPI_URL} className={styles.mobileCta} target="_blank" rel="noreferrer">
+            Subscribe on RapidAPI
+          </a>
         </div>
       </div>
-    </nav>
+    </header>
   );
 }

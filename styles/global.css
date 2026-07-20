@@ -3,14 +3,16 @@
    per-page render tree, so the variable classes must be applied there instead.
    --font-apimask-* variables resolve to the optimized face; system stacks are fallbacks. */
 :root {
-  --apimask-ink: #12140f;
-  --apimask-muted: #555c50;
-  --apimask-line: #d9ded3;
-  --apimask-surface: #f4f5f1;
+  /* Crisp-light, single-violet palette shared across the whole site
+     (marketing, blog, and the Nextra docs shell). */
+  --apimask-ink: #0e0e15;
+  --apimask-muted: #5b5f6b;
+  --apimask-line: #ececf1;
+  --apimask-surface: #ffffff;
   --apimask-card: #ffffff;
-  --apimask-code-bg: #11140f;
-  --apimask-accent-purple: #32126a;
-  --apimask-accent-green: #276749;
+  --apimask-code-bg: #0d0d14;
+  --apimask-accent-purple: #6d28d9;
+  --apimask-accent-green: #16a34a;
 
   --space-1: 4px;
   --space-2: 8px;
@@ -23,24 +25,60 @@
   --space-9: 64px;
   --space-10: 80px;
 
-  --radius-sm: 7px;
-  --radius-md: 8px;
-  --radius-lg: 10px;
+  --radius-sm: 8px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 18px;
   --radius-pill: 999px;
+
+  /* Semantic layer — the crisp-light violet system, now the site-wide default. */
+  --am-surface: #ffffff;
+  --am-surface-2: #f7f7fa;
+  --am-card: #ffffff;
+  --am-ink: #0e0e15;
+  --am-muted: #5b5f6b;
+  --am-line: #ececf1;
+  --am-accent: #6d28d9;
+  --am-accent-soft: #f4f1fe;
+  --am-primary: #7c3aed;
+  --am-primary-hover: #6d28d9;
+  --am-on-primary: #ffffff;
+  --am-primary-shadow: 0 2px 6px rgba(124, 58, 237, 0.22);
+  --am-ring: rgba(124, 58, 237, 0.5);
+  --am-shadow-sm: 0 1px 2px rgba(15, 15, 25, 0.06);
+  --am-shadow-md: 0 8px 30px rgba(15, 15, 25, 0.08);
+  --am-shadow-lg: 0 30px 70px rgba(15, 15, 25, 0.12);
 }
 
-/* Dark-mode values are not new choices — they're lifted from the hero
-   terminal card's own already-dark-designed palette (pages/index.tsx),
-   the only part of the site built for a dark surface before this. */
+/* High-contrast dark mode shared by the marketing pages and docs shell. */
 html.dark {
-  --apimask-ink: #f4f7f0;
-  --apimask-muted: #aeb8aa;
-  --apimask-line: rgba(255, 255, 255, 0.14);
-  --apimask-surface: #16180f;
-  --apimask-card: #1f2317;
-  --apimask-code-bg: #0a0c08;
-  --apimask-accent-purple: #b9a3f5;
-  --apimask-accent-green: #8bd6a5;
+  color-scheme: dark;
+  --apimask-ink: #f5f5fa;
+  --apimask-muted: #a1a1ad;
+  --apimask-line: rgba(255, 255, 255, 0.1);
+  --apimask-surface: #0a0a0f;
+  --apimask-card: #14141c;
+  --apimask-code-bg: #050510;
+  --apimask-accent-purple: #a78bfa;
+  --apimask-accent-green: #4ade80;
+
+  /* Semantic dark defaults — crisp-light violet, site-wide. */
+  --am-surface: #0a0a0f;
+  --am-surface-2: #101019;
+  --am-card: #14141c;
+  --am-ink: #f5f5fa;
+  --am-muted: #a1a1ad;
+  --am-line: rgba(255, 255, 255, 0.1);
+  --am-accent: #a78bfa;
+  --am-accent-soft: rgba(139, 92, 246, 0.16);
+  --am-primary: #8b5cf6;
+  --am-primary-hover: #7c3aed;
+  --am-on-primary: #ffffff;
+  --am-primary-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
+  --am-ring: rgba(167, 139, 250, 0.6);
+  --am-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --am-shadow-md: 0 8px 30px rgba(0, 0, 0, 0.4);
+  --am-shadow-lg: 0 28px 70px rgba(0, 0, 0, 0.5);
 }
 
 html {
@@ -50,9 +88,15 @@ html {
 }
 
 body {
+  background: var(--apimask-surface);
+  color: var(--apimask-ink);
   letter-spacing: 0;
   font-size: 16px;
   margin: 0;
+}
+
+html.dark body {
+  background: var(--apimask-surface);
 }
 
 /* --apimask-sans/-display/-mono must be declared on the same element that
@@ -115,9 +159,9 @@ pre code.nextra-code {
 }
 
 html[class~="dark"] :not(pre) > code.nextra-code {
-  border-color: rgba(255, 255, 255, 0.14) !important;
-  background: rgba(255, 255, 255, 0.1) !important;
-  color: #f4f7f0;
+  border-color: rgba(148, 163, 184, 0.32) !important;
+  background: rgba(148, 163, 184, 0.16) !important;
+  color: #ffffff;
 }
 
 [data-rehype-pretty-code-figure] {
@@ -126,9 +170,24 @@ html[class~="dark"] :not(pre) > code.nextra-code {
 }
 
 [data-rehype-pretty-code-figure] pre {
-  border: 1px solid rgba(139, 214, 165, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   background: var(--apimask-code-bg) !important;
-  box-shadow: 0 18px 44px rgba(17, 20, 15, 0.14);
+  box-shadow: var(--am-shadow-md);
+}
+
+html.dark [data-rehype-pretty-code-figure] pre {
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 18px 54px rgba(0, 0, 0, 0.45);
+}
+
+html.dark .nextra-nav-container,
+html.dark .nextra-sidebar-container,
+html.dark .nextra-toc {
+  border-color: var(--apimask-line) !important;
+}
+
+html.dark .nextra-nav-container-blur {
+  background: rgba(10, 10, 15, 0.82) !important;
 }
 
 [data-rehype-pretty-code-figure] code {
@@ -145,11 +204,90 @@ html[class~="dark"] :not(pre) > code.nextra-code {
 }
 
 .apimask-logo img {
-  width: 2rem;
-  height: 2rem;
-  border-radius: 7px;
-  background: #ffffff;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: var(--radius-sm);
   object-fit: cover;
-  box-shadow: 0 8px 20px rgba(50, 18, 106, 0.1);
 }
 
+/* ------------------------------------------------------------------ *
+ * Marketing scope — crisp-light, single-violet redesign.
+ * Applied to the landing <main class="marketing"> (which contains the
+ * SiteNav). Overrides the semantic --am-* tokens AND the legacy
+ * --apimask-* tokens so every primitive rendered inside adopts the new
+ * palette, while the Nextra docs pages (no .marketing) keep the defaults.
+ * ------------------------------------------------------------------ */
+.marketing {
+  --radius-sm: 8px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 18px;
+
+  --am-surface: #ffffff;
+  --am-surface-2: #f7f7fa;
+  --am-card: #ffffff;
+  --am-ink: #0e0e15;
+  --am-muted: #5b5f6b;
+  --am-line: #ececf1;
+  --am-accent: #6d28d9;
+  --am-accent-soft: #f4f1fe;
+  --am-primary: #7c3aed;
+  --am-primary-hover: #6d28d9;
+  --am-on-primary: #ffffff;
+  --am-primary-shadow: 0 2px 6px rgba(124, 58, 237, 0.22);
+  --am-ring: rgba(124, 58, 237, 0.5);
+  --am-shadow-sm: 0 1px 2px rgba(15, 15, 25, 0.06);
+  --am-shadow-md: 0 8px 30px rgba(15, 15, 25, 0.08);
+  --am-shadow-lg: 0 30px 70px rgba(15, 15, 25, 0.12);
+
+  /* Legacy token overrides so primitives still on --apimask-* adopt the look. */
+  --apimask-surface: #ffffff;
+  --apimask-card: #ffffff;
+  --apimask-ink: #0e0e15;
+  --apimask-muted: #5b5f6b;
+  --apimask-line: #ececf1;
+  --apimask-accent-purple: #6d28d9;
+  --apimask-accent-green: #16a34a;
+
+  background: var(--am-surface);
+  color: var(--am-ink);
+}
+
+html.dark .marketing {
+  --am-surface: #0a0a0f;
+  --am-surface-2: #101019;
+  --am-card: #14141c;
+  --am-ink: #f5f5fa;
+  --am-muted: #a1a1ad;
+  --am-line: rgba(255, 255, 255, 0.1);
+  --am-accent: #a78bfa;
+  --am-accent-soft: rgba(139, 92, 246, 0.16);
+  --am-primary: #8b5cf6;
+  --am-primary-hover: #7c3aed;
+  --am-on-primary: #ffffff;
+  --am-primary-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
+  --am-ring: rgba(167, 139, 250, 0.6);
+
+  --apimask-surface: #0a0a0f;
+  --apimask-card: #14141c;
+  --apimask-ink: #f5f5fa;
+  --apimask-muted: #a1a1ad;
+  --apimask-line: rgba(255, 255, 255, 0.1);
+  --apimask-accent-purple: #a78bfa;
+  --apimask-accent-green: #4ade80;
+}
+
+.marketing :where(h1, h2, h3) {
+  text-wrap: balance;
+}
+
+.marketing :where(p) {
+  text-wrap: pretty;
+}
+
+/* Accessible focus ring for all interactive elements in the marketing scope. */
+.marketing :where(a, button, [role="tab"], input, select):focus-visible {
+  outline: 2px solid var(--am-ring);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}

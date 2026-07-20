@@ -1,51 +1,50 @@
 .badge {
   display: inline-flex;
   align-items: center;
+  gap: 6px;
+  border: 1px solid transparent;
   border-radius: var(--radius-pill);
-  padding: 4px 10px;
+  padding: 4px 11px;
   font-size: 12px;
-  font-weight: 740;
+  font-weight: 640;
+  letter-spacing: 0.01em;
   white-space: nowrap;
 }
 
 .brand {
-  border: 1px solid rgba(50, 18, 106, 0.16);
-  background: rgba(255, 255, 255, 0.72);
-  color: var(--apimask-accent-purple);
+  border-color: color-mix(in srgb, var(--am-accent) 22%, transparent);
+  background: var(--am-accent-soft);
+  color: var(--am-accent);
   text-transform: uppercase;
-}
-
-html.dark .brand {
-  border-color: rgba(185, 163, 245, 0.28);
-  background: rgba(255, 255, 255, 0.06);
+  font-weight: 700;
 }
 
 .green {
-  background: #e6f4ea;
-  color: #276749;
+  border-color: color-mix(in srgb, #16a34a 26%, transparent);
+  background: #e9f7ee;
+  color: #157a3a;
   text-transform: uppercase;
+  font-weight: 700;
 }
 
-html.dark .green {
-  background: rgba(139, 214, 165, 0.16);
-  color: #8bd6a5;
+:global(html.dark) .green {
+  border-color: rgba(74, 222, 128, 0.3);
+  background: rgba(74, 222, 128, 0.12);
+  color: #6ee7a0;
 }
 
 .neutral {
-  border: 1px solid var(--apimask-line);
-  background: var(--apimask-card);
-  color: var(--apimask-muted);
-  font-weight: 650;
+  border-color: var(--am-line);
+  background: var(--am-card);
+  color: var(--am-muted);
 }
 
 .soon {
-  background: #f1edf8;
-  color: var(--apimask-accent-purple);
+  border-color: var(--am-line);
+  background: var(--am-surface-2);
+  color: var(--am-muted);
   text-transform: uppercase;
   font-size: 11px;
-  letter-spacing: 0.02em;
-}
-
-html.dark .soon {
-  background: rgba(185, 163, 245, 0.16);
+  font-weight: 680;
+  letter-spacing: 0.03em;
 }

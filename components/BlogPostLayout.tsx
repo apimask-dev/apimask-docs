@@ -3,6 +3,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { getAdjacentPosts, getBlogPost } from "./blog-posts";
 import { SiteNav } from "./SiteNav";
+import { SiteFooter } from "./SiteFooter";
 import { ArrowIcon } from "./ui/ArrowIcon";
 
 type BlogPostLayoutProps = {
@@ -15,7 +16,7 @@ export default function BlogPostLayout({ slug, children }: BlogPostLayoutProps) 
   const { prev, next } = getAdjacentPosts(slug);
 
   return (
-    <div className="blogShell">
+    <div className="blogShell marketing">
       <Head>
         {/* Prefetch adjacent guides so next/prev navigations feel instant */}
         {prev ? <link rel="prefetch" href={prev.href} as="document" /> : null}
@@ -73,6 +74,8 @@ export default function BlogPostLayout({ slug, children }: BlogPostLayoutProps) 
           </div>
         </footer>
       )}
+
+      <SiteFooter />
     </div>
   );
 }

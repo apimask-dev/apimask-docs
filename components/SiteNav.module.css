@@ -1,12 +1,30 @@
 .nav {
-  margin: 0 auto;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: color-mix(in srgb, var(--am-surface) 82%, transparent);
+  backdrop-filter: saturate(180%) blur(12px);
+  border-bottom: 1px solid transparent;
+  transition:
+    border-color 200ms ease,
+    background 200ms ease,
+    box-shadow 200ms ease;
+}
+
+.scrolled {
+  background: color-mix(in srgb, var(--am-surface) 92%, transparent);
+  border-bottom-color: var(--am-line);
+  box-shadow: var(--am-shadow-sm);
 }
 
 .navRow {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 18px 28px;
+  gap: 24px;
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 14px 28px;
 }
 
 .landing {
@@ -18,66 +36,87 @@
 }
 
 .blogPost {
-  max-width: 720px;
+  max-width: 760px;
 }
 
 .brand {
   display: flex;
   align-items: center;
   gap: 10px;
-  color: var(--apimask-ink);
-  font-weight: 760;
+  color: var(--am-ink);
+  font-weight: 720;
+  font-size: 17px;
+  letter-spacing: -0.02em;
   font-family: var(--apimask-display);
   text-decoration: none;
 }
 
 .brandMark {
-  width: 34px;
-  height: 34px;
+  width: 28px;
+  height: 28px;
   flex-shrink: 0;
   border-radius: var(--radius-sm);
-  background: #ffffff;
   object-fit: cover;
-  box-shadow: 0 10px 24px rgba(50, 18, 106, 0.12);
-}
-
-.right {
-  display: flex;
-  align-items: center;
-  gap: 14px;
 }
 
 .links {
   display: flex;
   align-items: center;
-  gap: 22px;
+  gap: 2px;
+  margin-right: auto;
   font-size: 14px;
 }
 
-.links a {
-  color: var(--apimask-muted);
+.navLink {
+  position: relative;
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  color: var(--am-muted);
+  font-weight: 550;
   text-decoration: none;
+  transition:
+    color 160ms ease,
+    background 160ms ease;
 }
 
-.links a:hover {
-  color: var(--apimask-ink);
+.navLink:hover {
+  color: var(--am-ink);
+  background: color-mix(in srgb, var(--am-ink) 5%, transparent);
 }
 
-.links a[aria-current="page"] {
-  color: var(--apimask-ink);
-  font-weight: 700;
+.navLink[aria-current="page"] {
+  color: var(--am-accent);
+  font-weight: 650;
+}
+
+.navLink[aria-current="page"]::after {
+  content: "";
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 2px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--am-accent);
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  gap: 10px;
 }
 
 .menuButton {
   display: none;
-  border: 1px solid var(--apimask-line);
+  border: 1px solid var(--am-line);
   border-radius: var(--radius-sm);
-  background: transparent;
-  width: 36px;
-  height: 36px;
+  background: var(--am-card);
+  width: 38px;
+  height: 38px;
   align-items: center;
   justify-content: center;
-  color: var(--apimask-ink);
+  color: var(--am-ink);
   cursor: pointer;
 }
 
@@ -90,8 +129,12 @@
   display: none;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 820px) {
   .links {
+    display: none;
+  }
+
+  .ctaWrap {
     display: none;
   }
 
@@ -101,46 +144,72 @@
 
   .mobilePanel {
     display: block;
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 20px;
     max-height: 0;
     overflow: hidden;
-    padding: 0 28px;
-    transition: max-height 220ms ease;
+    transition: max-height 240ms ease;
   }
 
   .mobilePanel.open {
-    max-height: 320px;
-    padding-bottom: 18px;
+    max-height: 360px;
+    padding-bottom: 14px;
   }
 
   .mobileLinks {
     display: flex;
     flex-direction: column;
-    gap: 4px;
-    border-top: 1px solid var(--apimask-line);
-    padding-top: 14px;
+    gap: 2px;
+    margin-top: 6px;
+    border: 1px solid var(--am-line);
+    border-radius: var(--radius-lg);
+    background: var(--am-card);
+    padding: 8px;
+    box-shadow: var(--am-shadow-md);
   }
 
   .mobileLinks a {
-    padding: 10px 4px;
-    color: var(--apimask-ink);
+    border-radius: var(--radius-sm);
+    padding: 11px 12px;
+    color: var(--am-ink);
     font-size: 15px;
-    font-weight: 650;
+    font-weight: 550;
     text-decoration: none;
   }
 
+  .mobileLinks a:hover {
+    background: color-mix(in srgb, var(--am-ink) 5%, transparent);
+  }
+
   .mobileLinks a[aria-current="page"] {
-    color: var(--apimask-accent-purple);
+    color: var(--am-accent);
+    font-weight: 650;
+  }
+
+  .mobileLinks .mobileCta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 6px;
+    border-radius: var(--radius-sm);
+    background: var(--am-primary);
+    color: var(--am-on-primary);
+    font-weight: 680;
+    text-align: center;
+  }
+
+  .mobileLinks .mobileCta:hover {
+    background: var(--am-primary-hover);
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 560px) {
   .navRow {
-    padding-right: 18px;
-    padding-left: 18px;
+    padding: 12px 18px;
   }
 
   .mobilePanel {
-    padding-right: 18px;
-    padding-left: 18px;
+    padding: 0 18px;
   }
 }
