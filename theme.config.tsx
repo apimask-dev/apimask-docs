@@ -114,7 +114,7 @@ const config: DocsThemeConfig = {
   color: {
     hue: 262,
     saturation: 70,
-    lightness: { dark: 70, light: 52 },
+    lightness: { dark: 78, light: 52 },
   },
   logo: (
     <span className="apimask-logo">

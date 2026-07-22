@@ -19,6 +19,12 @@
   font-weight: 700;
 }
 
+:global(html.dark) .brand {
+  border-color: rgba(196, 181, 253, 0.4);
+  background: rgba(139, 92, 246, 0.28);
+  color: #ede9fe;
+}
+
 .green {
   border-color: color-mix(in srgb, #16a34a 26%, transparent);
   background: #e9f7ee;
@@ -39,6 +45,12 @@
   color: var(--am-muted);
 }
 
+:global(html.dark) .neutral {
+  border-color: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.08);
+  color: #f0f0f5;
+}
+
 .soon {
   border-color: var(--am-line);
   background: var(--am-surface-2);
@@ -47,4 +59,10 @@
   font-size: 11px;
   font-weight: 680;
   letter-spacing: 0.03em;
+}
+
+:global(html.dark) .soon {
+  border-color: rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.06);
+  color: #e4e4ee;
 }

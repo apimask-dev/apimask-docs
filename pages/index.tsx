@@ -411,6 +411,15 @@ export default function LandingPage() {
           box-shadow: var(--am-shadow-sm);
         }
 
+        /* Dark: near-white label on a clearly separated chip — avoids washed
+           violet/grey-on-grey that made the RapidAPI pills hard to read. */
+        :global(html.dark) .heroBadges span {
+          border-color: rgba(255, 255, 255, 0.2);
+          background: rgba(255, 255, 255, 0.08);
+          color: #f0f0f5;
+          box-shadow: none;
+        }
+
         .heroBadges .badgeDot::before {
           content: "";
           width: 6px;
@@ -418,6 +427,11 @@ export default function LandingPage() {
           border-radius: 999px;
           background: #16a34a;
           box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.18);
+        }
+
+        :global(html.dark) .heroBadges .badgeDot::before {
+          background: #4ade80;
+          box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.22);
         }
 
         .eyebrow {
@@ -579,7 +593,7 @@ export default function LandingPage() {
         /* ---------- Products ---------- */
         .productGrid {
           display: grid;
-          grid-template-columns: repeat(4, minmax(0, 1fr));
+          grid-template-columns: repeat(3, minmax(0, 1fr));
           gap: 18px;
         }
 

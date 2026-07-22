@@ -54,12 +54,12 @@
 html.dark {
   color-scheme: dark;
   --apimask-ink: #f5f5fa;
-  --apimask-muted: #a1a1ad;
-  --apimask-line: rgba(255, 255, 255, 0.1);
+  --apimask-muted: #c4c4d0;
+  --apimask-line: rgba(255, 255, 255, 0.14);
   --apimask-surface: #0a0a0f;
   --apimask-card: #14141c;
   --apimask-code-bg: #050510;
-  --apimask-accent-purple: #a78bfa;
+  --apimask-accent-purple: #c4b5fd;
   --apimask-accent-green: #4ade80;
 
   /* Semantic dark defaults — crisp-light violet, site-wide. */
@@ -67,15 +67,15 @@ html.dark {
   --am-surface-2: #101019;
   --am-card: #14141c;
   --am-ink: #f5f5fa;
-  --am-muted: #a1a1ad;
-  --am-line: rgba(255, 255, 255, 0.1);
-  --am-accent: #a78bfa;
-  --am-accent-soft: rgba(139, 92, 246, 0.16);
+  --am-muted: #c4c4d0;
+  --am-line: rgba(255, 255, 255, 0.14);
+  --am-accent: #c4b5fd;
+  --am-accent-soft: rgba(139, 92, 246, 0.22);
   --am-primary: #8b5cf6;
   --am-primary-hover: #7c3aed;
   --am-on-primary: #ffffff;
   --am-primary-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
-  --am-ring: rgba(167, 139, 250, 0.6);
+  --am-ring: rgba(196, 181, 253, 0.65);
   --am-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
   --am-shadow-md: 0 8px 30px rgba(0, 0, 0, 0.4);
   --am-shadow-lg: 0 28px 70px rgba(0, 0, 0, 0.5);
@@ -258,22 +258,22 @@ html.dark .marketing {
   --am-surface-2: #101019;
   --am-card: #14141c;
   --am-ink: #f5f5fa;
-  --am-muted: #a1a1ad;
-  --am-line: rgba(255, 255, 255, 0.1);
-  --am-accent: #a78bfa;
-  --am-accent-soft: rgba(139, 92, 246, 0.16);
+  --am-muted: #c4c4d0;
+  --am-line: rgba(255, 255, 255, 0.14);
+  --am-accent: #c4b5fd;
+  --am-accent-soft: rgba(139, 92, 246, 0.22);
   --am-primary: #8b5cf6;
   --am-primary-hover: #7c3aed;
   --am-on-primary: #ffffff;
   --am-primary-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
-  --am-ring: rgba(167, 139, 250, 0.6);
+  --am-ring: rgba(196, 181, 253, 0.65);
 
   --apimask-surface: #0a0a0f;
   --apimask-card: #14141c;
   --apimask-ink: #f5f5fa;
-  --apimask-muted: #a1a1ad;
-  --apimask-line: rgba(255, 255, 255, 0.1);
-  --apimask-accent-purple: #a78bfa;
+  --apimask-muted: #c4c4d0;
+  --apimask-line: rgba(255, 255, 255, 0.14);
+  --apimask-accent-purple: #c4b5fd;
   --apimask-accent-green: #4ade80;
 }
 
