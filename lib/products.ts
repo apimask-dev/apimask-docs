@@ -3,10 +3,45 @@
 // `popularApis` + `productGroups` arrays that listed overlapping products
 // with inconsistent shapes (some linkable, some not).
 
-// Flagship products: the three ApiMask products that have their own
-// dedicated RapidAPI marketplace listing today. Counts/tags/links here are
-// the real, human-curated values from the original productGroups data.
+// Published RapidAPI marketplace listings (live on https://rapidapi.com/user/aftaab).
+// Counts/tags/links are curated from each product's docs and OpenAPI surface.
 export const flagshipProducts = [
+  {
+    icon: "IG",
+    count: 9,
+    title: "Instagram API Collection",
+    copy: "Profiles, posts, reels, comments, hashtag search, and AI insights in normalized JSON.",
+    tags: ["Profiles", "Reels", "Hashtags", "AI"],
+    docs: "/api/instagram",
+    rapidapi: "https://rapidapi.com/aftaab/api/instagram-api",
+  },
+  {
+    icon: "X",
+    count: 10,
+    title: "Twitter/X Data API",
+    copy: "Profiles, tweets, search, replies, threads, and deterministic social intelligence endpoints.",
+    tags: ["Search", "Threads", "Insights", "Mentions"],
+    docs: "/api/twitter",
+    rapidapi: "https://rapidapi.com/aftaab/api/twitter-x-api",
+  },
+  {
+    icon: "in",
+    count: 5,
+    title: "LinkedIn API Collection",
+    copy: "Profile and company lookup, employee search, people search, and LinkedIn jobs search.",
+    tags: ["Profiles", "Companies", "Jobs", "Search"],
+    docs: "/api/linkedin",
+    rapidapi: "https://rapidapi.com/aftaab/api/linkedin-api",
+  },
+  {
+    icon: "SEO",
+    count: 9,
+    title: "SEO Website Audit API",
+    copy: "Full site audits plus sitemap, robots.txt, SSL, DNS, security headers, CORS, and meta tags.",
+    tags: ["Audit", "Sitemap", "SSL", "Headers"],
+    docs: "/api/email-domain-validation",
+    rapidapi: "https://rapidapi.com/aftaab/api/seo-website-audit-api",
+  },
   {
     icon: "QR",
     count: 6,
@@ -33,6 +68,24 @@ export const flagshipProducts = [
     tags: ["CSV", "MX", "SPF", "DMARC"],
     docs: "/api/bulk-email-verification",
     rapidapi: "https://rapidapi.com/aftaab/api/bulk-email-verification-api",
+  },
+  {
+    icon: "DNS",
+    count: 8,
+    title: "Email & Domain Validation API",
+    copy: "Email validation, DNS, SSL, URL safety, security headers, robots.txt, sitemaps, and CORS checks.",
+    tags: ["Email", "DNS", "SSL", "CORS"],
+    docs: "/api/email-domain-validation",
+    rapidapi: "https://rapidapi.com/aftaab/api/email-domain-validation-api",
+  },
+  {
+    icon: "DEV",
+    count: 12,
+    title: "ApiMask Developer Utilities API",
+    copy: "Regex, stacktrace analysis, README/changelog generation, JSON, Base64, hashing, IDs, and URL parsing.",
+    tags: ["Regex", "JSON", "Hash", "IDs"],
+    docs: "/api/developer-utilities",
+    rapidapi: "https://rapidapi.com/aftaab/api/apimask-developer-utilities-api",
   },
 ] as const;
 
@@ -69,7 +122,7 @@ export const categories = [
   { name: "Website & security", status: "Live", note: "SSL, security headers, robots.txt, sitemap, CORS" },
   { name: "QR codes", status: "Live", note: "URL, WiFi, vCard, branded logo QR codes" },
   { name: "SEO", status: "Live", note: "Meta tags, site audits, structured data checks" },
-  { name: "Social & app intelligence", status: "Live", note: "Twitter/X and Instagram profile and content data" },
+  { name: "Social & app intelligence", status: "Live", note: "Twitter/X, Instagram, and LinkedIn profile and content data" },
   { name: "OCR & PDF", status: "Soon", note: "PDF-to-Markdown, table & field extraction, OCR cleanup" },
   { name: "Resume & ATS", status: "Soon", note: "ATS scoring, keyword gaps, resume rewrite" },
   { name: "App Store / ASO", status: "Soon", note: "Metadata, keywords, release notes, review sentiment" },
@@ -83,5 +136,8 @@ export const categories = [
 // (resume, appstore, pdf, ocr, content). Update this alongside _meta.ts
 // rather than letting the two drift, as they had before this file existed.
 export const liveEndpointCount = 28;
+
+// Live RapidAPI marketplace listings shown on the homepage product grid.
+export const publishedCollectionCount = flagshipProducts.length;
 
 export const liveCategoryCount = categories.filter((c) => c.status === "Live").length;
