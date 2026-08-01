@@ -1,0 +1,49 @@
+/* Token colours for the hand-highlighted snippet panels. They read from the
+   --syntax-* tokens so these panels and the Shiki-highlighted MDX code blocks
+   share one palette (see styles/tokens.css and styles/nextra-overrides.css). */
+
+.string {
+  color: var(--syntax-string);
+}
+
+.variable {
+  color: var(--syntax-variable);
+}
+
+.keyword,
+.flag {
+  color: var(--syntax-keyword);
+}
+
+.builtin {
+  color: var(--syntax-builtin);
+}
+
+.number {
+  color: var(--syntax-number);
+}
+
+.comment {
+  color: var(--syntax-comment);
+  font-style: italic;
+}
+
+.jsonKey {
+  color: var(--syntax-keyword);
+}
+
+.jsonString {
+  color: var(--syntax-string);
+}
+
+.jsonBoolean {
+  color: var(--syntax-variable);
+}
+
+.jsonNull {
+  color: var(--syntax-comment);
+}
+
+.jsonNumber {
+  color: var(--syntax-number);
+}
