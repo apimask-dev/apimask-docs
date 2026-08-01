@@ -2,10 +2,10 @@ import Link from "next/link";
 import { Card, CardLink } from "./ui/Card";
 import { ArrowIcon } from "./ui/ArrowIcon";
 import styles from "./ProductCard.module.css";
-import type { ApiEndpoint, flagshipProducts } from "../lib/products";
+import type { ApiEndpoint, rapidapiProducts } from "../lib/products";
 import { docsHref } from "../lib/products";
 
-type FlagshipProduct = (typeof flagshipProducts)[number];
+type FlagshipProduct = (typeof rapidapiProducts)[number];
 
 export function FlagshipProductCard({ icon, count, title, copy, tags, docs, rapidapi }: FlagshipProduct) {
   return (

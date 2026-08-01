@@ -1,0 +1,56 @@
+---
+title: SEO Website Audit API
+description: ApiMask SEO website audit, meta tag generation, sitemap, robots.txt, SSL, DNS, security headers, URL safety, and CORS APIs through RapidAPI.
+---
+
+# SEO Website Audit API
+
+Audit websites for SEO, technical health, sitemap validity, robots.txt rules, SSL status,
+DNS records, security headers, URL safety, and CORS policy. Use it to power SEO
+dashboards, agency reporting, CMS plugins, website monitoring, and launch QA.
+
+[Subscribe to the SEO Website Audit API on RapidAPI](https://rapidapi.com/aftaab/api/seo-website-audit-api)
+
+## Endpoints
+
+| Endpoint | Method | Docs |
+|---|---|---|
+| `/v1/seo/site-audit` | `POST` | [SEO Site Audit API](/api/seo-site-audit) |
+| `/v1/content/meta-tags` | `POST` | [SEO Meta Tags API](/api/seo-meta-tags-api) |
+| `/v1/utility/sitemap/validate` | `POST` | [Sitemap Validator API](/api/sitemap-validator) |
+| `/v1/utility/robots/analyze` | `POST` | [Robots.txt Analyzer API](/api/robots-txt-analyzer) |
+| `/v1/utility/security-headers/analyze` | `POST` | [Security Headers Analyzer API](/api/security-headers-analyzer) |
+| `/v1/utility/ssl/check` | `POST` | [SSL Checker API](/api/ssl-checker) |
+| `/v1/utility/dns/analyze` | `POST` | [DNS Analyzer API](/api/dns-analyzer) |
+| `/v1/utility/url/safety` | `POST` | [URL Safety Checker API](/api/url-safety-checker) |
+| `/v1/utility/cors/check` | `POST` | [CORS Checker API](/api/cors-checker) |
+
+Every endpoint except `/v1/seo/site-audit` is also available in the
+[Email & Domain Validation API](/api/email-domain-validation) and the
+[AI Content Generator API](/api/ai-content-generator-api). The paths are identical
+across listings; only the host changes, so those endpoint pages show a different
+`X-RapidAPI-Host` than the one below. Subscribe to whichever listing matches the
+work you are doing — this one if the job is site auditing.
+
+## Base URL
+
+```http
+https://seo-website-audit-api.p.rapidapi.com
+```
+
+## Authentication
+
+```http
+X-RapidAPI-Key: your-rapidapi-key
+X-RapidAPI-Host: seo-website-audit-api.p.rapidapi.com
+Content-Type: application/json
+```
+
+## Notes
+
+- The aggregate audit is built for quick diagnostics. For deeper workflows, call the
+  individual endpoints and store each check result in your own system.
+- Meta tag generation uses AI and has higher latency than the deterministic checks.
+- Network checks are best-effort and vary with third-party site behavior, DNS
+  propagation, timeouts, firewalls, and rate limits. Results are diagnostic signals,
+  not guarantees of ranking, safety, or production readiness.

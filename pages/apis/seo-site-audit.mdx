@@ -1,0 +1,121 @@
+---
+title: SEO Site Audit API
+description: Run a combined website audit for URL safety, security headers, robots.txt, sitemap, CORS, SSL, DNS, and SEO meta tags in one call through RapidAPI.
+---
+
+# SEO Site Audit API
+
+Run every website health check in a single call and get back one score, one grade, and a
+flat list of warnings. Use it for SEO dashboards, agency reporting, site builders, CMS
+plugins, and launch QA, where a per-check integration is more work than the result is
+worth.
+
+## Endpoint
+
+```http
+POST /v1/seo/site-audit
+```
+
+## Request body
+
+| Field | Type | Required | Description |
+|---|---|---:|---|
+| `url` | `string` | Yes | Website or page URL to audit. |
+| `sitemap_url` | `string` | No | Sitemap URL. Defaults to `/sitemap.xml` on the audited domain. |
+| `origin` | `string` | No | Origin header value used for the CORS check. Defaults to `https://example.com`. |
+| `include_meta_tags` | `boolean` | No | Generate SEO meta tags from `page_content`. Defaults to `false`. |
+| `page_content` | `string` | No | Page content used when `include_meta_tags` is `true`. |
+| `target_keyword` | `string` | No | Target keyword for the generated metadata. |
+
+## Example request
+
+```bash
+curl --request POST \
+  --url https://seo-website-audit-api.p.rapidapi.com/v1/seo/site-audit \
+  --header "Content-Type: application/json" \
+  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
+  --header "X-RapidAPI-Host: seo-website-audit-api.p.rapidapi.com" \
+  --data '{"url":"https://example.com","sitemap_url":"https://example.com/sitemap.xml","origin":"https://app.example.com"}'
+```
+
+## Example response
+
+```json
+{
+  "success": true,
+  "data": {
+    "url": "https://example.com",
+    "domain": "example.com",
+    "score": 86,
+    "grade": "B",
+    "summary": {
+      "passed_checks": 6,
+      "warning_count": 2,
+      "critical_count": 0
+    },
+    "checks": {
+      "url_safety": {
+        "url": "https://example.com",
+        "final_url": "https://example.com",
+        "redirect_count": 0,
+        "redirect_chain": ["https://example.com"],
+        "is_safe": true,
+        "threat_types": [],
+        "is_homograph": false,
+        "status_code": 200
+      },
+      "security_headers": {
+        "url": "https://example.com",
+        "status_code": 200,
+        "score": 80,
+        "grade": "B",
+        "present_headers": {},
+        "missing_headers": [],
+        "recommendations": []
+      },
+      "robots_txt": {},
+      "sitemap": {},
+      "cors": {},
+      "ssl": {},
+      "dns": {},
+      "meta_tags": null
+    },
+    "warnings": []
+  },
+  "error": null,
+  "meta": {
+    "request_id": "req_example"
+  }
+}
+```
+
+## Response fields
+
+| Field | Type | Description |
+|---|---|---|
+| `url` | `string` | The normalized URL that was audited. |
+| `domain` | `string` | Domain extracted from `url`. |
+| `score` | `integer` | Overall score, 0-100. The mean of the component scores. |
+| `grade` | `string` | `A` at 90+, `B` at 80+, `C` at 70+, `D` at 60+, `F` below that. |
+| `summary.passed_checks` | `integer` | Component checks scoring 80 or above. |
+| `summary.warning_count` | `integer` | Length of the `warnings` array. |
+| `summary.critical_count` | `integer` | Failures treated as critical, such as a homograph URL. |
+| `checks` | `object` | The full payload of each individual check, keyed by check name. |
+| `checks.meta_tags` | `object \| null` | `null` unless `include_meta_tags` was `true`. |
+| `warnings` | `string[]` | Flattened, prefixed warnings from every check. |
+
+Each entry under `checks` is the same shape that the standalone endpoint returns, so a
+dashboard can render one audit and the per-check pages interchangeably:
+[URL Safety](/api/url-safety-checker), [Security Headers](/api/security-headers-analyzer),
+[Robots.txt](/api/robots-txt-analyzer), [Sitemap](/api/sitemap-validator),
+[CORS](/api/cors-checker), [SSL](/api/ssl-checker), [DNS](/api/dns-analyzer), and
+[Meta Tags](/api/seo-meta-tags-api).
+
+## Notes
+
+- The audit runs the network checks against live third-party infrastructure, so it is
+  slower than any single endpoint and its results vary with timeouts, firewalls, DNS
+  propagation, and rate limits.
+- Setting `include_meta_tags` to `true` adds an AI generation step and further latency.
+- Scores are diagnostic signals, not guarantees of search ranking or production
+  readiness.

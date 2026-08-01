@@ -12,7 +12,7 @@ const CATEGORY_ENTRY: Record<string, string> = {
   "email-domain": "email-validation",
   "website-security": "ssl-checker",
   "qr-codes": "qr-code-generator-api",
-  seo: "seo-meta-tags-api",
+  seo: "seo-website-audit",
   "social-app": "instagram",
 };
 

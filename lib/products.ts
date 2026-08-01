@@ -15,6 +15,7 @@ const RAPIDAPI = {
   devUtilities: "https://rapidapi.com/aftaab/api/apimask-developer-utilities-api",
   emailDomain: "https://rapidapi.com/aftaab/api/email-domain-validation-api",
   bulkEmail: "https://rapidapi.com/aftaab/api/bulk-email-verification-api",
+  seoAudit: "https://rapidapi.com/aftaab/api/seo-website-audit-api",
   qrWithLogo: "https://rapidapi.com/aftaab/api/qr-code-generator-api-with-logo",
   aiContent: "https://rapidapi.com/aftaab/api/ai-content-generator-api",
   twitter: "https://rapidapi.com/aftaab/api/twitter-x-api",
@@ -69,7 +70,12 @@ export const categories: Category[] = [
     status: "Live",
     note: "URL, WiFi, vCard, branded logo QR codes",
   },
-  { slug: "seo", name: "SEO", status: "Live", note: "Meta tags, robots.txt, sitemaps" },
+  {
+    slug: "seo",
+    name: "SEO",
+    status: "Live",
+    note: "Site audits, meta tags, robots.txt, sitemaps",
+  },
   {
     slug: "social-app",
     name: "Social & app intelligence",
@@ -160,6 +166,15 @@ export const endpoints: ApiEndpoint[] = [
     rapidapi: RAPIDAPI.emailDomain,
     isCollection: true,
   },
+  {
+    slug: "seo-website-audit",
+    name: "SEO Website Audit API",
+    description:
+      "Site audit, SEO meta tags, sitemap, robots.txt, SSL, DNS, security headers, URL safety, and CORS checks in one product.",
+    category: "seo",
+    rapidapi: RAPIDAPI.seoAudit,
+    isCollection: true,
+  },
 
   // --- Email & domain ---
   {
@@ -221,6 +236,14 @@ export const endpoints: ApiEndpoint[] = [
   },
 
   // --- SEO ---
+  {
+    slug: "seo-site-audit",
+    name: "SEO Site Audit API",
+    description:
+      "Run one combined website audit covering URL safety, security headers, robots.txt, sitemap, CORS, SSL, DNS, and SEO meta tags.",
+    category: "seo",
+    rapidapi: RAPIDAPI.seoAudit,
+  },
   {
     slug: "seo-meta-tags-api",
     name: "SEO Meta Tags API",
@@ -401,7 +424,15 @@ export const categoryCounts: Record<string, number> = endpoints.reduce<Record<st
 /* -------------------------------------------------------------------------- */
 
 // The three ApiMask products with their own dedicated RapidAPI listing today.
-export const flagshipProducts = [
+/** Every RapidAPI listing, as shown on the homepage.
+ *
+ *  `count` is the number of endpoints in the RapidAPI listing, which is not the
+ *  same as the number of docs pages under pages/apis/ — several endpoints share
+ *  a page, and a few are sold under more than one listing. The numbers are the
+ *  operation counts in the platform's own OpenAPI specs
+ *  (apimask-platform/docs/*.openapi.json), so verify against those when a
+ *  listing gains an endpoint. */
+export const rapidapiProducts = [
   {
     icon: "QR",
     count: 6,
@@ -429,4 +460,51 @@ export const flagshipProducts = [
     docs: docsHref("bulk-email-verification"),
     rapidapi: RAPIDAPI.bulkEmail,
   },
+  {
+    icon: "{}",
+    count: 12,
+    title: "Developer Utilities API",
+    copy: "Regex generation and explanation, stacktrace analysis, README and changelog generation, JSON, Base64, hashing, IDs, and URL parsing.",
+    tags: ["Regex", "JSON", "Hash", "UUID"],
+    docs: docsHref("developer-utilities"),
+    rapidapi: RAPIDAPI.devUtilities,
+  },
+  {
+    icon: "MX",
+    count: 8,
+    title: "Email & Domain Validation API",
+    copy: "Validate emails and domains, and check DNS records, SSL certificates, URL safety, security headers, robots.txt, sitemaps, and CORS.",
+    tags: ["MX", "SSL", "Headers", "CORS"],
+    docs: docsHref("email-domain-validation"),
+    rapidapi: RAPIDAPI.emailDomain,
+  },
+  {
+    icon: "SEO",
+    count: 9,
+    title: "SEO Website Audit API",
+    copy: "Run one combined website audit, validate sitemaps and robots.txt, check SSL, DNS, security headers, URL safety, and CORS, and generate meta tags.",
+    tags: ["Audit", "Sitemap", "Robots", "Meta"],
+    docs: docsHref("seo-website-audit"),
+    rapidapi: RAPIDAPI.seoAudit,
+  },
+  {
+    icon: "X",
+    count: 10,
+    title: "Twitter/X Data API",
+    copy: "Profiles, tweets, search results, replies, and thread extraction through stable, normalized JSON endpoints.",
+    tags: ["Profiles", "Tweets", "Search", "Threads"],
+    docs: docsHref("twitter"),
+    rapidapi: RAPIDAPI.twitter,
+  },
+  {
+    icon: "IG",
+    count: 9,
+    title: "Instagram API Collection",
+    copy: "Profiles, posts, reels, comments, hashtag search, and AI insights, returned as normalized JSON.",
+    tags: ["Profiles", "Reels", "Hashtags", "Insights"],
+    docs: docsHref("instagram"),
+    rapidapi: RAPIDAPI.instagram,
+  },
 ] as const;
+
+export const rapidapiProductCount = rapidapiProducts.length;
