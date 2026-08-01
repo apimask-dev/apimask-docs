@@ -6,6 +6,7 @@ import {
   liveCategories,
   soonCategories,
 } from "../../lib/products";
+import { spellCount } from "../../lib/format";
 import { ArrowIcon } from "../ui/ArrowIcon";
 import { Section, SectionHead } from "./Section";
 import styles from "./Home.module.css";
@@ -24,7 +25,7 @@ export function CategoryGrid() {
       <SectionHead
         eyebrow="Catalog"
         title="Browse by category."
-        lead="Seven live categories today, with more on the public roadmap. Every live category links straight into its documentation."
+        lead={`${spellCount(liveCategories.length)} live categories today, with more on the public roadmap. Every live category links straight into its documentation.`}
       />
 
       <div className={styles.categoryGrid}>

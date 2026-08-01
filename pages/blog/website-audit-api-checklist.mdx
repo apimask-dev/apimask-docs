@@ -169,11 +169,11 @@ Example SSL check:
 
 ```bash
 curl --request POST \
-  --url https://apimask-email-domain-validation-api.p.rapidapi.com/v1/website/ssl \
+  --url https://email-domain-validation-api.p.rapidapi.com/v1/utility/ssl/check \
   --header "Content-Type: application/json" \
   --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
-  --header "X-RapidAPI-Host: apimask-email-domain-validation-api.p.rapidapi.com" \
-  --data '{"url":"https://example.com"}'
+  --header "X-RapidAPI-Host: email-domain-validation-api.p.rapidapi.com" \
+  --data '{"domain":"example.com"}'
 ```
 
 You can combine this with [DNS Analyzer](/api/dns-analyzer), [Security Headers Analyzer](/api/security-headers-analyzer), [CORS Checker](/api/cors-checker), [Robots.txt Analyzer](/api/robots-txt-analyzer), and [Sitemap Validator](/api/sitemap-validator) to build a fuller audit report.

@@ -88,7 +88,7 @@ curl --request POST \
   --header "Content-Type: application/json" \
   --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
   --header "X-RapidAPI-Host: qr-code-generator-api-with-logo.p.rapidapi.com" \
-  --data '{"url":"https://apimask.dev","format":"png","size":512,"foreground":"#111111","background":"#ffffff"}'
+  --data '{"url":"https://apimask.dev","output":"png","box_size":10,"fill_color":"#111111","back_color":"#ffffff"}'
 ```
 
 Your application can call the API whenever a user creates a campaign, location, ticket, product, or page.

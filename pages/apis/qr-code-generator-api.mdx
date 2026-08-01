@@ -47,7 +47,7 @@ payload fields:
 | `logo_base64` | `string` | `null` | PNG/JPEG/WebP logo as raw base64 or a data URL. PNG output only. |
 | `logo_size_ratio` | `float` | `0.2` | Logo size as a fraction of the QR, `0.05`–`0.3`. |
 
-See [QR Code API with Logo](/apis/qr-code-api-with-logo) for branded output.
+See [QR Code API with Logo](/api/qr-code-api-with-logo) for branded output.
 
 ## Response envelope
 
@@ -132,7 +132,7 @@ curl --request POST \
 ## WiFi
 
 `POST /v1/qr/wifi` encodes WiFi credentials so a scan connects automatically.
-See the focused [WiFi QR Code API](/apis/wifi-qr-code-api) page. Plus all
+See the focused [WiFi QR Code API](/api/wifi-qr-code-api) page. Plus all
 [rendering options](#rendering-options).
 
 | Field | Type | Required | Default | Description |
@@ -230,6 +230,6 @@ for the full list and envelope shape.
 
 ## Related docs
 
-- [QR Code API with Logo](/apis/qr-code-api-with-logo)
-- [WiFi QR Code API](/apis/wifi-qr-code-api)
-- [API Catalog](/apis)
+- [QR Code API with Logo](/api/qr-code-api-with-logo)
+- [WiFi QR Code API](/api/wifi-qr-code-api)
+- [API Catalog](/api)
