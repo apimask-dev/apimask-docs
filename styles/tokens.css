@@ -1,0 +1,161 @@
+/* ---------------------------------------------------------------------------
+   ApiMask design tokens — the single source of truth for colour, radius, and
+   rhythm across all three surfaces (marketing pages, blog, Nextra docs shell).
+
+   Before this file existed the same concepts were declared three times with
+   different values: styles/global.css (:root, docs), pages/index.tsx (a
+   styled-jsx block, home), and styles/blog.css (blog). That divergence is why
+   the docs and blog read as separate websites. Nothing may re-declare these
+   below; surfaces consume them.
+
+   Palette direction: neutral near-black / off-white with one violet accent,
+   generous whitespace, soft-rounded surfaces.
+--------------------------------------------------------------------------- */
+
+:root {
+  color-scheme: light;
+
+  /* Surfaces, back to front */
+  --bg: #ffffff;
+  --bg-subtle: #f6f7f9;
+  --surface: #ffffff;
+  --surface-raised: #ffffff;
+  --border: #e4e7ec;
+  --border-strong: #cfd4dc;
+
+  /* Text, most to least prominent */
+  --ink: #0b0d0f;
+  --ink-muted: #5b6472;
+  --ink-faint: #8a93a0;
+
+  /* Accent */
+  --accent: #6c47ff;
+  --accent-hover: #5a38e0;
+  --accent-soft: #f1edff;
+  --accent-border: #d9cfff;
+  --on-accent: #ffffff;
+
+  /* Status */
+  --success: #067647;
+  --success-soft: #ecfdf3;
+  --warning-soft: #fffaeb;
+
+  /* Code surfaces are dark in both themes — deliberate, matches the hero
+     terminal card, which was the only part of the site designed dark first. */
+  --code-bg: #0b0d0f;
+  --code-border: #1d2027;
+  --code-ink: #e6e8ec;
+
+  /* Syntax tokens. One palette, tuned for the dark code surface above, shared
+     by the hand-highlighted panels (components/ui/highlight.tsx) and the
+     Shiki-highlighted MDX blocks so a snippet reads the same everywhere. */
+  --syntax-string: #b8cfad;
+  --syntax-variable: #e6c98c;
+  --syntax-keyword: #a99aff;
+  --syntax-builtin: #91b8d8;
+  --syntax-number: #91b8d8;
+  --syntax-comment: #6b7280;
+  --syntax-punctuation: #8b93a1;
+
+  /* Elevation. Kept extremely soft; the design leans on hairline borders. */
+  --shadow-sm: 0 1px 2px rgba(11, 13, 15, 0.05);
+  --shadow-md: 0 4px 16px rgba(11, 13, 15, 0.06);
+  --shadow-lg: 0 12px 40px rgba(11, 13, 15, 0.09);
+
+  /* Radii */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-pill: 999px;
+
+  /* Spacing scale */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-7: 32px;
+  --space-8: 48px;
+  --space-9: 64px;
+  --space-10: 80px;
+
+  /* Layout rhythm */
+  --content-max: 1200px;
+  --prose-max: 68ch;
+  --section-y: 96px;
+  --gutter: 40px;
+  --nav-height: 64px;
+}
+
+html.dark {
+  color-scheme: dark;
+
+  --bg: #0a0b0d;
+  --bg-subtle: #0f1114;
+  --surface: #14161a;
+  --surface-raised: #191c21;
+  --border: #23262d;
+  --border-strong: #343841;
+
+  --ink: #edeff2;
+  --ink-muted: #9ba3af;
+  --ink-faint: #6b7280;
+
+  --accent: #9b87ff;
+  --accent-hover: #b0a0ff;
+  --accent-soft: rgba(108, 71, 255, 0.14);
+  --accent-border: rgba(155, 135, 255, 0.32);
+  --on-accent: #0a0b0d;
+
+  --success: #75e0a7;
+  --success-soft: rgba(117, 224, 167, 0.12);
+  --warning-soft: rgba(247, 178, 62, 0.12);
+
+  --code-bg: #0d0f13;
+  --code-border: #23262d;
+  --code-ink: #e6e8ec;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.55);
+}
+
+@media (max-width: 860px) {
+  :root {
+    --section-y: 64px;
+    --gutter: 20px;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Back-compat aliases.
+
+   ~1500 lines of existing CSS (SiteNav.module.css, CodeTabs, ProductCard, the
+   Nextra overrides) are written against --apimask-*. Rather than a risky
+   big-bang rename, those names now resolve to the tokens above, so old and new
+   rules render identically and modules can be migrated one at a time.
+
+   Do not add new --apimask-* usages. New code targets the tokens directly.
+--------------------------------------------------------------------------- */
+:root,
+html.dark {
+  --apimask-ink: var(--ink);
+  --apimask-muted: var(--ink-muted);
+  --apimask-faint: var(--ink-faint);
+  --apimask-strong-muted: var(--ink-muted);
+  --apimask-line: var(--border);
+  --apimask-surface: var(--bg);
+  --apimask-outer: var(--bg-subtle);
+  --apimask-card: var(--surface);
+  --apimask-panel: var(--surface);
+  --apimask-code-bg: var(--code-bg);
+  --apimask-accent-purple: var(--accent);
+  --apimask-accent-green: var(--success);
+  --apimask-on-accent: var(--on-accent);
+  --apimask-control: var(--surface);
+  --apimask-control-text: var(--ink-muted);
+  --apimask-control-hover: var(--border-strong);
+  --apimask-dot: var(--border-strong);
+  --apimask-dot-active: var(--accent);
+}

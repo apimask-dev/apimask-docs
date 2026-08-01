@@ -1,26 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { Button } from "./ui/Button";
-import { ThemeToggle } from "./ui/ThemeToggle";
-import { cx } from "./ui/cx";
+import { RAPIDAPI_PROFILE_URL } from "../lib/products";
+import { NavActions } from "./nav/NavActions";
+import { NavLinks } from "./nav/NavLinks";
+import { NAV_ITEMS, isActive } from "./nav/nav-config";
 import styles from "./SiteNav.module.css";
-
-const NAV_ITEMS = [
-  { label: "APIs", href: "/api" },
-  { label: "Docs", href: "/quickstart" },
-  { label: "Pricing", href: "/pricing" },
-  { label: "Blog", href: "/blog" },
-] as const;
-
-const RAPIDAPI_URL = "https://rapidapi.com/user/aftaab";
-
-type Variant = "landing" | "blogIndex" | "blogPost";
-
-function isActive(pathname: string, href: string): boolean {
-  if (href === "/") return pathname === "/";
-  return pathname === href || pathname.startsWith(`${href}/`);
-}
 
 function MenuIcon({ open }: { open: boolean }) {
   return open ? (
@@ -34,36 +19,51 @@ function MenuIcon({ open }: { open: boolean }) {
   );
 }
 
-export function SiteNav({ variant }: { variant: Variant }) {
+/**
+ * Header for the pages that sit outside the Nextra shell (home and blog).
+ * Docs pages get the same links and actions through DocsNavExtras, which
+ * injects the shared NavLinks/NavActions into Nextra's own navbar — replacing
+ * that navbar outright would drop the hamburger that opens the mobile sidebar,
+ * since the menu context it needs isn't exported by Nextra.
+ */
+export function SiteNav() {
   const router = useRouter();
-  const pathname = (router.pathname || "/").replace(/^\/apis(\/|$)/, "/api$1");
+  const pathname = router.pathname || "/";
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  // The bar is transparent-bordered at the top of the page and gains a hairline
+  // once content passes underneath it.
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // Close the mobile panel on navigation, otherwise it stays open over the new
+  // page (the route changes without this component unmounting).
+  useEffect(() => {
+    const close = () => setOpen(false);
+    router.events.on("routeChangeComplete", close);
+    return () => router.events.off("routeChangeComplete", close);
+  }, [router.events]);
 
   return (
-    <nav className={cx(styles.nav, styles[variant])} aria-label="Main navigation">
-      <div className={styles.navRow}>
-        <Link href="/" className={styles.brand} aria-label="ApiMask home" prefetch={false}>
-          <img className={styles.brandMark} src="/apimask-logo.png" alt="" aria-hidden="true" />
-          <span>ApiMask</span>
-        </Link>
-
-        <div className={styles.links}>
-          {NAV_ITEMS.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              aria-current={isActive(pathname, item.href) ? "page" : undefined}
-            >
-              {item.label}
-            </Link>
-          ))}
+    <header className={`${styles.nav} ${scrolled ? styles.scrolled : ""}`}>
+      <nav className={styles.navRow} aria-label="Main navigation">
+        <div className={styles.left}>
+          <Link href="/" className="apimask-logo" aria-label="ApiMask home" prefetch={false}>
+            <span className="apimask-logo-mark" aria-hidden="true">
+              <img src="/logo.png" alt="" width={24} height={24} />
+            </span>
+            <span>ApiMask</span>
+          </Link>
+          <NavLinks />
         </div>
 
         <div className={styles.right}>
-          <ThemeToggle />
-          <Button href={RAPIDAPI_URL} variant="rapidapi" size="sm" external>
-            Subscribe on RapidAPI
-          </Button>
+          <NavActions />
           <button
             type="button"
             className={styles.menuButton}
@@ -75,22 +75,29 @@ export function SiteNav({ variant }: { variant: Variant }) {
             <MenuIcon open={open} />
           </button>
         </div>
-      </div>
+      </nav>
 
-      <div id="site-nav-mobile" className={cx(styles.mobilePanel, open && styles.open)}>
-        <div className={styles.mobileLinks}>
-          {NAV_ITEMS.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              aria-current={isActive(pathname, item.href) ? "page" : undefined}
-              onClick={() => setOpen(false)}
-            >
-              {item.label}
-            </Link>
-          ))}
-        </div>
+      <div id="site-nav-mobile" className={styles.mobilePanel} hidden={!open}>
+        {NAV_ITEMS.map((item) => (
+          <Link
+            key={item.href}
+            href={item.href}
+            aria-current={isActive(pathname, item.href) ? "page" : undefined}
+            onClick={() => setOpen(false)}
+          >
+            {item.label}
+          </Link>
+        ))}
+        <a
+          href={RAPIDAPI_PROFILE_URL}
+          className={styles.mobileCta}
+          target="_blank"
+          rel="noreferrer"
+          onClick={() => setOpen(false)}
+        >
+          View on RapidAPI
+        </a>
       </div>
-    </nav>
+    </header>
   );
 }

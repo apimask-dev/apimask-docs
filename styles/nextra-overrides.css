@@ -1,0 +1,325 @@
+/* ---------------------------------------------------------------------------
+   nextra-theme-docs re-skin.
+
+   The docs keep Nextra's shell (sidebar, TOC, search, MDX pipeline, mobile
+   behaviour) but are re-dressed in the site's tokens so they stop reading as a
+   bolted-on subsite. Nextra's own theming hooks are used where they exist
+   (--nextra-primary-* / --nextra-bg); everything else is a targeted override.
+
+   Article typography is NOT redefined here — theme.config.tsx wraps the docs
+   content in .prose, so docs and blog share styles/prose.css verbatim.
+--------------------------------------------------------------------------- */
+
+:root {
+  /* Nextra derives its link/accent colours from this HSL triple.
+     252deg 100% 64% == var(--accent), #6C47FF. */
+  --nextra-primary-hue: 252deg;
+  --nextra-primary-saturation: 100%;
+  --nextra-primary-lightness: 64%;
+  /* Nextra consumes this as an "R, G, B" triple inside rgb(). Must track
+     --bg in tokens.css. */
+  --nextra-bg: 255, 255, 255;
+  --nextra-navbar-height: var(--nav-height);
+}
+
+html.dark {
+  /* 250deg 100% 76% == dark-mode var(--accent), #9B87FF. */
+  --nextra-primary-hue: 250deg;
+  --nextra-primary-saturation: 100%;
+  --nextra-primary-lightness: 76%;
+  --nextra-bg: 10, 11, 13;
+}
+
+/* --- Navbar -------------------------------------------------------------- */
+
+/* Nextra's navbar is restyled rather than replaced. Swapping in SiteNav via
+   `navbar.component` would also replace the hamburger that opens the mobile
+   sidebar, and the menu context it needs is not exported by Nextra — so the
+   links and CTA are injected through `navbar.extraContent` (DocsNavExtras) and
+   this block makes the result match SiteNav exactly. */
+
+.nextra-nav-container {
+  border-bottom: 1px solid var(--border);
+  box-shadow: none;
+}
+
+/* Nextra paints the bar via a separate absolutely-positioned blur element. */
+.nextra-nav-container .nextra-nav-container-blur {
+  border-bottom: 0;
+  background: color-mix(in srgb, var(--bg) 82%, transparent);
+  -webkit-backdrop-filter: saturate(180%) blur(12px);
+  backdrop-filter: saturate(180%) blur(12px);
+  box-shadow: none;
+}
+
+@supports not (background: color-mix(in srgb, red 50%, transparent)) {
+  .nextra-nav-container .nextra-nav-container-blur {
+    background: var(--bg);
+  }
+}
+
+/* Nextra's row is `justify-end` with `margin-right: auto` on the logo, which
+   throws every link to the far right. Reset both, then order the children so
+   the layout reads: logo, links, …, actions, hamburger — identical to SiteNav. */
+.nextra-nav-container nav {
+  justify-content: flex-start;
+  gap: var(--space-6);
+  padding-right: max(env(safe-area-inset-right), var(--gutter));
+  padding-left: max(env(safe-area-inset-left), var(--gutter));
+}
+
+.nextra-nav-container nav > * {
+  order: 5;
+}
+
+.nextra-nav-container nav > a:first-child {
+  order: 1;
+  margin-right: 0;
+}
+
+/* Top-level page items, if any are ever added to pages/_meta.ts. */
+.nextra-nav-container nav > div:not([class*="docsLinks"]):not([class*="docsActions"]) {
+  order: 3;
+}
+
+.nextra-nav-container .nextra-search {
+  order: 6;
+}
+
+.nextra-nav-container .nextra-hamburger {
+  order: 9;
+  border-radius: var(--radius-sm);
+  color: var(--ink);
+}
+
+/* --- Sidebar ------------------------------------------------------------- */
+
+.nextra-sidebar-container {
+  border-right: 1px solid var(--border);
+  background: var(--bg);
+  font-size: 0.875rem;
+}
+
+.nextra-sidebar-container .nextra-scrollbar {
+  padding-top: var(--space-6);
+}
+
+/* Nextra ships a rounded-full active pill in its primary colour at low alpha.
+   Squared off and re-tinted to match the rest of the site's surfaces. */
+.nextra-sidebar-container li.active > a,
+.nextra-sidebar-container a[aria-current="page"] {
+  border-radius: var(--radius-sm);
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.nextra-sidebar-container a {
+  border-radius: var(--radius-sm);
+  color: var(--ink-muted);
+  font-weight: 450;
+  transition: background 0.12s ease, color 0.12s ease;
+}
+
+.nextra-sidebar-container a:hover {
+  background: var(--bg-subtle);
+  color: var(--ink);
+}
+
+/* Section headings in the sidebar */
+.nextra-sidebar-container .nextra-menu-desktop > li > .nextra-menu-heading,
+.nextra-sidebar-container button.nextra-menu-heading {
+  color: var(--ink);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+}
+
+.nextra-sidebar-footer {
+  border-top: 1px solid var(--border);
+  background: var(--bg);
+}
+
+/* --- Table of contents --------------------------------------------------- */
+
+.nextra-toc {
+  font-size: 0.8125rem;
+}
+
+.nextra-toc a {
+  color: var(--ink-faint);
+  transition: color 0.12s ease;
+}
+
+.nextra-toc a:hover {
+  color: var(--ink);
+}
+
+.nextra-toc a[aria-selected="true"],
+.nextra-toc li.active a {
+  color: var(--accent);
+  font-weight: 500;
+}
+
+.nextra-toc-footer {
+  border-top: 1px solid var(--border);
+  color: var(--ink-faint);
+}
+
+/* --- Content column ------------------------------------------------------ */
+
+.nextra-content {
+  color: var(--ink-muted);
+}
+
+/* .prose caps at --prose-max (68ch) for readability; the docs column is
+   already constrained by the sidebar + TOC, so let the wrapper fill it and
+   keep the measure limit on text only. Tables and code may run full width. */
+.nextra-content .prose {
+  max-width: none;
+}
+
+.nextra-content .prose > p,
+.nextra-content .prose > ul,
+.nextra-content .prose > ol,
+.nextra-content .prose > blockquote {
+  max-width: var(--prose-max);
+}
+
+/* Breadcrumbs */
+.nextra-content .nextra-breadcrumb,
+.nextra-content nav[aria-label="Breadcrumb"] {
+  color: var(--ink-faint);
+  font-size: 0.8125rem;
+}
+
+/* Prev/next pagination */
+.nextra-content .nextra-navigation-links a {
+  border-radius: var(--radius-md);
+  color: var(--ink-muted);
+  font-weight: 500;
+}
+
+.nextra-content .nextra-navigation-links a:hover {
+  color: var(--accent);
+}
+
+/* --- Cards (used by MDX <Cards />) --------------------------------------- */
+
+.nextra-card {
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius-lg) !important;
+  background: var(--surface) !important;
+  box-shadow: none !important;
+  color: var(--ink) !important;
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+
+.nextra-card:hover {
+  border-color: var(--accent-border) !important;
+  transform: translateY(-2px);
+}
+
+/* --- Steps --------------------------------------------------------------- */
+
+.nextra-steps {
+  border-left-color: var(--border);
+}
+
+.nextra-steps h3:before {
+  border-color: var(--border);
+  background: var(--bg-subtle);
+  color: var(--ink);
+}
+
+/* --- Search -------------------------------------------------------------- */
+
+.nextra-search input {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg-subtle);
+  color: var(--ink);
+  font-family: var(--apimask-sans);
+  font-size: 0.875rem;
+}
+
+.nextra-search input::placeholder {
+  color: var(--ink-faint);
+}
+
+.nextra-search ul {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  box-shadow: var(--shadow-lg);
+}
+
+.nextra-search li[aria-selected="true"],
+.nextra-search li > a:hover {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+/* --- Code blocks --------------------------------------------------------- */
+
+/* Nextra's rehype-pretty-code output sits outside .prose in some slots
+   (e.g. tab panels), so pin the surface globally rather than only in prose. */
+[data-rehype-pretty-code-figure] pre,
+pre:has(> code.nextra-code) {
+  border: 1px solid var(--code-border);
+  border-radius: var(--radius-md) !important;
+  background: var(--code-bg) !important;
+  box-shadow: none;
+}
+
+code.nextra-code {
+  font-family: var(--apimask-mono) !important;
+}
+
+pre code.nextra-code {
+  background: transparent !important;
+  color: var(--code-ink);
+  font-size: 0.8125rem !important;
+  line-height: 1.7 !important;
+}
+
+/* Shiki emits both --shiki-light and --shiki-dark on every token, and Nextra
+   picks between them on html.dark. Our code surface is dark in BOTH themes
+   (see --code-bg), so the light branch painted github-light's near-black
+   tokens onto a near-black block — highlighting that was technically present
+   but unreadable. Pin every block to the dark token set. */
+pre code.nextra-code span {
+  background-color: var(--shiki-dark-bg, transparent) !important;
+  color: var(--shiki-dark, var(--code-ink)) !important;
+}
+
+/* Line-level wrappers carry no --shiki-dark of their own; without this they
+   would resolve the var to nothing and lose the inherited body colour. */
+pre code.nextra-code > span {
+  background-color: transparent !important;
+  color: var(--code-ink) !important;
+}
+
+:not(pre) > code.nextra-code {
+  border: 1px solid var(--border) !important;
+  border-radius: 6px !important;
+  background: var(--bg-subtle) !important;
+  color: var(--ink) !important;
+  font-size: 0.875em !important;
+  font-weight: 500;
+}
+
+/* The copy button inherits Nextra's neutral palette; align it with ours. */
+.nextra-button,
+.nextra-copy-icon {
+  border-color: var(--code-border);
+  color: var(--ink-faint);
+}
+
+/* --- Focus --------------------------------------------------------------- */
+
+.nextra-focusable:focus-visible,
+.nextra-focus:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}

@@ -2,98 +2,97 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 14px;
+  gap: var(--space-3);
 }
 
 .icon {
   display: inline-grid;
-  width: 42px;
-  height: 42px;
+  width: 40px;
+  height: 40px;
   flex-shrink: 0;
   place-items: center;
   border-radius: var(--radius-md);
-  background: #f1edf8;
-  color: var(--apimask-accent-purple);
+  background: var(--accent-soft);
+  color: var(--accent);
   font-family: var(--apimask-mono);
-  font-size: 15px;
-  font-weight: 800;
-}
-
-html.dark .icon {
-  background: rgba(185, 163, 245, 0.14);
+  font-size: 0.875rem;
+  font-weight: 600;
 }
 
 .count {
-  border: 1px solid var(--apimask-line);
+  border: 1px solid var(--accent-border);
   border-radius: var(--radius-pill);
-  padding: 6px 10px;
-  color: var(--apimask-accent-purple);
-  font-size: 12px;
-  font-weight: 740;
+  background: var(--accent-soft);
+  padding: 4px 10px;
+  color: var(--accent);
+  font-size: 0.75rem;
+  font-weight: 500;
 }
 
 .title {
-  margin: var(--space-4) 0 0;
-  font-size: 18px;
-  font-weight: 760;
+  margin: var(--space-2) 0 0;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  letter-spacing: -0.018em;
 }
 
 .copy {
   margin: 0;
-  color: var(--apimask-muted);
-  line-height: 1.65;
+  color: var(--ink-muted);
+  font-size: 0.9375rem;
+  line-height: 1.6;
 }
 
 .tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: var(--space-2);
 }
 
 .tags span {
-  border: 1px solid var(--apimask-line);
+  border: 1px solid var(--border);
   border-radius: var(--radius-pill);
-  background: var(--apimask-surface);
-  padding: 5px 9px;
-  color: var(--apimask-muted);
-  font-size: 12px;
-  font-weight: 650;
+  background: var(--bg-subtle);
+  padding: 4px 9px;
+  color: var(--ink-muted);
+  font-size: 0.75rem;
+  font-weight: 500;
 }
 
 .actions {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: 10px 18px;
+  gap: var(--space-2) var(--space-5);
   margin-top: auto;
-  padding-top: 4px;
+  padding-top: var(--space-1);
 }
 
 .docsLink,
 .rapidLink {
   display: inline-flex;
   align-items: center;
-  font-size: 14px;
-  font-weight: 720;
+  font-size: 0.875rem;
+  font-weight: 500;
   text-decoration: none;
 }
 
 .docsLink {
-  color: var(--apimask-muted);
+  color: var(--ink-muted);
 }
 
 .docsLink:hover {
-  color: var(--apimask-ink);
+  color: var(--ink);
 }
 
 .rapidLink {
-  color: var(--apimask-accent-purple);
+  color: var(--accent);
 }
 
 .icon16 {
   width: 15px;
   height: 15px;
-  margin-left: 7px;
+  margin-left: 6px;
   flex-shrink: 0;
   transition: transform 160ms ease;
 }
@@ -103,26 +102,28 @@ html.dark .icon {
   transform: translateX(3px);
 }
 
-/* Lightweight variant for tools without a dedicated RapidAPI listing */
+/* Compact single-endpoint variant */
 .lite {
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
+  padding: var(--space-5);
 }
 
 .liteTitle {
-  margin: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 10px;
-  font-size: 16px;
-  font-weight: 760;
+  gap: var(--space-3);
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
 }
 
 .liteCopy {
   margin: 0;
-  color: var(--apimask-muted);
-  font-size: 14px;
+  color: var(--ink-muted);
+  font-size: 0.875rem;
   line-height: 1.6;
 }

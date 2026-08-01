@@ -1,0 +1,197 @@
+---
+title: "Generate and Explain Regex with an API"
+description: Turn plain-English rules into working regular expressions, then get a token-by-token explanation of any pattern you inherit — with a regex generator and explainer API.
+theme:
+  layout: raw
+  navbar: false
+  footer: false
+  sidebar: false
+  toc: false
+  pagination: false
+  timestamp: false
+  breadcrumb: false
+---
+
+import BlogPostLayout from '../../components/BlogPostLayout'
+
+<BlogPostLayout slug="regex-generator-api-guide">
+
+# Generate and Explain Regex with an API
+
+Regular expressions have an unusual cost profile. Writing one takes ten minutes.
+Reading one that somebody else wrote eighteen months ago takes forty, and you are
+never quite sure you got it right. The pattern is compact, dense, and almost
+entirely resistant to being skimmed.
+
+That asymmetry is the actual problem worth solving. Most teams do not need to
+write more regexes — they need the ones already in the codebase to stop being
+opaque, and they need the new ones to be right the first time.
+
+## Where regex actually costs you time
+
+Three situations account for most of the pain.
+
+**The one-off validation rule.** Someone needs to check that a reference code
+looks like `INV-2024-00871`. It is a five-minute job that turns into thirty
+because of an edge case with leading zeros, and the result gets pasted into the
+codebase with no comment.
+
+**The inherited pattern.** A regex in a validation layer is rejecting an input a
+customer insists is valid. Before you can fix it you have to reverse-engineer
+what it was trying to do, and the original author has left.
+
+**The flavour mismatch.** A pattern works in your editor and fails in
+production, because JavaScript's regex engine does not support lookbehind the
+way PCRE does, or because Go's RE2 refuses backreferences entirely. The error
+message rarely says this.
+
+## Generating a pattern from a description
+
+The [Regex Generator API](/api/regex-generator) takes a plain-English
+description and returns a pattern, an explanation, and test cases:
+
+```bash
+curl --request POST \
+  --url https://apimask-developer-utilities-api.p.rapidapi.com/v1/dev/regex/generate \
+  --header "Content-Type: application/json" \
+  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
+  --header "X-RapidAPI-Host: apimask-developer-utilities-api.p.rapidapi.com" \
+  --data '{"description":"Match a valid email address","flavor":"python"}'
+```
+
+```json
+{
+  "success": true,
+  "data": {
+    "pattern": "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$",
+    "explanation": "Matches a common email address structure.",
+    "test_cases": [
+      { "string": "hello@example.com", "should_match": true },
+      { "string": "not-an-email", "should_match": false }
+    ]
+  },
+  "error": null,
+  "meta": {}
+}
+```
+
+Two things in that response matter more than the pattern itself.
+
+The `flavor` parameter is the one people skip and then regret. It accepts
+`pcre`, `python`, `javascript`, `go`, and `re2`, and it changes what the
+generator is allowed to emit. Ask for a `go` pattern and you will not get
+backreferences, because RE2 does not have them. Ask for `pcre` and paste the
+result into a Go service and you will get a compile error at startup. Set it to
+the engine that will actually run the pattern.
+
+The `test_cases` array is the part to keep. Copy those strings into your test
+suite before you commit the pattern. A regex with two assertions next to it is a
+different artefact from a regex sitting alone in a constants file — the next
+person to touch it can change it without guessing at the intent.
+
+### Writing a description that produces a good pattern
+
+The output tracks the specificity of the input closely. "Match a phone number"
+is under-specified — phone numbers differ by country, and the generator has to
+pick one interpretation. "Match a US phone number with optional +1 country code,
+optional parentheses around the area code, and either hyphens or spaces as
+separators" describes an actual rule.
+
+Say what should *not* match, too. "Match a slug of lowercase letters, numbers,
+and hyphens, but not starting or ending with a hyphen and with no consecutive
+hyphens" produces something usable. Half that description produces something
+that will let `--foo--` through.
+
+## Explaining a pattern you inherited
+
+The reverse direction is the one that saves more time in practice. The
+[Regex Explainer API](/api/regex-explainer) takes a pattern and returns a
+description plus a token-by-token breakdown:
+
+```bash
+curl --request POST \
+  --url https://apimask-developer-utilities-api.p.rapidapi.com/v1/dev/regex/explain \
+  --header "Content-Type: application/json" \
+  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
+  --header "X-RapidAPI-Host: apimask-developer-utilities-api.p.rapidapi.com" \
+  --data '{"pattern":"^[A-Z][a-z]+$"}'
+```
+
+```json
+{
+  "success": true,
+  "data": {
+    "explanation": "Matches one capital letter followed by one or more lowercase letters.",
+    "breakdown": [
+      { "token": "^", "meaning": "Start of string" },
+      { "token": "[A-Z]", "meaning": "One uppercase letter" }
+    ]
+  },
+  "error": null,
+  "meta": {}
+}
+```
+
+The `breakdown` array is what makes this worth calling rather than reading the
+pattern yourself. It splits the expression into its component tokens with a
+meaning for each, which is the step your brain has to do anyway — it just does it
+slowly and with a decent chance of glossing over a `?` that turns a greedy
+quantifier lazy.
+
+## Three places to put this in a product
+
+**Admin and internal tooling.** If your product lets non-engineers configure
+matching rules — a support tool with routing rules, a CRM with a field
+validator, an ETL tool with a filter step — a description field backed by the
+generator is far kinder than a regex input. Store the generated pattern, show
+the explanation next to it, and let people verify the rule reads the way they
+meant it.
+
+**Code review.** Pipe changed regexes through the explainer and post the
+breakdown as a comment. A reviewer who can see "one or more of any character,
+lazily" spelled out is much more likely to catch that it should have been a
+character class.
+
+**Documentation generation.** Validation rules documented as raw patterns are
+documentation in name only. Running them through the explainer produces prose
+that an API consumer can act on.
+
+## When not to reach for regex at all
+
+This is the part most regex articles leave out, and it matters more than any of
+the above.
+
+**Email addresses.** The pattern in the example above is a structural sanity
+check and nothing more. It will accept `a@b.co` and reject nothing that matters.
+Whether an address can actually receive mail depends on the domain having MX
+records, on it not being a disposable provider, and on the mailbox existing —
+none of which is knowable from the string. Use a real
+[email validation endpoint](/api/email-validation) for that, and read
+[how to validate emails before signup](/blog/validate-emails-before-signup) for
+what the checks actually mean.
+
+**URLs.** Every language ships a URL parser. Use it. A regex will get scheme,
+host, port, path, query, and fragment approximately right and then fall over on
+internationalised domains, credentials in the authority, or an empty path.
+[URL Parser](/api/url-parser) or your standard library both beat a pattern here.
+
+**HTML and JSON.** Neither is a regular language. Parse them.
+
+**Anything user-supplied that you will run untrusted patterns through.** Nested
+quantifiers over user input are how you get catastrophic backtracking and a
+pegged CPU. If users can supply patterns, run them on an engine with linear-time
+guarantees — RE2, which is what `flavor: "re2"` targets — or don't accept them.
+
+## Where this sits
+
+Both endpoints are part of the
+[Developer Utilities API](/api/developer-utilities), alongside the hashing, ID
+generation, JSON formatting, and URL parsing endpoints covered in
+[the developer utility APIs you keep rewriting](/blog/developer-utility-apis-you-keep-rewriting).
+One RapidAPI subscription covers all of them.
+
+The rule of thumb: generate when you know the rule but not the syntax; explain
+when you have the syntax but not the rule. Reach for neither when the thing you
+are matching has a real parser.
+
+</BlogPostLayout>

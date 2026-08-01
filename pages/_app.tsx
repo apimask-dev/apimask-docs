@@ -1,8 +1,12 @@
 import type { AppProps } from "next/app";
 import { useRouter } from "next/router";
 import { ThemeProvider } from "next-themes";
+// Order matters: tokens define the custom properties every other sheet reads,
+// and nextra-overrides must win over nextra-theme-docs' own bundled CSS.
+import "../styles/tokens.css";
 import "../styles/global.css";
-import "../styles/blog.css";
+import "../styles/prose.css";
+import "../styles/nextra-overrides.css";
 import { fontVariableClassName } from "../lib/fonts";
 
 // The Nextra docs shell (every route except "/" and "/blog/**") ships its own

@@ -1,0 +1,504 @@
+/* Homepage layout. One module for all sections so the vertical rhythm, the
+   section header treatment, and the grid gutters stay in one place — the
+   previous homepage inlined ~300 lines of styled-jsx with its own private
+   colour set, which is what put it out of step with the rest of the site. */
+
+.section {
+  border-bottom: 1px solid var(--border);
+}
+
+.sectionInner {
+  max-width: var(--content-max);
+  box-sizing: border-box;
+  margin: 0 auto;
+  padding: var(--section-y) var(--gutter);
+}
+
+.tint {
+  background: var(--bg-subtle);
+}
+
+/* --- Section header ------------------------------------------------------ */
+
+.head {
+  max-width: 720px;
+  margin-bottom: var(--space-8);
+}
+
+.eyebrow {
+  margin: 0 0 var(--space-3);
+  color: var(--accent);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.head h2 {
+  margin: 0 0 var(--space-4);
+  font-size: clamp(1.75rem, 3vw, 2.25rem);
+  line-height: 1.12;
+  letter-spacing: -0.032em;
+  text-wrap: balance;
+}
+
+.head p {
+  margin: 0;
+  color: var(--ink-muted);
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  text-wrap: pretty;
+}
+
+.moreLink {
+  display: inline-flex;
+  align-items: center;
+  margin-top: var(--space-7);
+  color: var(--accent);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.moreLink svg {
+  width: 15px;
+  height: 15px;
+  margin-left: 6px;
+  transition: transform 160ms ease;
+}
+
+.moreLink:hover svg {
+  transform: translateX(3px);
+}
+
+/* --- Hero ---------------------------------------------------------------- */
+
+.hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg);
+}
+
+/* A single soft accent bloom behind the headline, the only decorative
+   flourish on the page. */
+.hero:before {
+  position: absolute;
+  z-index: -1;
+  top: -320px;
+  left: 50%;
+  width: 900px;
+  height: 620px;
+  transform: translateX(-62%);
+  border-radius: 50%;
+  background: radial-gradient(closest-side, var(--accent-soft), transparent);
+  content: "";
+  pointer-events: none;
+}
+
+.heroInner {
+  display: grid;
+  grid-template-columns: minmax(0, 1.02fr) minmax(420px, 0.98fr);
+  align-items: center;
+  gap: var(--space-9);
+  max-width: var(--content-max);
+  box-sizing: border-box;
+  margin: 0 auto;
+  padding: clamp(64px, 9vw, 104px) var(--gutter) clamp(64px, 8vw, 96px);
+}
+
+.heroBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0 0 var(--space-6);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  padding: 5px 12px 5px 6px;
+  color: var(--ink-muted);
+  font-size: 0.8125rem;
+}
+
+.heroBadge b {
+  border-radius: var(--radius-pill);
+  background: var(--accent-soft);
+  padding: 2px 8px;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.heroInner h1 {
+  max-width: 15ch;
+  margin: 0 0 var(--space-5);
+  font-size: clamp(2.5rem, 4.6vw, 3.75rem);
+  font-weight: 600;
+  line-height: 1.02;
+  letter-spacing: -0.042em;
+  text-wrap: balance;
+}
+
+.heroLead {
+  max-width: 52ch;
+  margin: 0 0 var(--space-7);
+  color: var(--ink-muted);
+  font-size: 1.125rem;
+  line-height: 1.6;
+  text-wrap: pretty;
+}
+
+.heroActions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.primaryAction,
+.secondaryAction {
+  display: inline-flex;
+  min-height: 44px;
+  box-sizing: border-box;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  padding: 0 20px;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: background 0.12s ease, border-color 0.12s ease, color 0.12s ease;
+}
+
+.primaryAction {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.primaryAction:hover {
+  border-color: var(--accent-hover);
+  background: var(--accent-hover);
+}
+
+.secondaryAction {
+  border-color: var(--border-strong);
+  background: var(--surface);
+  color: var(--ink);
+}
+
+.secondaryAction:hover {
+  border-color: var(--ink-faint);
+}
+
+.heroNote {
+  margin: var(--space-5) 0 0;
+  color: var(--ink-faint);
+  font-size: 0.875rem;
+}
+
+.heroVisual {
+  min-width: 0;
+}
+
+/* --- Distribution strip -------------------------------------------------- */
+
+.strip {
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-subtle);
+}
+
+.stripInner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-6);
+  flex-wrap: wrap;
+  max-width: var(--content-max);
+  box-sizing: border-box;
+  margin: 0 auto;
+  padding: var(--space-6) var(--gutter);
+}
+
+.stripItem {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  color: var(--ink-muted);
+  font-size: 0.9375rem;
+}
+
+.stripItem b {
+  color: var(--ink);
+  font-size: 1.125rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+/* --- Two-column feature layout (docs quality, security) ------------------ */
+
+.split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  align-items: start;
+  gap: var(--space-9);
+}
+
+.featureList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.featureList h3 {
+  margin: 0 0 var(--space-2);
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+
+.featureList p {
+  margin: 0;
+  color: var(--ink-muted);
+  font-size: 0.9375rem;
+  line-height: 1.6;
+}
+
+/* --- Code sample panel --------------------------------------------------- */
+
+.samplePanel {
+  overflow: hidden;
+  border: 1px solid var(--code-border);
+  border-radius: var(--radius-lg);
+  background: var(--code-bg);
+}
+
+.sampleBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  border-bottom: 1px solid var(--code-border);
+  padding: 10px 16px;
+  color: #8b93a1;
+  font-family: var(--apimask-mono);
+  font-size: 0.75rem;
+}
+
+.sampleBar b {
+  border-radius: 4px;
+  background: rgba(155, 135, 255, 0.16);
+  padding: 2px 6px;
+  color: #b9a8ff;
+  font-weight: 600;
+}
+
+.samplePanel pre {
+  margin: 0;
+  padding: 16px;
+  overflow-x: auto;
+  color: var(--code-ink);
+  font-family: var(--apimask-mono);
+  font-size: 0.8125rem;
+  line-height: 1.7;
+}
+
+.sampleDivider {
+  border-top: 1px solid var(--code-border);
+}
+
+/* --- Category grid ------------------------------------------------------- */
+
+.categoryGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: var(--space-4);
+}
+
+.categoryCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  padding: var(--space-5);
+  color: inherit;
+  text-decoration: none;
+  transition: border-color 160ms ease, transform 160ms ease;
+}
+
+a.categoryCard:hover {
+  border-color: var(--accent-border);
+  transform: translateY(-2px);
+}
+
+.categoryTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.categoryCard h3 {
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+
+.categoryCard p {
+  margin: 0;
+  color: var(--ink-muted);
+  font-size: 0.875rem;
+  line-height: 1.55;
+}
+
+.countBadge {
+  flex-shrink: 0;
+  border-radius: var(--radius-pill);
+  background: var(--accent-soft);
+  padding: 2px 9px;
+  color: var(--accent);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.soonBadge {
+  flex-shrink: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  padding: 2px 9px;
+  color: var(--ink-faint);
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.soon {
+  background: transparent;
+}
+
+.soon h3 {
+  color: var(--ink-muted);
+}
+
+.soonHeading {
+  margin: var(--space-8) 0 var(--space-4);
+  color: var(--ink-faint);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+/* --- Product grid -------------------------------------------------------- */
+
+.productGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--space-5);
+}
+
+/* --- Stat / trust grids -------------------------------------------------- */
+
+.statGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--space-5);
+}
+
+.stat {
+  border-top: 2px solid var(--accent);
+  padding-top: var(--space-4);
+}
+
+.stat b {
+  display: block;
+  margin-bottom: var(--space-2);
+  font-size: 1.375rem;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+}
+
+.stat p {
+  margin: 0;
+  color: var(--ink-muted);
+  font-size: 0.9375rem;
+  line-height: 1.55;
+}
+
+/* --- Audience columns ---------------------------------------------------- */
+
+.audienceGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: var(--space-7);
+}
+
+.audience h3 {
+  margin: 0 0 var(--space-3);
+  font-size: 1.0625rem;
+  font-weight: 600;
+  letter-spacing: -0.018em;
+}
+
+.audience > p {
+  margin: 0 0 var(--space-4);
+  color: var(--ink-muted);
+  font-size: 0.9375rem;
+  line-height: 1.6;
+}
+
+.audienceLinks {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.audienceLinks a {
+  color: var(--ink);
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-decoration: underline;
+  text-decoration-color: var(--accent-border);
+  text-underline-offset: 3px;
+}
+
+.audienceLinks a:hover {
+  color: var(--accent);
+  text-decoration-color: var(--accent);
+}
+
+/* --- Responsive ---------------------------------------------------------- */
+
+@media (max-width: 960px) {
+  .heroInner,
+  .split {
+    grid-template-columns: 1fr;
+    gap: var(--space-7);
+  }
+
+  .heroInner h1 {
+    max-width: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .heroActions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .primaryAction,
+  .secondaryAction {
+    width: 100%;
+  }
+
+  .stripInner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-3);
+  }
+}

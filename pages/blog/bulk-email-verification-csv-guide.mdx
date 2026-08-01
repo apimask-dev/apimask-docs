@@ -1,0 +1,228 @@
+---
+title: "Cleaning a 50,000-Row Email List with a Bulk Verification API"
+description: A practical pass over a real list — CSV upload, batching, what each flag means, which addresses to drop, and what a healthy result actually looks like.
+theme:
+  layout: raw
+  navbar: false
+  footer: false
+  sidebar: false
+  toc: false
+  pagination: false
+  timestamp: false
+  breadcrumb: false
+---
+
+import BlogPostLayout from '../../components/BlogPostLayout'
+
+<BlogPostLayout slug="bulk-email-verification-csv-guide">
+
+# Cleaning a 50,000-Row Email List with a Bulk Verification API
+
+At some point somebody hands you a CSV. It came from a CRM export, or three
+years of form fills, or an acquisition, and the question is whether you can send
+to it.
+
+The honest answer is usually "not as-is". Lists that have not been maintained
+degrade at roughly 20–30% per year — people change jobs, domains lapse,
+addresses get abandoned. Send to a stale list and the bounce rate does the
+damage: mailbox providers read high bounces as a signal that you do not know who
+your recipients are, and your deliverability drops for the addresses that *were*
+good.
+
+This is a walkthrough of doing that cleanup properly.
+
+## Before the API: fix the file
+
+Roughly a fifth of the problems in a real list are solved in the CSV, before any
+verification runs.
+
+**Deduplicate case-insensitively.** `Ada@example.com` and `ada@example.com` are
+the same mailbox. Duplicates cost you verification quota and, worse, produce
+duplicate sends.
+
+**Trim whitespace and strip display names.** Exports frequently contain
+`"Ada Lovelace" <ada@example.com>` or a trailing space. Extract the address.
+
+**Drop obvious junk early.** Rows with no `@`, addresses ending in `.` or `,`,
+and the test entries somebody typed into a form. `asdf@asdf.com` is in every
+list.
+
+**Segment by age and source before you verify.** A list is rarely homogeneous —
+last quarter's signups and a 2019 tradeshow scrape have very different profiles,
+and averaging them hides that. Verify separately and you can make a
+source-by-source decision.
+
+## The CSV endpoint
+
+The [Bulk Email Verification API](/api/bulk-email-verification) accepts a file
+directly:
+
+```bash
+curl --request POST \
+  --url https://bulk-email-verification-api.p.rapidapi.com/v1/email/bulk/validate-csv \
+  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
+  --header "X-RapidAPI-Host: bulk-email-verification-api.p.rapidapi.com" \
+  --form "file=@emails.csv"
+```
+
+The CSV should have an `email` column; if it does not, the first column is
+treated as the email column.
+
+```csv
+email,name
+hello@example.com,Ada
+support@example.com,Support
+```
+
+**Limits: 1,000 rows and 512 KB per upload.** So a 50,000-row list is not one
+call — it is at least 50 chunks. Split the file, keep a stable row index so you
+can rejoin results to your original records, and process the chunks with bounded
+concurrency against your plan's [rate limit](/rate-limits).
+
+If you already have the addresses in memory, the JSON endpoint is simpler:
+`POST /v1/email/bulk/validate` takes up to 500 addresses per call.
+
+```bash
+curl --request POST \
+  --url https://bulk-email-verification-api.p.rapidapi.com/v1/email/bulk/validate \
+  --header "Content-Type: application/json" \
+  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
+  --header "X-RapidAPI-Host: bulk-email-verification-api.p.rapidapi.com" \
+  --data '{"emails":["hello@example.com","support@example.com","test@mailinator.com"]}'
+```
+
+## Reading the result
+
+```json
+{
+  "success": true,
+  "data": {
+    "results": [
+      {
+        "input": "hello@example.com",
+        "is_valid": true,
+        "email": "hello@example.com",
+        "local_part": "hello",
+        "domain": "example.com",
+        "is_disposable": false,
+        "has_mx_records": true,
+        "is_role_account": false,
+        "reason": null
+      }
+    ],
+    "summary": {
+      "total": 3,
+      "valid": 3,
+      "invalid": 0,
+      "disposable": 1,
+      "role_accounts": 1,
+      "domains_with_mx": 3,
+      "duplicates": 0
+    }
+  },
+  "error": null,
+  "meta": { "request_id": "req_example" }
+}
+```
+
+Note that `is_valid`, `is_disposable`, and `is_role_account` are independent
+axes. A role account can be perfectly valid. A disposable address is usually
+syntactically fine. Treating any single flag as "delete this row" is the most
+common mistake.
+
+### What each flag means, and what to do about it
+
+**`is_valid: false`** — the address failed syntax or structural checks.
+`reason` says why. **Delete these.** There is no upside; they will hard-bounce.
+
+**`has_mx_records: false`** — the domain publishes no mail exchanger, so it
+cannot receive mail at all. **Delete these too.** This catches typo domains
+(`gmial.com`), lapsed company domains, and addresses at domains that were never
+mail-capable. In an old list this is usually the single largest removal bucket.
+
+**`is_disposable: true`** — a throwaway provider like Mailinator or 10MinuteMail.
+The address may work right now; it will not work in a week, and the person behind
+it explicitly signalled they did not want ongoing contact. **Remove from
+marketing sends.** Whether to block them at signup is a separate product
+decision — see
+[validating emails before signup](/blog/validate-emails-before-signup) for that
+side of it.
+
+**`is_role_account: true`** — `support@`, `info@`, `sales@`, `admin@`. These go
+to a shared inbox rather than a person. **Do not delete; segment.** They are
+frequently your most valuable B2B contacts, and they are also disproportionately
+likely to hit a spam complaint button on a marketing blast. Transactional and
+account email: fine. Newsletter: exclude by default.
+
+## Checking the domains, not just the addresses
+
+`POST /v1/email/domain/health` takes up to 500 domains and reports MX, SPF, and
+DMARC readiness. Run it over the distinct domains in your list — a 50,000-row
+list typically has a few thousand at most, so this is cheap.
+
+Two uses.
+
+**Spot dead domains in bulk.** Faster than inferring from per-address results,
+and it groups the failures so you can see that 400 addresses all belong to one
+acquired company.
+
+**Check your own sending domain.** If you are about to send to a cleaned list,
+your own SPF and DMARC records matter as much as the recipients'. Missing or
+misconfigured records will hurt delivery regardless of list quality.
+[MX, SPF, DKIM, and DMARC explained](/blog/mx-spf-dkim-dmarc-explained) covers
+what each record does, and the [DNS Analyzer](/api/dns-analyzer) shows the raw
+records if you need to debug one.
+
+## What the API deliberately does not tell you
+
+Being clear about the limits, because vendors in this space are often not.
+
+**SMTP mailbox probing is not included.** The API does not connect to the
+recipient's mail server to ask whether a specific mailbox exists. That means it
+cannot distinguish `ada@example.com` (real person, still employed) from
+`departed@example.com` (valid syntax, valid domain, mailbox deleted last March).
+
+That is a meaningful limit and worth understanding rather than glossing over.
+SMTP probing is also less reliable than it sounds — catch-all domains accept
+everything, major providers rate-limit or deliberately mislead probes, and
+aggressive probing can get your IP blocked. The checks here are the ones that are
+reliable.
+
+**Validation improves list quality; it does not guarantee delivery.** A clean
+list can still land in spam if your sending reputation, authentication, or
+content is the problem.
+
+## What a healthy result looks like
+
+Rough expectations from `summary`, so you can tell "this list is fine" from
+"this list is a liability":
+
+- **Recent, single-opt-in list:** 95%+ valid, under 2% no-MX, disposables under
+  1%.
+- **Two to three years old, unmaintained:** 80–90% valid is normal. 10–20%
+  attrition over that period is expected, not alarming.
+- **Purchased or scraped list:** frequently 50–70% valid, with high disposable
+  and role-account counts.
+
+That last case is worth stating plainly: if a list comes back at 60% valid, the
+cleanup is not the problem. Nobody on it asked to hear from you, and sending to
+it will damage the sending reputation you use for the lists that did.
+
+## After the pass
+
+**Keep the removals.** Write rejected addresses to a suppression list rather than
+deleting them. If the same address re-enters through a form import next quarter,
+you want to know it already failed.
+
+**Store the verification date on the record.** "Verified 2026-06-01" lets you
+re-verify on a schedule instead of re-verifying everything every time.
+
+**Warm up if the list has been dormant.** Sending 40,000 messages to a list that
+has not been contacted in two years looks exactly like a spam run, even if every
+address is valid. Ramp volume over days.
+
+**Fix the intake.** The cheapest cleanup is the one you never have to run — put
+[validation at the signup form](/blog/validate-emails-before-signup) and the
+list stays clean by default.
+
+</BlogPostLayout>

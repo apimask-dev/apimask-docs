@@ -1,3 +1,10 @@
+import { blogPosts } from "../../components/blog-posts";
+
+// Blog posts render through BlogPostLayout, not the docs shell, so every entry
+// switches Nextra's chrome off. Each MDX file repeats this in its frontmatter
+// too — Nextra needs it there to avoid a flash of the docs layout on direct
+// navigation — but keeping it here as well means a post can never end up half
+// wrapped in the sidebar if the frontmatter is forgotten.
 const rawBlogTheme = {
   layout: "raw" as const,
   navbar: false,
@@ -9,31 +16,11 @@ const rawBlogTheme = {
   breadcrumb: false,
 };
 
-// Note: blog/index.tsx is a custom page (not MDX) and must not be listed here —
-// Nextra only maps markdown pages into _meta keys.
-export default {
-  "validate-emails-before-signup": {
-    title: "Validate Emails Before Signup",
-    theme: rawBlogTheme,
-  },
-  "mx-spf-dkim-dmarc-explained": {
-    title: "MX, SPF, DKIM, and DMARC",
-    theme: rawBlogTheme,
-  },
-  "check-website-security-headers": {
-    title: "Website Security Headers",
-    theme: rawBlogTheme,
-  },
-  "cors-errors-explained": {
-    title: "CORS Errors Explained",
-    theme: rawBlogTheme,
-  },
-  "generate-qr-codes-with-logo-api": {
-    title: "QR Codes With Logo API",
-    theme: rawBlogTheme,
-  },
-  "website-audit-api-checklist": {
-    title: "Website Audit API Checklist",
-    theme: rawBlogTheme,
-  },
-};
+// Derived from components/blog-posts.ts rather than hand-listed. Adding a post
+// used to mean editing three files with three chances to typo a slug; now the
+// post list is the single source and this stays in step automatically.
+// blog/index.tsx is a custom page (not MDX) and is correctly absent — Nextra
+// only maps markdown pages into _meta keys.
+export default Object.fromEntries(
+  blogPosts.map((post) => [post.slug, { title: post.title, theme: rawBlogTheme }]),
+);

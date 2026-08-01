@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 import type { GetServerSideProps } from "next";
+import { blogPosts } from "../components/blog-posts";
 
 const BASE_URL = "https://apimask.dev";
 
@@ -22,7 +23,13 @@ const TOP_LEVEL = [
   "changelog",
 ];
 
-type SitemapEntry = { loc: string; priority: number; changefreq: string };
+type SitemapEntry = { loc: string; priority: number; changefreq: string; lastmod: string };
+
+// Blog posts carry a real publication date, so they get a truthful lastmod
+// instead of the deploy timestamp every other route uses.
+const BLOG_DATES = new Map(
+  blogPosts.map((post) => [post.slug, new Date(`${post.updated ?? post.date}T00:00:00Z`).toISOString()]),
+);
 
 function discoverApiRoutes(): string[] {
   // Pages live under pages/apis/** but are served at /api/** via rewrites.
@@ -76,22 +83,30 @@ function discoverBlogRoutes(): string[] {
 
 function entryFor(route: string): SitemapEntry {
   const loc = route ? `${BASE_URL}/${route}` : BASE_URL;
-  if (route === "") return { loc, priority: 1.0, changefreq: "weekly" };
-  if (route === "api") return { loc, priority: 0.9, changefreq: "weekly" };
-  if (route.startsWith("api/")) return { loc, priority: 0.8, changefreq: "weekly" };
-  if (route === "blog") return { loc, priority: 0.8, changefreq: "weekly" };
-  if (route.startsWith("blog/")) return { loc, priority: 0.7, changefreq: "monthly" };
+  const lastmod = LASTMOD;
+  if (route === "") return { loc, priority: 1.0, changefreq: "weekly", lastmod };
+  if (route === "api") return { loc, priority: 0.9, changefreq: "weekly", lastmod };
+  if (route.startsWith("api/")) return { loc, priority: 0.8, changefreq: "weekly", lastmod };
+  if (route === "blog") return { loc, priority: 0.8, changefreq: "weekly", lastmod };
+  if (route.startsWith("blog/")) {
+    return {
+      loc,
+      priority: 0.7,
+      changefreq: "monthly",
+      lastmod: BLOG_DATES.get(route.slice("blog/".length)) ?? lastmod,
+    };
+  }
   if (route === "quickstart" || route === "pricing")
-    return { loc, priority: 0.7, changefreq: "monthly" };
-  return { loc, priority: 0.6, changefreq: "monthly" };
+    return { loc, priority: 0.7, changefreq: "monthly", lastmod };
+  return { loc, priority: 0.6, changefreq: "monthly", lastmod };
 }
 
 function generateSitemap(): string {
   const routes = [...TOP_LEVEL, ...discoverApiRoutes(), ...discoverBlogRoutes()];
   const urls = routes
     .map((route) => {
-      const { loc, priority, changefreq } = entryFor(route);
-      return `  <url><loc>${loc}</loc><lastmod>${LASTMOD}</lastmod><changefreq>${changefreq}</changefreq><priority>${priority.toFixed(1)}</priority></url>`;
+      const { loc, priority, changefreq, lastmod } = entryFor(route);
+      return `  <url><loc>${loc}</loc><lastmod>${lastmod}</lastmod><changefreq>${changefreq}</changefreq><priority>${priority.toFixed(1)}</priority></url>`;
     })
     .join("\n");
 

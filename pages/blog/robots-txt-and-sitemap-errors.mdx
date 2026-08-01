@@ -1,0 +1,205 @@
+---
+title: "Robots.txt and Sitemap Errors That Quietly Kill Your Crawl Budget"
+description: The robots.txt and XML sitemap misconfigurations that stop pages being indexed, why they are so easy to miss, and how to catch them automatically before a deploy ships.
+theme:
+  layout: raw
+  navbar: false
+  footer: false
+  sidebar: false
+  toc: false
+  pagination: false
+  timestamp: false
+  breadcrumb: false
+---
+
+import BlogPostLayout from '../../components/BlogPostLayout'
+
+<BlogPostLayout slug="robots-txt-and-sitemap-errors">
+
+# Robots.txt and Sitemap Errors That Quietly Kill Your Crawl Budget
+
+Two files decide whether search engines can find and reach your pages. They are
+plain text, they live at predictable paths, and almost nobody looks at them
+between the day the site launches and the day traffic falls off a cliff.
+
+The failure mode is what makes them dangerous. A broken robots.txt does not
+throw an error. Nothing in your monitoring goes red. The site works perfectly for
+every human visitor. You find out weeks later, from a graph.
+
+## The one that costs the most
+
+A staging `robots.txt` shipped to production:
+
+```
+User-agent: *
+Disallow: /
+```
+
+Two lines that ask every crawler to stay off the entire site. This is not a rare
+mistake — it is one of the most common serious SEO incidents there is, because
+the staging environment legitimately needs those lines and the deploy pipeline
+does not know the difference.
+
+Recovery is slow. Even after you fix it, re-crawling and re-indexing takes time
+that scales with the size of the site.
+
+**The safeguard:** assert on the contents of production robots.txt in CI, or in a
+post-deploy check. This is a five-minute job that pays for itself the first time
+it fires.
+
+## What robots.txt actually controls, and what it doesn't
+
+A persistent and expensive misunderstanding: **`Disallow` prevents crawling, not
+indexing.**
+
+If a disallowed URL is linked from elsewhere, a search engine can still index it
+— it just cannot see the content, so it may show the URL with no useful snippet.
+Worse, because it cannot fetch the page, it cannot see a `noindex` meta tag
+either.
+
+This produces the single most counter-intuitive result in technical SEO: **if you
+want a page out of the index, you must let crawlers fetch it.** Use `noindex` in
+the page's meta or headers, and do *not* disallow it in robots.txt. Blocking a
+page you want de-indexed actively prevents the de-indexing.
+
+Rules of thumb:
+
+- **Want it hidden from results?** `noindex`, and allow crawling.
+- **Want to save crawl budget on worthless URLs?** `Disallow` — infinite faceted
+  filters, session-ID URLs, internal search results.
+- **Want it genuinely private?** Authentication. Neither file is a security
+  control; robots.txt is a public document that helpfully lists the paths you
+  consider sensitive.
+
+## Checking robots.txt programmatically
+
+The [Robots.txt Analyzer](/api/robots-txt-analyzer) fetches and parses the file:
+
+```bash
+curl --request POST \
+  --url https://apimask-email-domain-validation-api.p.rapidapi.com/v1/utility/robots/analyze \
+  --header "Content-Type: application/json" \
+  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
+  --header "X-RapidAPI-Host: apimask-email-domain-validation-api.p.rapidapi.com" \
+  --data '{"url":"https://example.com"}'
+```
+
+```json
+{
+  "success": true,
+  "data": {
+    "url": "https://example.com",
+    "robots_url": "https://example.com/robots.txt",
+    "exists": true,
+    "status_code": 200,
+    "disallow_rules": ["/private"],
+    "sitemap_urls": ["https://example.com/sitemap.xml"],
+    "user_agents": ["*"],
+    "warnings": []
+  },
+  "error": null,
+  "meta": {}
+}
+```
+
+Four things to assert on:
+
+**`status_code` must be 200 or 404.** Both are fine — 404 means "no rules, crawl
+everything", which is a valid state. What is not fine is **5xx**. A server error
+on robots.txt is commonly treated as "do not crawl anything", so an intermittent
+500 on that one path can suppress crawling across the whole site. This is the
+sneakiest failure on this list because it is transient and your uptime
+monitoring probably does not check that path.
+
+**`disallow_rules` should not contain `/`.** That is the staging-config check
+above.
+
+**`sitemap_urls` should be non-empty.** The `Sitemap:` directive is how crawlers
+discover your sitemap without guessing. It costs one line.
+
+**`warnings` should be empty.** Parse ambiguities live here.
+
+## Sitemaps: the errors that matter
+
+A sitemap is a discovery hint, not a guarantee. It helps crawlers find URLs they
+might not reach through links — deep pages, new pages, orphans.
+
+The [Sitemap Validator](/api/sitemap-validator) checks fetchability and
+structure:
+
+```json
+{
+  "success": true,
+  "data": {
+    "url": "https://example.com/sitemap.xml",
+    "exists": true,
+    "status_code": 200,
+    "is_valid_xml": true,
+    "url_count": 42,
+    "sitemap_count": 0,
+    "warnings": []
+  },
+  "error": null,
+  "meta": {}
+}
+```
+
+`sitemap_count` being non-zero means you are looking at a sitemap *index* — a
+sitemap of sitemaps — and the child sitemaps need validating too. Large sites
+must use an index: a single sitemap is capped at 50,000 URLs and 50MB
+uncompressed.
+
+The errors worth watching for, in rough order of how often they bite:
+
+**URLs that redirect.** Your sitemap lists `http://` or non-`www` URLs, and every
+one 301s to the canonical version. It works, but every entry now costs an extra
+round trip and sends a muddled signal about which URL is canonical. List final
+destination URLs only.
+
+**URLs that 404.** Dead entries burn crawl budget and, in volume, reduce trust in
+the sitemap.
+
+**Non-canonical or `noindex` URLs.** Listing a page in your sitemap says "please
+index this". Having it also carry `noindex` or a canonical pointing elsewhere
+says the opposite. Contradictory signals get resolved in ways you did not choose.
+
+**Stale `lastmod`.** Either accurate or absent. A `lastmod` that updates on every
+deploy, for every URL, is noise and gets discounted.
+
+**A sitemap that is not actually generated.** Static file, generated once,
+`/sitemap.xml` returning last year's URL set. Generate it from your routes, not
+by hand — and note that
+[this site's own sitemap](https://apimask.dev/sitemap.xml) is built by walking
+the pages directory for exactly this reason.
+
+## Wiring the checks into CI
+
+Both endpoints return plain JSON, which makes them straightforward as a
+post-deploy gate. The checks worth failing a build over:
+
+1. robots.txt returns 200 or 404, never 5xx.
+2. `disallow_rules` does not contain `/`.
+3. `sitemap_urls` is non-empty.
+4. Every sitemap in `sitemap_urls` returns 200 with `is_valid_xml: true`.
+5. `url_count` is within an expected band. A sitemap that drops from 4,000 URLs
+   to 12 is a generation bug, and this catches it the same day rather than the
+   next quarter.
+
+That last one is the highest-value check on the list and the one people never
+think to add.
+
+Both endpoints are part of the
+[Email, Domain & Website Utilities API](/api/email-domain-validation), so the
+same subscription covers the SSL, DNS, header, and CORS checks alongside them.
+
+## Where this fits
+
+Crawlability is the first gate. Metadata quality only matters for pages that can
+actually be reached — which is why
+[generating SEO titles and descriptions at scale](/blog/generate-seo-meta-tags-at-scale)
+is the step *after* this one, not before it.
+
+For the full set of technical checks assembled into one repeatable report, see
+the [website audit API checklist](/blog/website-audit-api-checklist).
+
+</BlogPostLayout>

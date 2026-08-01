@@ -2,10 +2,10 @@ import Link from "next/link";
 import { Card, CardLink } from "./ui/Card";
 import { ArrowIcon } from "./ui/ArrowIcon";
 import styles from "./ProductCard.module.css";
-import type { flagshipProducts, quickTools } from "../lib/products";
+import type { ApiEndpoint, flagshipProducts } from "../lib/products";
+import { docsHref } from "../lib/products";
 
 type FlagshipProduct = (typeof flagshipProducts)[number];
-type QuickTool = (typeof quickTools)[number];
 
 export function FlagshipProductCard({ icon, count, title, copy, tags, docs, rapidapi }: FlagshipProduct) {
   return (
@@ -34,14 +34,15 @@ export function FlagshipProductCard({ icon, count, title, copy, tags, docs, rapi
   );
 }
 
-export function QuickToolCard({ title, copy, docs }: QuickTool) {
+/** Compact card for a single endpoint, used by the homepage catalog grid. */
+export function EndpointCard({ slug, name, description }: ApiEndpoint) {
   return (
-    <CardLink href={docs} className={styles.lite}>
+    <CardLink href={docsHref(slug)} className={styles.lite}>
       <h3 className={styles.liteTitle}>
-        {title}
+        {name}
         <ArrowIcon className={styles.icon16} />
       </h3>
-      <p className={styles.liteCopy}>{copy}</p>
+      <p className={styles.liteCopy}>{description}</p>
     </CardLink>
   );
 }

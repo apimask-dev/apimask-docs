@@ -1,0 +1,188 @@
+---
+title: "Automating Product Descriptions, Summaries, and Social Captions"
+description: Where an AI content API genuinely saves time in a catalog or content pipeline, where it does not, and how to keep the output usable rather than generic.
+theme:
+  layout: raw
+  navbar: false
+  footer: false
+  sidebar: false
+  toc: false
+  pagination: false
+  timestamp: false
+  breadcrumb: false
+---
+
+import BlogPostLayout from '../../components/BlogPostLayout'
+
+<BlogPostLayout slug="ai-product-descriptions-and-captions-api">
+
+# Automating Product Descriptions, Summaries, and Social Captions
+
+There is a particular kind of content work that is genuinely repetitive: eight
+thousand SKUs imported from a supplier feed with nothing but a part number and a
+spec table, a knowledge base where every article needs a summary, a social
+calendar that needs the same announcement phrased five ways for five platforms.
+
+Nobody enjoys this work and nobody does it well at volume. It is a reasonable
+candidate for automation. It is also where a lot of automation goes wrong, in a
+specific and predictable way.
+
+## The failure mode to design against
+
+Generic output. Not wrong output — generic output.
+
+Feed a model a product name and a shrug, and you get "Experience the perfect
+blend of style and functionality with our premium product, designed to meet all
+your needs." It is grammatical, on-topic, and completely interchangeable with
+every competitor's copy. It converts nobody, and search engines have no reason to
+prefer the page carrying it.
+
+This is almost never a limitation of the model. It is an input problem. The
+generator produced generic copy because it was given generic input and had
+nothing specific to work with.
+
+Everything below is about the inputs.
+
+## Product descriptions
+
+The [product description endpoint](/api/ai-content-generator-api) takes a name
+and details and returns a title, a long description, bullet points, and keyword
+suggestions:
+
+```bash
+curl --request POST \
+  --url https://ai-content-generator-api.p.rapidapi.com/v1/content/product-description \
+  --header "Content-Type: application/json" \
+  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
+  --header "X-RapidAPI-Host: ai-content-generator-api.p.rapidapi.com" \
+  --data '{
+    "product_name":"TrailLight 500",
+    "product_details":"Rechargeable USB-C headlamp, 500 lumens, 12-hour runtime, IPX6 waterproof.",
+    "audience":"hikers",
+    "length":"medium"
+  }'
+```
+
+```json
+{
+  "success": true,
+  "data": {
+    "title": "TrailLight 500: 500-Lumen USB-C Headlamp Built for the Backcountry",
+    "description": "Light up the trail with the TrailLight 500. Its 500-lumen beam and 12-hour runtime keep you moving from dusk to dawn, while IPX6 waterproofing shrugs off rain and creek crossings.",
+    "bullet_points": [
+      "500 lumens of adjustable brightness",
+      "12-hour runtime on a single charge",
+      "USB-C rechargeable",
+      "IPX6 waterproof"
+    ],
+    "seo_keywords": ["USB-C headlamp", "waterproof headlamp", "hiking headlamp"]
+  },
+  "error": null,
+  "meta": { "request_id": "req_9c8b7a6d5e4f", "model": "gpt-4o-mini" }
+}
+```
+
+Compare the input to the output. Every concrete claim in the description — 500
+lumens, 12 hours, IPX6, creek crossings — traces back to a fact in
+`product_details`. The copy is specific because the input was specific.
+
+Now imagine `product_details` had said "high-quality headlamp for outdoor use".
+The output would have been the "perfect blend of style and functionality"
+sentence, and it would have been the API's only honest option.
+
+**So: `product_details` is the whole job.** Push every fact you have into it —
+dimensions, materials, capacity, compatibility, what is in the box, the spec
+table from the supplier feed. It has a 20-character minimum, which is a floor,
+not a target. If your catalogue data is thin, fixing that upstream will improve
+output more than any prompt tuning.
+
+`audience` shifts vocabulary and which benefits get led with. "Hikers" and
+"warehouse night shift supervisors" want the same headlamp described very
+differently. `tone` defaults to `persuasive`; `length` takes `short`, `medium`,
+or `long`. Match `length` to where the copy will render — a category grid tile
+and a full product page are not the same slot.
+
+`target_keyword` biases the copy toward a search term, the same way it does in
+[SEO title and meta description generation](/blog/generate-seo-meta-tags-at-scale).
+
+## Summaries
+
+`POST /v1/content/summarize` condenses long text into a summary and key points.
+The genuinely useful applications are narrower than they first appear:
+
+- **Listing pages.** A support centre index where each article needs two lines.
+- **Digests.** Turning a week of changelog entries into a paragraph.
+- **Preview text.** Email subject lines and card previews generated from the
+  body rather than an arbitrary first-150-characters truncation.
+
+What it should not do is replace the content. A summary that saves a reader from
+reading is useful; a summary published *as* the page is a thin page.
+
+## Social captions
+
+`POST /v1/content/social-caption` generates platform-specific captions with
+optional hashtags. Platform-specific is doing real work in that sentence:
+LinkedIn, X, and Instagram have different length norms, different tolerance for
+hashtags, and different registers. One caption cross-posted everywhere reads as
+wrong on at least two of them.
+
+The realistic workflow is one source announcement, three generated variants, one
+human pass. Not three published captions.
+
+## Where the whole approach breaks down
+
+Being direct about this, because the alternative is shipping something that
+damages the thing it was supposed to help.
+
+**Regulated claims.** Supplements, medical devices, financial products, safety
+equipment. Generated copy will confidently produce claims you are not permitted
+to make. The generator does not know your jurisdiction's advertising rules.
+Human review here is not optional.
+
+**Anything where accuracy is contractual.** Compatibility statements, load
+ratings, ingredient lists, warranty terms. If a generated description says a part
+fits a model it does not fit, you own that. Render these fields from structured
+data, not from prose generation.
+
+**Your best pages.** The same rule as metadata: your top-selling products and
+your highest-traffic articles deserve a copywriter. There are a handful of them
+and they earn it. Automation is for the tail.
+
+**Cases where the real problem is your data.** If descriptions come out generic
+because your PIM has three attributes per product, the fix is the PIM. An API
+cannot invent facts, and you would not want it to if it could.
+
+## Making it operational
+
+**Persist output with provenance.** Store the generated text with the
+`request_id` and `model` from `meta`, plus a status (`generated`, `reviewed`,
+`published`). When output quality shifts, you can tell which records came from
+which model version, and you have a rollback path.
+
+**Never write straight to the storefront.** Generate into a staging column.
+Review, then promote. This is the single highest-value process decision here and
+it costs almost nothing.
+
+**Batch with bounded concurrency.** These calls are independent, so parallelise
+them — but respect your plan's [rate limits](/rate-limits) and handle
+`RATE_LIMIT_EXCEEDED` (429) with backoff. The `meta` block reports token counts
+and `cost_usd` per call, which makes a dry run on 100 items a reliable way to
+project the cost of 10,000 before you commit. See [Errors](/errors) for the full
+error catalogue.
+
+**Spot-check for duplication.** Run a similarity check across the generated set.
+Near-identical descriptions across a catalogue are the automated-content failure
+mode search engines are best at spotting.
+
+**Regenerate on data change, not on a schedule.** Churning copy monthly achieves
+nothing and destroys your ability to attribute conversion changes.
+
+## Related
+
+The [AI Content Generator API](/api/ai-content-generator-api) covers all eight
+endpoints — summarize, rewrite, meta tags, blog outline, product description,
+social caption, headlines, and FAQ — under one RapidAPI subscription. For the
+metadata-specific workflow, see
+[generating SEO titles and meta descriptions at scale](/blog/generate-seo-meta-tags-at-scale).
+
+</BlogPostLayout>

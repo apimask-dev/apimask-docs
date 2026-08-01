@@ -2,14 +2,19 @@ import React from "react";
 import { useRouter } from "next/router";
 import { useConfig } from "nextra-theme-docs";
 import type { DocsThemeConfig } from "nextra-theme-docs";
-import { Button } from "./components/ui/Button";
+import { DocsNavExtras } from "./components/nav/DocsNavExtras";
+import { SiteFooter } from "./components/SiteFooter";
 
 const SITE_URL = "https://apimask.dev";
 const SITE_NAME = "ApiMask";
 const DEFAULT_TITLE = "ApiMask - Developer, AI, Email, Domain & Website APIs";
 const DEFAULT_DESCRIPTION =
   "ApiMask is a growing platform of production-ready APIs: developer utilities, AI content, bulk email verification, domain validation, SEO, security, and website intelligence. Available through RapidAPI with clean JSON responses and copy-paste examples.";
-const OG_IMAGE = `${SITE_URL}/apimask-logo.png`;
+// A 1200x630 card, the ratio Open Graph and Twitter crop to. Previously this
+// pointed at the 200px logo file, which social clients letterboxed on a
+// background of their own choosing.
+const OG_IMAGE = `${SITE_URL}/og-image.png`;
+const LOGO = `${SITE_URL}/apimask-logo.png`;
 
 // Site-wide structured data. Organization + WebSite (with a SearchAction) help
 // search engines understand the brand and can enable a sitelinks search box.
@@ -18,7 +23,7 @@ const organizationLd = {
   "@type": "Organization",
   name: SITE_NAME,
   url: SITE_URL,
-  logo: OG_IMAGE,
+  logo: LOGO,
   description: DEFAULT_DESCRIPTION,
   sameAs: ["https://rapidapi.com/user/aftaab", "https://github.com/apimask-dev"],
 };
@@ -73,6 +78,14 @@ function useSeoHead() {
       <meta property="og:type" content="website" />
       <meta property="og:site_name" content={SITE_NAME} />
       <meta property="og:image" content={image} />
+      {/* Only the shared card has known dimensions; a page that supplies its
+          own image in frontmatter would make these a lie. */}
+      {image === OG_IMAGE && (
+        <>
+          <meta property="og:image:width" content="1200" />
+          <meta property="og:image:height" content="630" />
+        </>
+      )}
       <meta property="og:image:alt" content="ApiMask logo" />
 
       <meta name="twitter:card" content="summary_large_image" />
@@ -92,7 +105,7 @@ function useSeoHead() {
       <link rel="icon" href="/favicon-16x16.png" sizes="16x16" type="image/png" />
       <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
       <link rel="manifest" href="/site.webmanifest" />
-      <meta name="theme-color" content="#32126a" />
+      <meta name="theme-color" content="#6c47ff" />
       <meta name="application-name" content={SITE_NAME} />
       <meta name="apple-mobile-web-app-title" content={SITE_NAME} />
       {/* Structured data */}
@@ -111,7 +124,9 @@ function useSeoHead() {
 const config: DocsThemeConfig = {
   logo: (
     <span className="apimask-logo">
-      <img src="/apimask-logo.png" alt="" aria-hidden="true" />
+      <span className="apimask-logo-mark" aria-hidden="true">
+        <img src="/logo.png" alt="" width={24} height={24} />
+      </span>
       <span>ApiMask</span>
     </span>
   ),
@@ -119,17 +134,19 @@ const config: DocsThemeConfig = {
     link: "https://github.com/apimask-dev",
   },
   docsRepositoryBase: "https://github.com/apimask-dev/apimask-docs/tree/main",
+  // Nextra's navbar is kept (its hamburger owns the mobile sidebar) but is
+  // re-dressed to match SiteNav: the shared links and CTA come in here, and
+  // styles/nextra-overrides.css reorders the row so they sit beside the logo.
   navbar: {
-    extraContent: (
-      <Button href="https://rapidapi.com/user/aftaab" variant="rapidapi" size="sm" external>
-        Subscribe on RapidAPI
-      </Button>
-    ),
+    extraContent: <DocsNavExtras />,
   },
+  // Same footer as the marketing pages, so every route ends identically.
   footer: {
-    content:
-      "ApiMask - developer utility, AI content, email, domain, security, SEO, and website intelligence APIs available through RapidAPI.",
+    content: <SiteFooter />,
   },
+  // The docs content column opts into the shared article typography, which is
+  // what makes a docs page and a blog post read as the same site.
+  main: ({ children }) => <div className="prose">{children}</div>,
   // `head` is rendered inside a React component, so a function head can use
   // hooks (useConfig/useRouter) to emit per-page SEO. Returning a static node
   // here would replace Nextra's default head and strip every page of its

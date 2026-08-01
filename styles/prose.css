@@ -1,0 +1,242 @@
+/* ---------------------------------------------------------------------------
+   Long-form article typography, shared by the blog (BlogPostLayout) and the
+   Nextra docs content column (mapped in styles/nextra-overrides.css).
+
+   Previously the blog hand-rolled this in styles/blog.css while docs used
+   nextra-theme-docs' own defaults — two unrelated type systems, which is the
+   main reason a blog post and a docs page didn't look like the same website.
+   One measure, one baseline, one link treatment, everywhere.
+--------------------------------------------------------------------------- */
+
+.prose {
+  max-width: var(--prose-max);
+  color: var(--ink-muted);
+  font-family: var(--apimask-sans);
+  font-size: 1.0625rem;
+  line-height: 1.75;
+}
+
+/* --- Headings ------------------------------------------------------------ */
+
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4 {
+  color: var(--ink);
+  font-family: var(--apimask-display);
+  font-weight: 600;
+  text-wrap: balance;
+}
+
+.prose h1 {
+  margin: 0 0 var(--space-6);
+  font-size: clamp(2.125rem, 4.4vw, 3rem);
+  line-height: 1.06;
+  letter-spacing: -0.035em;
+}
+
+.prose h2 {
+  margin: 3rem 0 1rem;
+  font-size: 1.5rem;
+  line-height: 1.25;
+  letter-spacing: -0.022em;
+  scroll-margin-top: calc(var(--nav-height) + 24px);
+}
+
+.prose h3 {
+  margin: 2.25rem 0 0.75rem;
+  font-size: 1.1875rem;
+  line-height: 1.35;
+  letter-spacing: -0.015em;
+  scroll-margin-top: calc(var(--nav-height) + 24px);
+}
+
+.prose h4 {
+  margin: 1.75rem 0 0.5rem;
+  font-size: 1.0625rem;
+  line-height: 1.4;
+  scroll-margin-top: calc(var(--nav-height) + 24px);
+}
+
+/* The old blog styles prefixed every h2 with a purple "//" glyph. Dropped:
+   it read as terminal-chrome decoration that appeared nowhere else on the
+   site, and it was one of the louder "this is a different website" signals. */
+
+/* --- Body ---------------------------------------------------------------- */
+
+.prose p {
+  margin: 0 0 1.25rem;
+  text-wrap: pretty;
+}
+
+.prose strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.prose ul,
+.prose ol {
+  margin: 0 0 1.35rem;
+  padding-left: 1.35rem;
+}
+
+.prose li {
+  margin-bottom: 0.5rem;
+  padding-left: 0.2rem;
+}
+
+.prose li::marker {
+  color: var(--accent);
+}
+
+.prose li > ul,
+.prose li > ol {
+  margin: 0.5rem 0 0;
+}
+
+/* --- Links --------------------------------------------------------------- */
+
+.prose a {
+  color: var(--ink);
+  font-weight: 500;
+  text-decoration: underline;
+  text-decoration-color: var(--accent-border);
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 3px;
+  transition: color 0.12s ease, text-decoration-color 0.12s ease;
+}
+
+.prose a:hover {
+  color: var(--accent);
+  text-decoration-color: var(--accent);
+}
+
+/* Headings that contain only an anchor link (Nextra's autolink headings)
+   must not inherit the underline treatment. */
+.prose h1 a,
+.prose h2 a,
+.prose h3 a,
+.prose h4 a {
+  color: inherit;
+  font-weight: inherit;
+  text-decoration: none;
+}
+
+/* --- Code ---------------------------------------------------------------- */
+
+.prose code {
+  font-family: var(--apimask-mono);
+  font-size: 0.875em;
+  font-variant-ligatures: contextual;
+}
+
+.prose :not(pre) > code {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg-subtle);
+  padding: 0.15em 0.4em;
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.prose pre {
+  margin: 1.5rem 0;
+  border: 1px solid var(--code-border);
+  border-radius: var(--radius-md);
+  background: var(--code-bg);
+  padding: 1rem 1.15rem;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  /* Long posts render many code blocks; skip offscreen layout work. */
+  content-visibility: auto;
+  contain-intrinsic-size: auto 220px;
+}
+
+.prose pre code {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  color: var(--code-ink);
+  font-size: 0.8125rem;
+  line-height: 1.7;
+}
+
+.prose [data-rehype-pretty-code-figure] {
+  margin: 1.5rem 0;
+}
+
+.prose [data-rehype-pretty-code-figure] pre {
+  margin: 0;
+}
+
+/* --- Blocks -------------------------------------------------------------- */
+
+.prose blockquote {
+  margin: 1.75rem 0;
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  background: var(--accent-soft);
+  padding: 0.9rem 1.15rem;
+  color: var(--ink-muted);
+}
+
+.prose blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+.prose hr {
+  margin: 2.5rem 0;
+  border: 0;
+  border-top: 1px solid var(--border);
+}
+
+.prose img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius-md);
+}
+
+/* --- Tables -------------------------------------------------------------- */
+
+/* Wide tables scroll inside their own container rather than pushing the page
+   into horizontal overflow. */
+.prose table {
+  display: block;
+  width: 100%;
+  margin: 1.75rem 0;
+  border-collapse: collapse;
+  overflow-x: auto;
+  font-size: 0.9375rem;
+}
+
+.prose th,
+.prose td {
+  border-bottom: 1px solid var(--border);
+  padding: 0.75rem 0.9rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.prose thead th {
+  border-bottom-color: var(--border-strong);
+  color: var(--ink);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+
+.prose tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+@media (max-width: 640px) {
+  .prose {
+    font-size: 1rem;
+  }
+
+  .prose h2 {
+    margin-top: 2.25rem;
+    font-size: 1.375rem;
+  }
+}

@@ -1,58 +1,22 @@
-/* Fonts are self-hosted via next/font (lib/fonts.ts, applied in pages/_app.tsx).
-   next/font is not supported in _document.tsx — its CSS injection is tied to the
-   per-page render tree, so the variable classes must be applied there instead.
-   --font-apimask-* variables resolve to the optimized face; system stacks are fallbacks. */
-:root {
-  --apimask-ink: #12140f;
-  --apimask-muted: #555c50;
-  --apimask-line: #d9ded3;
-  --apimask-surface: #f4f5f1;
-  --apimask-card: #ffffff;
-  --apimask-code-bg: #11140f;
-  --apimask-accent-purple: #32126a;
-  --apimask-accent-green: #276749;
-
-  --space-1: 4px;
-  --space-2: 8px;
-  --space-3: 12px;
-  --space-4: 16px;
-  --space-5: 20px;
-  --space-6: 24px;
-  --space-7: 32px;
-  --space-8: 48px;
-  --space-9: 64px;
-  --space-10: 80px;
-
-  --radius-sm: 7px;
-  --radius-md: 8px;
-  --radius-lg: 10px;
-  --radius-pill: 999px;
-}
-
-/* Dark-mode values are not new choices — they're lifted from the hero
-   terminal card's own already-dark-designed palette (pages/index.tsx),
-   the only part of the site built for a dark surface before this. */
-html.dark {
-  --apimask-ink: #f4f7f0;
-  --apimask-muted: #aeb8aa;
-  --apimask-line: rgba(255, 255, 255, 0.14);
-  --apimask-surface: #16180f;
-  --apimask-card: #1f2317;
-  --apimask-code-bg: #0a0c08;
-  --apimask-accent-purple: #b9a3f5;
-  --apimask-accent-green: #8bd6a5;
-}
+/* Global base styles.
+   Design tokens live in styles/tokens.css (imported first in _app.tsx) — this
+   file must not re-declare colour, radius, or spacing values. Nextra shell
+   styling lives in styles/nextra-overrides.css; article typography lives in
+   styles/prose.css. */
 
 html {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background: var(--bg);
 }
 
 body {
-  letter-spacing: 0;
-  font-size: 16px;
   margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-size: 16px;
+  letter-spacing: 0;
 }
 
 /* --apimask-sans/-display/-mono must be declared on the same element that
@@ -64,7 +28,9 @@ body {
    have --font-apimask-* set directly. */
 .font-root {
   --apimask-sans: var(--font-apimask-sans), "Helvetica Neue", Arial, sans-serif;
-  --apimask-display: var(--font-apimask-display), "Helvetica Neue", Arial, sans-serif;
+  /* Geist is a variable face covering both roles; display differs by weight
+     and tracking, not family. See lib/fonts.ts. */
+  --apimask-display: var(--font-apimask-sans), "Helvetica Neue", Arial, sans-serif;
   --apimask-mono: var(--font-apimask-mono), "SFMono-Regular", "Cascadia Code", "Roboto Mono", Menlo, Monaco, Consolas, monospace;
   font-family: var(--apimask-sans);
 }
@@ -80,76 +46,57 @@ h2,
 h3,
 h4,
 h5,
-h6,
-.nextra-nav-container,
-.nextra-sidebar-container {
+h6 {
   font-family: var(--apimask-display);
-  letter-spacing: 0;
+  font-weight: 600;
+  letter-spacing: -0.022em;
 }
 
 code,
 kbd,
 samp,
-pre,
-.nextra-code {
-  font-family: var(--apimask-mono) !important;
+pre {
+  font-family: var(--apimask-mono);
   font-variant-ligatures: contextual;
   font-feature-settings: "liga" 1, "calt" 1, "zero" 1;
 }
 
-pre {
-  border-radius: 8px !important;
+::selection {
+  background: var(--accent-soft);
+  color: var(--ink);
 }
 
-pre code.nextra-code {
-  font-size: 0.875rem !important;
-  line-height: 1.75 !important;
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
 }
 
-:not(pre) > code.nextra-code {
-  border-color: rgba(17, 20, 15, 0.12) !important;
-  background: rgba(17, 20, 15, 0.055) !important;
-  color: #11140f;
-  font-size: 0.88em !important;
-  font-weight: 560;
-}
-
-html[class~="dark"] :not(pre) > code.nextra-code {
-  border-color: rgba(255, 255, 255, 0.14) !important;
-  background: rgba(255, 255, 255, 0.1) !important;
-  color: #f4f7f0;
-}
-
-[data-rehype-pretty-code-figure] {
-  margin-top: 1.25rem;
-  margin-bottom: 1.75rem;
-}
-
-[data-rehype-pretty-code-figure] pre {
-  border: 1px solid rgba(139, 214, 165, 0.18);
-  background: var(--apimask-code-bg) !important;
-  box-shadow: 0 18px 44px rgba(17, 20, 15, 0.14);
-}
-
-[data-rehype-pretty-code-figure] code {
-  background: transparent !important;
-}
-
+/* Shared brand lockup, used by SiteNav and the Nextra logo slot so both
+   render an identical mark. The mark is a violet shield with white knockouts
+   and holds up on either surface, so unlike the previous monochrome logo it
+   needs no light/dark swap — one file serves both themes. */
 .apimask-logo {
   display: inline-flex;
   align-items: center;
-  gap: 0.625rem;
-  color: inherit;
+  gap: 0.5rem;
+  color: var(--ink);
   font-family: var(--apimask-display);
-  font-weight: 760;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  text-decoration: none;
 }
 
-.apimask-logo img {
-  width: 2rem;
-  height: 2rem;
-  border-radius: 7px;
-  background: #ffffff;
-  object-fit: cover;
-  box-shadow: 0 8px 20px rgba(50, 18, 106, 0.1);
+.apimask-logo-mark {
+  display: block;
+  width: 1.5rem;
+  height: 1.5rem;
+  flex-shrink: 0;
 }
 
+.apimask-logo-mark img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}

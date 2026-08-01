@@ -1,0 +1,106 @@
+/* Shared nav primitives. Rendered inside SiteNav on marketing pages and, via
+   DocsNavExtras, directly inside Nextra's navbar on docs pages — so both
+   headers are literally the same markup and CSS. */
+
+.links {
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+}
+
+.link {
+  position: relative;
+  padding: 4px 0;
+  color: var(--ink-muted);
+  font-family: var(--apimask-sans);
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: -0.006em;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 0.12s ease;
+}
+
+.link:hover {
+  color: var(--ink);
+}
+
+.link[aria-current="page"] {
+  color: var(--ink);
+}
+
+/* Active state is a 2px accent underline rather than a weight change, so the
+   row never reflows when navigating. */
+.link[aria-current="page"]:after {
+  position: absolute;
+  right: 0;
+  bottom: -2px;
+  left: 0;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--accent);
+  content: "";
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.ghostLink {
+  display: inline-flex;
+  min-height: 34px;
+  align-items: center;
+  border-radius: var(--radius-sm);
+  padding: 0 10px;
+  color: var(--ink-muted);
+  font-family: var(--apimask-sans);
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.12s ease, color 0.12s ease;
+}
+
+.ghostLink:hover {
+  background: var(--bg-subtle);
+  color: var(--ink);
+}
+
+.cta {
+  display: inline-flex;
+  min-height: 34px;
+  align-items: center;
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-sm);
+  background: var(--accent);
+  padding: 0 14px;
+  color: var(--on-accent);
+  font-family: var(--apimask-sans);
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.12s ease, border-color 0.12s ease;
+}
+
+.cta:hover {
+  border-color: var(--accent-hover);
+  background: var(--accent-hover);
+}
+
+/* Below this width the link row is replaced by a menu (SiteNav) or by
+   Nextra's own hamburger + sidebar (docs). */
+@media (max-width: 1020px) {
+  .links,
+  .ghostLink {
+    display: none;
+  }
+}
+
+@media (max-width: 560px) {
+  .cta {
+    display: none;
+  }
+}

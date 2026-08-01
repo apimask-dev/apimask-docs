@@ -1,0 +1,211 @@
+---
+title: "The Developer Utility APIs You Keep Rewriting"
+description: Hashing, UUIDs, Base64, JSON formatting, and URL parsing show up in every project. Here is when calling a developer utility API beats vendoring another helper module.
+theme:
+  layout: raw
+  navbar: false
+  footer: false
+  sidebar: false
+  toc: false
+  pagination: false
+  timestamp: false
+  breadcrumb: false
+---
+
+import BlogPostLayout from '../../components/BlogPostLayout'
+
+<BlogPostLayout slug="developer-utility-apis-you-keep-rewriting">
+
+# The Developer Utility APIs You Keep Rewriting
+
+Every codebase accumulates the same drawer of small functions. A wrapper around
+`crypto` that produces a SHA-256 hex digest. A UUID helper. A Base64 encode that
+handles the URL-safe alphabet. A JSON pretty-printer for logs. A URL parser that
+pulls the host out of a string.
+
+None of them is hard. Collectively they are a surprising amount of surface area
+that nobody owns, nobody tests, and everybody copies into the next project.
+
+This post is about when moving those to an API is genuinely the right call — and,
+just as importantly, when it very much is not.
+
+## Start with the honest answer: usually, don't
+
+If you are writing server-side code in a language with a standard library,
+`hashlib.sha256()` and `crypto.randomUUID()` are right there. They are faster
+than a network call by four orders of magnitude, they work offline, and they
+cannot rate-limit you. Calling an API to generate a UUID inside a request
+handler is worse than the helper function in every dimension that matters.
+
+So the question is not "should hashing be an API". It is "in which environments
+is the local implementation not actually available or not actually trustworthy".
+There are more of those than you would expect.
+
+## Where a utility API earns its place
+
+**No-code and low-code automations.** Zapier, Make, n8n, and Retool steps cannot
+`import hashlib`. If a workflow needs to hash an email before pushing it to an
+ad platform's audience API, or generate a batch of IDs to seed records, an HTTP
+call is the only mechanism available. This is the single most common legitimate
+use.
+
+**Agent and LLM tool calls.** A model orchestrating a workflow can call an HTTP
+endpoint. Giving it a code interpreter so it can Base64-encode something is a
+much larger security surface than giving it one narrow endpoint that does
+exactly that and nothing else.
+
+**Cross-language consistency.** When a Python service, a Go worker, and a
+TypeScript frontend all need to agree on a normalised URL or a canonical hash,
+three implementations means three subtly different results. One endpoint means
+one answer. This is worth real money in systems where the hash is a cache key or
+a deduplication key.
+
+**Environments where you cannot add dependencies.** Locked-down CI runners,
+customer-hosted plugin sandboxes, spreadsheet macros, database functions with
+HTTP extensions.
+
+**Prototypes and internal tools.** Sometimes you want the thing working in the
+next four minutes and the dependency review can wait.
+
+If none of those describe your situation, close this tab and use your standard
+library. That is the correct outcome.
+
+## What the endpoints look like
+
+All of these are part of the
+[Developer Utilities API](/api/developer-utilities) — one RapidAPI subscription,
+one host, one response envelope.
+
+### Identifiers
+
+[UUID and ULID generation](/api/id-generator) takes a `kind` (`uuid4`, `uuid1`,
+or `ulid`) and a `count` up to 100:
+
+```bash
+curl --request POST \
+  --url https://apimask-developer-utilities-api.p.rapidapi.com/v1/dev/data/id/generate \
+  --header "Content-Type: application/json" \
+  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
+  --data '{"kind":"uuid4","count":3}'
+```
+
+```json
+{
+  "success": true,
+  "data": {
+    "kind": "uuid4",
+    "ids": [
+      "2b76b310-9a18-4edc-a88a-0f65c8ce9b88",
+      "86e23583-13df-4022-99b6-4a26fd0d14fb",
+      "b2d198e4-cc6e-4ad8-8f15-7c3a04cfb274"
+    ]
+  },
+  "error": null,
+  "meta": {}
+}
+```
+
+The `count` parameter is the design detail that makes this usable. Seeding a
+hundred test records with a hundred round trips would be absurd; one call
+returning a hundred IDs is fine.
+
+Worth knowing which kind to ask for. `uuid4` is random — use it unless you have
+a reason not to. `ulid` is lexicographically sortable by creation time, which
+makes it pleasant as a primary key because inserts stay roughly sequential and
+your B-tree does not fragment. `uuid1` embeds a timestamp and a MAC address; it
+leaks information and you almost never want it.
+
+### URL parsing
+
+[URL Parser](/api/url-parser) returns the decomposed components plus a
+normalised form:
+
+```json
+{
+  "success": true,
+  "data": {
+    "scheme": "https",
+    "host": "example.com",
+    "port": 443,
+    "path": "/docs",
+    "query": "q=api",
+    "fragment": "intro",
+    "username": null,
+    "has_password": false,
+    "query_params": { "q": ["api"] },
+    "normalized_url": "https://example.com:443/docs?q=api#intro"
+  },
+  "error": null,
+  "meta": {}
+}
+```
+
+Two fields deserve attention. `query_params` maps each key to an *array*,
+because `?tag=a&tag=b` is legal and a flat object would silently drop one of
+them — a real class of bug in analytics pipelines. And `has_password` is a
+boolean rather than the password itself, which is the right call: you want to
+know that credentials were embedded in a URL so you can reject or redact it, and
+you do not want that secret echoed back in a response body that might get
+logged.
+
+### Hashing, Base64, JSON
+
+The remaining three are what you would expect:
+[`/v1/dev/data/hash`](/api/hash-generator) for MD5, SHA-1, SHA-256, SHA-512, and
+BLAKE2; [`/v1/dev/data/base64/encode` and `/decode`](/api/base64-encoder-decoder)
+with URL-safe alphabet support; and
+[`/v1/dev/data/json/format`](/api/json-formatter) to validate, format, minify,
+and optionally sort keys.
+
+The JSON one has a non-obvious use: key sorting. If you are hashing a JSON body
+to produce a cache key or a webhook signature, key order has to be deterministic
+or the same logical payload produces different hashes. Sort, then hash.
+
+## The security line you should not cross
+
+Be clear about what a hashing endpoint is for.
+
+It is for content fingerprints, ETags, cache keys, deduplication, and checksums.
+It is **not** for passwords. Passwords need a slow, salted KDF — bcrypt, scrypt,
+or Argon2 — computed where the plaintext never leaves your control. Sending a
+plaintext password to any third-party endpoint, including this one, is a
+straightforward vulnerability. No parameter makes that acceptable.
+
+Similarly, MD5 and SHA-1 are in the list because file checksums and legacy
+system compatibility still need them, not because they are safe for anything
+adversarial. Both are broken for collision resistance. Use SHA-256 or BLAKE2 for
+anything where an attacker benefits from producing a collision.
+
+The same reasoning applies to what you send generally: request bodies are
+processed to build the response and not retained, but the correct posture for
+genuinely sensitive material is still to hash it locally.
+
+## A consistent envelope is the actual feature
+
+Every endpoint above returns the same shape:
+
+```json
+{ "success": true, "data": { }, "error": null, "meta": { } }
+```
+
+That sounds like a small thing until you have written the fifth integration
+against five APIs with five different error conventions. One envelope means one
+error handler, one retry policy, and one type definition that generalises across
+every call. When something fails, `success` is `false` and `error` carries a code
+you can switch on — documented once in [Errors](/errors) rather than per
+endpoint.
+
+## Where to go next
+
+If regular expressions are on your list of things you keep rewriting, they are in
+the same product —
+[generating and explaining regex with an API](/blog/regex-generator-api-guide)
+covers those two endpoints and the cases where regex is the wrong tool entirely.
+
+And if the utility you actually needed was email checking, that is a different
+kind of problem: it depends on DNS and external state, not just string
+manipulation, which is exactly why
+[validating emails before signup](/blog/validate-emails-before-signup) is worth
+doing properly rather than with a pattern.
+
+</BlogPostLayout>

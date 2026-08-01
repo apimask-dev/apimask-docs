@@ -1,0 +1,17 @@
+/* The wrapper must not participate in layout — its children need to be direct
+   flex items of Nextra's navbar row so they can be individually ordered. */
+.contents {
+  display: contents;
+}
+
+/* Ordering within Nextra's navbar flex row. Base order for every child is set
+   in styles/nextra-overrides.css; these two claim the slots that put the links
+   immediately after the logo and the actions at the far right. */
+.docsLinks {
+  order: 2;
+  margin-right: auto;
+}
+
+.docsActions {
+  order: 8;
+}

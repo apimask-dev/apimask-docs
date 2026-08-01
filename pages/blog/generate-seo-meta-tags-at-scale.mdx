@@ -1,0 +1,195 @@
+---
+title: "How to Generate SEO Titles and Meta Descriptions at Scale"
+description: Write metadata for thousands of pages without writing it by hand, and without shipping the generic output Google rewrites. A practical guide to using a meta tags API.
+theme:
+  layout: raw
+  navbar: false
+  footer: false
+  sidebar: false
+  toc: false
+  pagination: false
+  timestamp: false
+  breadcrumb: false
+---
+
+import BlogPostLayout from '../../components/BlogPostLayout'
+
+<BlogPostLayout slug="generate-seo-meta-tags-at-scale">
+
+# How to Generate SEO Titles and Meta Descriptions at Scale
+
+Metadata is the classic long-tail content problem. On a fifty-page marketing
+site you write it by hand and it takes an afternoon. On a catalogue with
+forty thousand product pages, or a marketplace with a page per city-and-service
+combination, hand-writing is not an option and templates produce the kind of
+output that gets ignored.
+
+The gap between those two is where an API is genuinely useful — provided you
+understand what you are optimising for, which is not what most people assume.
+
+## What titles and descriptions actually do
+
+Worth being precise, because it changes how you generate them.
+
+**The title tag is a ranking factor.** It is one of the strongest on-page
+signals about what a document is about. Google will rewrite it in results when
+it judges yours unhelpful — studies of large samples have consistently found
+rewrites on a substantial minority of queries — but the tag still informs how
+the page is understood.
+
+**The meta description is not a ranking factor.** It has not been one for a long
+time. What it does is control the snippet, and the snippet drives click-through
+rate. A description that answers the searcher's implied question earns clicks; a
+truncated feature list does not.
+
+So the two fields have different jobs. The title needs to carry the primary
+keyword and be accurate. The description needs to be persuasive. Generating both
+from the same prompt with the same objective produces mediocre versions of each.
+
+## The endpoint
+
+The [SEO Meta Tags API](/api/seo-meta-tags-api) takes page content and returns a
+title, a description, and a keyword set:
+
+```bash
+curl --request POST \
+  --url https://ai-content-generator-api.p.rapidapi.com/v1/content/meta-tags \
+  --header "Content-Type: application/json" \
+  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
+  --header "X-RapidAPI-Host: ai-content-generator-api.p.rapidapi.com" \
+  --data '{
+    "page_content":"ApiMask is a platform of production-ready APIs for developers and startups building SaaS, AI, and automation products.",
+    "page_url":"https://apimask.dev",
+    "target_keyword":"developer APIs"
+  }'
+```
+
+```json
+{
+  "success": true,
+  "data": {
+    "title": "Production-ready Developer APIs for SaaS, AI & Automation | ApiMask",
+    "description": "Build faster with ApiMask, a platform of production-ready developer APIs for SaaS, AI, and automation products.",
+    "keywords": ["developer APIs", "SaaS APIs", "AI APIs", "automation APIs"]
+  },
+  "error": null,
+  "meta": {
+    "request_id": "req_5d7a1c0e23bb",
+    "model": "gpt-4o-mini",
+    "prompt_tokens": 220,
+    "completion_tokens": 96,
+    "cost_usd": 0.00006120
+  }
+}
+```
+
+Three input fields, and the difference between good and useless output is
+almost entirely in how you populate them.
+
+### `page_content` — send the copy, not the page
+
+This is where most integrations go wrong. If you scrape the rendered HTML and
+pass the whole thing, you are sending navigation, cookie banners, footer link
+lists, and a newsletter form. The generator has to guess which part is the page,
+and on a template-heavy site the boilerplate outweighs the content.
+
+Send the main body copy. If you have a CMS, that is the body field. If you are
+working from HTML, extract the `<main>` or `<article>` element first. For a
+product page, concatenate the name, the description, and the key attributes —
+not the reviews, not the related products, not the shipping policy.
+
+The endpoint requires at least 20 characters, but that is a floor, not a target.
+A one-line product blurb produces a one-line-quality title.
+
+### `target_keyword` — the field that does the most work
+
+Passing the term you want the page to rank for biases both the title and the
+description toward it. Without it the generator picks its own reading of what
+the page is about, which is often reasonable and occasionally not the query you
+care about.
+
+If you have keyword research, this is where it enters the pipeline. If you do
+not, the page's H1 or its category name is usually a defensible proxy.
+
+One keyword per page. If you find yourself wanting to pass three, that is
+usually a signal the page is trying to cover three topics and should be three
+pages.
+
+### `page_url` — brand and context cues
+
+Supplying the URL lets domain and brand cues appear in the title, which is where
+the `| ApiMask` suffix in the example comes from. On a large site it also gives
+the generator a hint about where in the hierarchy the page sits.
+
+## Running it over a whole catalogue
+
+A workable pipeline looks like this.
+
+**1. Extract, don't scrape.** Pull content from your CMS or database. It is
+cleaner than parsing your own rendered pages and it does not break when the
+template changes.
+
+**2. Batch with concurrency, not in a loop.** These calls are independent.
+Process them in parallel with a bounded worker pool sized to your plan's rate
+limit. See [Rate limits](/rate-limits) for what your subscription allows, and
+handle `RATE_LIMIT_EXCEEDED` (429) with exponential backoff — see
+[Errors](/errors) for the full catalogue.
+
+**3. Store, then review, then publish.** Do not write generated metadata
+straight to production. Persist it alongside the page record with a status flag.
+This gives you a diff to review, a rollback path, and a record of which pages
+have generated versus hand-written metadata.
+
+**4. Check lengths before you ship.** Titles are truncated around 580 pixels,
+which is roughly 55–60 characters; descriptions around 155–160. Character counts
+are an approximation — Google measures pixels — but they are a good enough gate.
+Flag anything long for a human rather than truncating it programmatically, which
+tends to cut mid-word.
+
+**5. Deduplicate.** Run a uniqueness check across the whole set before
+publishing. Duplicate titles across a large catalogue are a real problem and
+are the most common failure mode of any automated approach, templated or
+generated. If two pages produce the same title, their content is probably too
+similar for both to deserve indexing.
+
+**6. Re-run on content change, not on a schedule.** Regenerating monthly churns
+metadata for no reason. Trigger regeneration when the underlying content
+changes.
+
+## Where this genuinely does not help
+
+**Your highest-value pages.** Your homepage, your pricing page, and your top ten
+organic landing pages should have hand-written metadata. They are a handful of
+pages, they drive a disproportionate share of traffic, and a copywriter will beat
+a generator on the ones that matter. Use the API for the long tail — that is
+where the volume is and where hand-writing genuinely does not scale.
+
+**Thin pages.** If the page has nothing to say, better metadata will not fix it.
+Generating a compelling description for a page with fifty words of content
+produces a snippet that over-promises, which raises CTR and then raises bounce
+rate. Fix the page.
+
+**Pages that shouldn't be indexed.** Faceted search results, internal filters,
+paginated archives past page one. The right answer there is `noindex`, not
+metadata.
+
+## Fitting it into a wider audit
+
+Metadata is one line item in technical SEO. It sits alongside the crawlability
+checks that determine whether the page gets seen at all —
+[robots.txt and sitemap errors](/blog/robots-txt-and-sitemap-errors) covers the
+failures that quietly stop pages being indexed no matter how good their titles
+are.
+
+If you are building this into a repeatable audit product rather than a one-off
+migration, the
+[website audit API checklist](/blog/website-audit-api-checklist) sets out how the
+metadata, SSL, header, and crawl checks combine into a single report.
+
+The endpoint itself is part of the
+[AI Content Generator API](/api/ai-content-generator-api), which also covers
+summaries, rewrites, product descriptions, and social captions — see
+[automating product descriptions and captions](/blog/ai-product-descriptions-and-captions-api)
+for where those hold up and where they don't.
+
+</BlogPostLayout>

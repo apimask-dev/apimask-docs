@@ -1,0 +1,197 @@
+---
+title: "Beyond the Basic QR Code: WiFi, vCards, and SVG"
+description: The payload formats behind WiFi and contact QR codes, why SVG matters for print, and the escaping and error-correction rules that quietly break scans.
+theme:
+  layout: raw
+  navbar: false
+  footer: false
+  sidebar: false
+  toc: false
+  pagination: false
+  timestamp: false
+  breadcrumb: false
+---
+
+import BlogPostLayout from '../../components/BlogPostLayout'
+
+<BlogPostLayout slug="wifi-vcard-svg-qr-codes">
+
+# Beyond the Basic QR Code: WiFi, vCards, and SVG
+
+Most QR code work is the same job: take a URL, produce a PNG. That case is
+well-served by roughly every library and every generator.
+
+The interesting cases are the ones where the QR code contains something other
+than a link — a WiFi network the phone can join, a contact card it can save —
+and the ones where the output has to survive being printed at 4cm on a menu.
+Those have real rules, and getting them wrong produces a code that scans on your
+phone in the office and fails on a customer's phone in a dim restaurant.
+
+## A QR code encodes a string, and the string has a grammar
+
+This is the part worth internalising. A QR code is a container for text. What
+makes a WiFi QR code different from a URL QR code is not the code — it is that
+the encoded string follows a format the phone's camera app recognises and offers
+to act on.
+
+The WiFi format looks like this:
+
+```
+WIFI:T:WPA;S:Guest WiFi;P:secret123;H:false;;
+```
+
+`T` is the security type, `S` the SSID, `P` the password, `H` whether the
+network is hidden. Note the double semicolon terminator — it is part of the
+format, and omitting it is a common hand-rolled bug.
+
+The [WiFi QR endpoint](/api/wifi-qr-code-api) builds this for you and returns
+both the payload and the image, which is useful precisely because you can see
+what was encoded:
+
+```bash
+curl --request POST \
+  --url https://qr-code-generator-api-with-logo.p.rapidapi.com/v1/qr/wifi \
+  --header "Content-Type: application/json" \
+  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
+  --header "X-RapidAPI-Host: qr-code-generator-api-with-logo.p.rapidapi.com" \
+  --data '{"ssid":"Guest WiFi","password":"secret123","encryption":"WPA","hidden":false,"output":"png"}'
+```
+
+```json
+{
+  "success": true,
+  "data": {
+    "payload": "WIFI:T:WPA;S:Guest WiFi;P:secret123;H:false;;",
+    "format": "png",
+    "mime_type": "image/png",
+    "data_base64": "iVBORw0KGgo...",
+    "data_url": "data:image/png;base64,iVBORw0KGgo...",
+    "size_px": 330
+  },
+  "error": null,
+  "meta": { "request_id": "req_8f3b1d6a0c25" }
+}
+```
+
+### The escaping rule that breaks WiFi codes
+
+Semicolons, colons, commas, backslashes, and double quotes are structural
+characters in that format. If your SSID or password contains one, it has to be
+backslash-escaped or the parse breaks at exactly that character.
+
+A password of `pa;ssword` naively concatenated produces `P:pa;ssword;` — and the
+phone reads the password as `pa` and then sees garbage. The result is a code
+that scans (the QR decodes fine) but fails to join, which is a maddening bug to
+diagnose because the code "works".
+
+This is the single strongest argument for not building the payload string by
+hand. Cafés and venues absolutely do use passwords with punctuation in them.
+
+### `hidden` matters more than it looks
+
+Setting `hidden: true` for a non-broadcasting SSID is not cosmetic. If the flag
+is wrong, the phone will scan for the network, not find it advertising, and give
+up. Get it from your network config rather than guessing.
+
+For an open network, use `encryption: "nopass"` and omit the password entirely.
+
+## vCards
+
+`POST /v1/qr/vcard` encodes contact details — `full_name` required, with
+optional `phone`, `email`, and `organization` — into a card the phone offers to
+save.
+
+Two practical notes.
+
+**Keep it short.** vCard payloads are much larger than URLs, and payload length
+directly determines how many modules the code needs. A code with a name, two
+phone numbers, an email, a company, a job title, and a postal address becomes
+visually dense, and dense codes need more physical size and better print quality
+to scan reliably. If you find yourself wanting a full card, consider encoding a
+URL to a contact page instead.
+
+**Phone numbers should be international format.** `+44 20 7946 0958` works
+everywhere the card ends up. A local-format number saved by someone in another
+country is not dialable.
+
+## PNG versus SVG, and when it actually matters
+
+The `output` field takes `png` or `svg`. The choice is not a preference.
+
+**PNG for screens.** A raster image at a known pixel size. `box_size` sets the
+pixels per module (2–40), which combined with the payload length determines the
+final image size — `size_px` in the response tells you what you got.
+
+**SVG for print.** Vectors scale without resampling. If the code is going on a
+menu, a poster, packaging, a table tent, or a business card, and especially if
+anyone downstream might resize it, send SVG. A PNG generated at 330px and blown
+up to fill an A3 poster produces soft module edges, and soft edges are what
+push a marginal scan into a failed one.
+
+This matters more than people expect because the failure is probabilistic. The
+upscaled code scans fine for you, in good light, at 20cm, with a recent phone. It
+fails for the customer with an older camera in a dim room at arm's length.
+
+## Error correction: the tradeoff nobody explains
+
+`error_correction` takes `L`, `M`, `Q`, or `H`, defaulting to `M`. These
+correspond to roughly 7%, 15%, 25%, and 30% of the code being recoverable if
+damaged or obscured.
+
+Higher correction is not free — the redundancy is stored in the code, so the same
+payload at `H` needs more modules than at `L`, making the code denser at a fixed
+physical size. Denser codes are harder to scan. You can absolutely make a code
+*less* scannable by raising error correction thoughtlessly.
+
+Sensible defaults:
+
+- **`M`** for screens and clean digital contexts. The default is the default for
+  good reason.
+- **`Q` or `H`** when the code will be physically abused — outdoor signage,
+  packaging that creases, table tents that get wet — or when you are overlaying
+  a logo.
+- **`H` specifically for logo overlays.** The logo covers modules. That coverage
+  has to come out of the error-correction budget, or the code stops decoding.
+  See [generating QR codes with logos](/blog/generate-qr-codes-with-logo-api)
+  for the sizing rules there.
+
+## The quiet zone is not optional
+
+`border` sets the quiet-zone width in modules (0–12, default 4). That white
+margin is part of the specification — scanners use it to find the code's
+boundary. Setting it to `0` because it looks tidier in a layout is a reliable way
+to produce a code that fails against a busy background.
+
+Four modules is the specified minimum. Keep it, and make sure whatever the code
+sits on does not eat into it.
+
+## Contrast, and why inverted codes fail
+
+`fill_color` and `back_color` accept hex values, and it is tempting to brand
+them. Two constraints:
+
+**Dark on light, not light on dark.** Most scanners expect dark modules on a
+light background. Inverting is supported by some decoders and not others, which
+means it works in testing and fails for a fraction of users.
+
+**Keep real contrast.** A mid-grey on a slightly lighter grey satisfies a brand
+guideline and fails a camera in poor light. Treat it like a text contrast
+requirement, because it is the same underlying problem.
+
+## Before you print anything
+
+The one process rule worth adopting: **test the actual artefact, not the file.**
+
+Print it at final size, on the final material, and scan it with an old phone in
+bad light from a metre away. Most QR failures in the wild are not encoding bugs —
+they are a code that was fine on a monitor and marginal on paper.
+
+## Where these live
+
+All six QR endpoints — `generate`, `url`, `wifi`, `vcard`, `email`, and `sms` —
+are documented under the
+[QR Code Generator API](/api/qr-code-generator-api) and share the same rendering
+options. Logo overlays are covered by the
+[QR Code API with Logo](/api/qr-code-api-with-logo).
+
+</BlogPostLayout>

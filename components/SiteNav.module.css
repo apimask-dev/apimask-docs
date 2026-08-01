@@ -1,83 +1,65 @@
 .nav {
-  margin: 0 auto;
+  position: sticky;
+  z-index: 30;
+  top: 0;
+  border-bottom: 1px solid transparent;
+  background: color-mix(in srgb, var(--bg) 82%, transparent);
+  -webkit-backdrop-filter: saturate(180%) blur(12px);
+  backdrop-filter: saturate(180%) blur(12px);
+  transition: border-color 0.15s ease;
+}
+
+/* color-mix is unsupported in older Safari/Firefox; fall back to an opaque
+   bar rather than an unreadable transparent one. */
+@supports not (background: color-mix(in srgb, red 50%, transparent)) {
+  .nav {
+    background: var(--bg);
+  }
+}
+
+.nav.scrolled {
+  border-bottom-color: var(--border);
 }
 
 .navRow {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 18px 28px;
+  gap: var(--space-6);
+  max-width: var(--content-max);
+  min-height: var(--nav-height);
+  box-sizing: border-box;
+  margin: 0 auto;
+  padding: 0 var(--gutter);
 }
 
-.landing {
-  max-width: 1180px;
-}
-
-.blogIndex {
-  max-width: 860px;
-}
-
-.blogPost {
-  max-width: 720px;
-}
-
-.brand {
+/* The fix for "nav in the centre doesn't look nice": brand and links are one
+   left-hand cluster, so navigation reads out from the logo. Only the actions
+   sit on the right. */
+.left {
   display: flex;
   align-items: center;
-  gap: 10px;
-  color: var(--apimask-ink);
-  font-weight: 760;
-  font-family: var(--apimask-display);
-  text-decoration: none;
-}
-
-.brandMark {
-  width: 34px;
-  height: 34px;
-  flex-shrink: 0;
-  border-radius: var(--radius-sm);
-  background: #ffffff;
-  object-fit: cover;
-  box-shadow: 0 10px 24px rgba(50, 18, 106, 0.12);
+  gap: var(--space-8);
+  min-width: 0;
 }
 
 .right {
   display: flex;
   align-items: center;
-  gap: 14px;
-}
-
-.links {
-  display: flex;
-  align-items: center;
-  gap: 22px;
-  font-size: 14px;
-}
-
-.links a {
-  color: var(--apimask-muted);
-  text-decoration: none;
-}
-
-.links a:hover {
-  color: var(--apimask-ink);
-}
-
-.links a[aria-current="page"] {
-  color: var(--apimask-ink);
-  font-weight: 700;
+  gap: var(--space-2);
+  flex-shrink: 0;
 }
 
 .menuButton {
   display: none;
-  border: 1px solid var(--apimask-line);
-  border-radius: var(--radius-sm);
-  background: transparent;
   width: 36px;
   height: 36px;
   align-items: center;
   justify-content: center;
-  color: var(--apimask-ink);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--ink);
   cursor: pointer;
 }
 
@@ -90,57 +72,43 @@
   display: none;
 }
 
-@media (max-width: 768px) {
-  .links {
-    display: none;
-  }
+.mobilePanel[hidden] {
+  display: none;
+}
 
+@media (max-width: 1020px) {
   .menuButton {
     display: inline-flex;
   }
 
   .mobilePanel {
-    display: block;
-    max-height: 0;
-    overflow: hidden;
-    padding: 0 28px;
-    transition: max-height 220ms ease;
-  }
-
-  .mobilePanel.open {
-    max-height: 320px;
-    padding-bottom: 18px;
-  }
-
-  .mobileLinks {
     display: flex;
     flex-direction: column;
-    gap: 4px;
-    border-top: 1px solid var(--apimask-line);
-    padding-top: 14px;
+    gap: var(--space-1);
+    border-top: 1px solid var(--border);
+    background: var(--bg);
+    padding: var(--space-3) var(--gutter) var(--space-5);
   }
 
-  .mobileLinks a {
-    padding: 10px 4px;
-    color: var(--apimask-ink);
-    font-size: 15px;
-    font-weight: 650;
+  .mobilePanel a {
+    border-radius: var(--radius-sm);
+    padding: 10px 8px;
+    color: var(--ink);
+    font-size: 0.9375rem;
+    font-weight: 500;
     text-decoration: none;
   }
 
-  .mobileLinks a[aria-current="page"] {
-    color: var(--apimask-accent-purple);
-  }
-}
-
-@media (max-width: 640px) {
-  .navRow {
-    padding-right: 18px;
-    padding-left: 18px;
+  .mobilePanel a[aria-current="page"] {
+    background: var(--accent-soft);
+    color: var(--accent);
   }
 
-  .mobilePanel {
-    padding-right: 18px;
-    padding-left: 18px;
+  .mobileCta {
+    margin-top: var(--space-2);
+    border: 1px solid var(--accent);
+    background: var(--accent);
+    color: var(--on-accent) !important;
+    text-align: center;
   }
 }

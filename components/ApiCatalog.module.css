@@ -1,0 +1,257 @@
+/* Rendered inside the Nextra content column, which is wrapped in .prose — so
+   these rules deliberately reset the prose defaults for the interactive parts
+   (list markers, link underlines) while leaving surrounding MDX untouched. */
+
+.catalog {
+  margin: var(--space-7) 0 0;
+}
+
+.controls {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+.search {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg-subtle);
+  padding: 10px 14px;
+  color: var(--ink);
+  font-family: var(--apimask-sans);
+  font-size: 0.9375rem;
+}
+
+.search::placeholder {
+  color: var(--ink-faint);
+}
+
+.search:focus {
+  border-color: var(--accent);
+  background: var(--surface);
+  outline: 2px solid var(--accent-soft);
+  outline-offset: 0;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  padding: 5px 12px;
+  color: var(--ink-muted);
+  font-family: var(--apimask-sans);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color 0.12s ease, color 0.12s ease, background 0.12s ease;
+}
+
+.chip span {
+  color: var(--ink-faint);
+  font-variant-numeric: tabular-nums;
+}
+
+.chip:hover {
+  border-color: var(--border-strong);
+  color: var(--ink);
+}
+
+.chipActive {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.chipActive span {
+  color: var(--accent);
+}
+
+.count {
+  margin: 0 0 var(--space-4);
+  color: var(--ink-faint);
+  font-size: 0.8125rem;
+}
+
+.empty {
+  margin: var(--space-8) 0;
+  color: var(--ink-muted);
+}
+
+.reset {
+  border: 0;
+  background: none;
+  padding: 0;
+  color: var(--accent);
+  font: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.list {
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--border);
+  list-style: none;
+}
+
+.row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-6);
+  margin: 0;
+  padding: var(--space-5) 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.rowMain {
+  min-width: 0;
+}
+
+.rowMain h3 {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin: 0 0 4px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  scroll-margin-top: 0;
+}
+
+.rowMain h3 a {
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.rowMain h3 a:hover {
+  color: var(--accent);
+}
+
+.rowMain p {
+  max-width: 62ch;
+  margin: 0 0 6px;
+  color: var(--ink-muted);
+  font-size: 0.875rem;
+  line-height: 1.55;
+}
+
+.rowCategory {
+  color: var(--ink-faint);
+  font-size: 0.75rem;
+}
+
+.badge {
+  border: 1px solid var(--accent-border);
+  border-radius: var(--radius-pill);
+  background: var(--accent-soft);
+  padding: 1px 8px;
+  color: var(--accent);
+  font-size: 0.6875rem;
+  font-weight: 500;
+}
+
+.rowActions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  flex-shrink: 0;
+  padding-top: 2px;
+}
+
+.docsLink,
+.rapidLink {
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.docsLink {
+  color: var(--ink-muted);
+}
+
+.docsLink:hover {
+  color: var(--ink);
+}
+
+.rapidLink {
+  color: var(--accent);
+}
+
+.rapidLink:hover {
+  text-decoration: underline;
+}
+
+/* --- Roadmap ------------------------------------------------------------- */
+
+.roadmap {
+  margin-top: var(--space-9);
+  border-top: 1px solid var(--border);
+  padding-top: var(--space-7);
+}
+
+.roadmap h2 {
+  margin: 0 0 var(--space-2);
+  font-size: 1.25rem;
+}
+
+.roadmapLead {
+  margin: 0 0 var(--space-5);
+  color: var(--ink-muted);
+  font-size: 0.9375rem;
+}
+
+.roadmapList {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.roadmapList li {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0;
+  padding: var(--space-4);
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-md);
+}
+
+.roadmapList b {
+  color: var(--ink-muted);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.roadmapList span {
+  color: var(--ink-faint);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+
+@media (max-width: 700px) {
+  .row {
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .rowActions {
+    padding-top: 0;
+  }
+}
