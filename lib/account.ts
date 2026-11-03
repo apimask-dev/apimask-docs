@@ -132,7 +132,24 @@ export const account = {
       "POST",
     ),
   usage: () => call<{ periods: UsagePeriod[]; daily: UsageDay[] }>("/account/usage"),
+  billing: () => call<BillingStatus>("/account/billing"),
+  checkout: (plan: string) => call<{ url: string }>("/account/billing/checkout", "POST", { plan }),
+  portal: () => call<{ url: string }>("/account/billing/portal", "POST"),
 };
+
+export interface BillingStatus {
+  /** Plans that can be bought now (a Lemon Squeezy variant is configured). */
+  purchasable: string[];
+  subscription: {
+    plan_id: string;
+    status: string;
+    renews_at: string | null;
+    ends_at: string | null;
+    grace_until: string | null;
+    /** True while the subscription can still be changed or resumed in the portal. */
+    holds_plan: boolean;
+  } | null;
+}
 
 /** The usage total for env in the plan's current period, if any calls were made. */
 export function currentPeriod(periods: UsagePeriod[], env: "live" | "test", me: Me): UsagePeriod | undefined {
