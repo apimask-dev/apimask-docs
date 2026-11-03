@@ -1,0 +1,458 @@
+/* Dashboard and sign-in surfaces. Consumes styles/tokens.css only. */
+
+.page {
+  min-height: 100vh;
+  background: var(--bg-subtle);
+  color: var(--ink);
+}
+
+.header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+
+.headerInner {
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+  min-height: var(--nav-height);
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+  flex-wrap: wrap;
+}
+
+.brand {
+  font-weight: 650;
+  font-size: 17px;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.nav {
+  display: flex;
+  gap: var(--space-1);
+  flex: 1;
+  flex-wrap: wrap;
+}
+
+.navLink,
+.navActive {
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  text-decoration: none;
+  color: var(--ink-muted);
+}
+
+.navLink:hover {
+  color: var(--ink);
+  background: var(--bg-subtle);
+}
+
+.navActive {
+  color: var(--ink);
+  background: var(--accent-soft);
+}
+
+.account {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: 14px;
+}
+
+.email {
+  color: var(--ink-muted);
+  overflow-wrap: anywhere;
+}
+
+.main {
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: var(--space-7) var(--gutter) var(--space-9);
+}
+
+.title {
+  font-size: 26px;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  margin: 0 0 var(--space-6);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: var(--space-6);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: var(--space-4);
+  min-width: 0;
+}
+
+.grid > .card {
+  margin-bottom: 0;
+}
+
+.cardTitle {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0 0 var(--space-3);
+}
+
+.label {
+  font-size: 13px;
+  color: var(--ink-muted);
+  margin: 0 0 var(--space-1);
+}
+
+.stat {
+  font-size: 28px;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.muted {
+  color: var(--ink-muted);
+  font-size: 14px;
+  margin: var(--space-2) 0 0;
+}
+
+.meter {
+  height: 8px;
+  background: var(--bg-subtle);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+  margin-top: var(--space-3);
+}
+
+.meterFill {
+  height: 100%;
+  background: var(--accent);
+}
+
+.meterWarn {
+  background: #d97706;
+}
+
+.code {
+  background: var(--code-bg);
+  color: var(--code-ink);
+  border: 1px solid var(--code-border);
+  border-radius: var(--radius-sm);
+  padding: var(--space-4);
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 13px;
+  line-height: 1.6;
+  overflow-x: auto;
+  white-space: pre;
+  margin: var(--space-3) 0 0;
+}
+
+.secret {
+  display: flex;
+  gap: var(--space-2);
+  align-items: stretch;
+  margin-top: var(--space-3);
+}
+
+.secret code {
+  flex: 1;
+  min-width: 0;
+  background: var(--code-bg);
+  color: var(--code-ink);
+  border-radius: var(--radius-sm);
+  padding: var(--space-3);
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+
+.notice {
+  background: var(--warning-soft);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: var(--space-5);
+  margin-bottom: var(--space-4);
+}
+
+.alert {
+  background: var(--warning-soft);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  padding: var(--space-3) var(--space-4);
+  margin-bottom: var(--space-4);
+  font-size: 14px;
+}
+
+.success {
+  color: var(--success);
+}
+
+.form {
+  display: flex;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  align-items: flex-end;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  font-size: 13px;
+  color: var(--ink-muted);
+  min-width: 0;
+}
+
+.input,
+.select {
+  font: inherit;
+  font-size: 15px;
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  padding: 9px 12px;
+  min-width: 0;
+}
+
+.input:focus,
+.select:focus {
+  outline: 2px solid var(--accent-border);
+  outline-offset: 1px;
+}
+
+.button,
+.buttonSecondary,
+.buttonDanger {
+  font: inherit;
+  font-size: 14px;
+  font-weight: 550;
+  border-radius: var(--radius-sm);
+  padding: 9px 16px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+
+.button {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.button:hover:not(:disabled) {
+  background: var(--accent-hover);
+}
+
+.buttonSecondary {
+  background: var(--surface);
+  color: var(--ink);
+  border-color: var(--border-strong);
+}
+
+.buttonDanger {
+  background: var(--surface);
+  color: #b42318;
+  border-color: var(--border-strong);
+}
+
+.button:disabled,
+.buttonSecondary:disabled,
+.buttonDanger:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.linkButton {
+  font: inherit;
+  font-size: 14px;
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--accent);
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.tableWrap {
+  overflow-x: auto;
+  margin: 0 calc(-1 * var(--space-6));
+  padding: 0 var(--space-6);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.table th {
+  text-align: left;
+  font-weight: 550;
+  color: var(--ink-muted);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: var(--space-2) var(--space-3) var(--space-2) 0;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+.table td {
+  padding: var(--space-3) var(--space-3) var(--space-3) 0;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+
+.num {
+  text-align: right !important;
+  font-variant-numeric: tabular-nums;
+}
+
+.mono {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 13px;
+}
+
+.actions {
+  display: flex;
+  gap: var(--space-2);
+  justify-content: flex-end;
+}
+
+.badge,
+.badgeLive,
+.badgeOff {
+  display: inline-block;
+  font-size: 12px;
+  border-radius: var(--radius-pill);
+  padding: 2px 8px;
+  border: 1px solid var(--border);
+  color: var(--ink-muted);
+}
+
+.badgeLive {
+  color: var(--success);
+  background: var(--success-soft);
+  border-color: transparent;
+}
+
+.badgeOff {
+  text-decoration: line-through;
+}
+
+.plans {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--space-4);
+}
+
+.planCurrent {
+  border-color: var(--accent-border);
+  box-shadow: 0 0 0 1px var(--accent-border);
+}
+
+.price {
+  font-size: 30px;
+  font-weight: 650;
+  margin: var(--space-2) 0;
+}
+
+.price span {
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--ink-muted);
+}
+
+.list {
+  margin: var(--space-3) 0 var(--space-4);
+  padding-left: 18px;
+  font-size: 14px;
+  color: var(--ink-muted);
+  line-height: 1.7;
+}
+
+/* Sign-in pages */
+
+.authPage {
+  min-height: 100vh;
+  background: var(--bg-subtle);
+  color: var(--ink);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--space-8) var(--space-4);
+  gap: var(--space-6);
+}
+
+.authCard {
+  width: 100%;
+  max-width: 420px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-7);
+  box-shadow: var(--shadow-md);
+}
+
+.authCard h1 {
+  font-size: 22px;
+  font-weight: 650;
+  margin: 0 0 var(--space-2);
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  margin-top: var(--space-5);
+}
+
+.stack .button {
+  width: 100%;
+  padding: 11px 16px;
+}
+
+@media (max-width: 640px) {
+  .headerInner {
+    gap: var(--space-3);
+    padding-top: var(--space-3);
+    padding-bottom: var(--space-3);
+  }
+
+  /* Brand and account share the first row; the nav gets its own. */
+  .brand {
+    order: 1;
+  }
+
+  .account {
+    order: 2;
+    margin-left: auto;
+    min-width: 0;
+  }
+
+  .nav {
+    order: 3;
+    flex-basis: 100%;
+    margin: 0 calc(-1 * var(--space-3));
+  }
+
+  .email {
+    display: none;
+  }
+
+  .authCard {
+    padding: var(--space-6) var(--space-5);
+  }
+}
