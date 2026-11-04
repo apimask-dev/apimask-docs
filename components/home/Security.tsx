@@ -3,25 +3,26 @@ import { ArrowIcon } from "../ui/ArrowIcon";
 import { Section, SectionHead } from "./Section";
 import styles from "./Home.module.css";
 
-// Claims are limited to what is structurally true of a RapidAPI-distributed
-// service. No compliance certifications are asserted — ApiMask holds none, and
-// claiming SOC 2 or an audit status it doesn't have would be a real problem.
+// Claims are limited to what the gateway actually does
+// (apimask-platform/internal/apikeys, internal/gateway). No compliance
+// certifications are asserted — ApiMask holds none, and claiming SOC 2 or an
+// audit status it doesn't have would be a real problem.
 const points = [
   {
-    title: "Keys never touch ApiMask",
-    copy: "RapidAPI issues, rotates, and revokes your key, and enforces your plan's quota. There is no second credential to manage or leak.",
+    title: "Keys are stored as hashes",
+    copy: "A key is shown once when you create it. ApiMask keeps only a hash, and you can rotate or revoke any key from the dashboard.",
   },
   {
-    title: "TLS on every call",
-    copy: "All traffic to *.p.rapidapi.com is encrypted in transit. Plain HTTP is not served.",
+    title: "Test keys never spend quota",
+    copy: "apim_test_ keys have their own small allowance, so a CI run or a local script can't use up your live quota.",
   },
   {
     title: "Request bodies aren't retained",
     copy: "Payloads are processed to build the response and then discarded — relevant if you're passing customer emails or page content.",
   },
   {
-    title: "Public data only",
-    copy: "The social and website endpoints read publicly accessible data. Nothing requires you to hand over end-user credentials.",
+    title: "Keys only in headers",
+    copy: "Keys are accepted in the Authorization header, never in the query string, so they don't end up in access logs or browser history.",
   },
 ];
 
@@ -31,7 +32,7 @@ export function Security() {
       <SectionHead
         eyebrow="Security"
         title="Fewer secrets to look after."
-        lead="Because distribution runs through RapidAPI, most of the surface area you'd normally have to review simply isn't yours to manage."
+        lead="The things a reviewer asks about first: how keys are stored, where they're accepted, and what happens to your payloads."
       />
       <div className={styles.split}>
         <ul className={styles.featureList}>

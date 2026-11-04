@@ -59,9 +59,8 @@ directly:
 
 ```bash
 curl --request POST \
-  --url https://bulk-email-verification-api.p.rapidapi.com/v1/email/bulk/validate-csv \
-  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
-  --header "X-RapidAPI-Host: bulk-email-verification-api.p.rapidapi.com" \
+  --url https://api.apimask.dev/v1/email/bulk/validate-csv \
+  --header "Authorization: Bearer $APIMASK_API_KEY" \
   --form "file=@emails.csv"
 ```
 
@@ -84,10 +83,9 @@ If you already have the addresses in memory, the JSON endpoint is simpler:
 
 ```bash
 curl --request POST \
-  --url https://bulk-email-verification-api.p.rapidapi.com/v1/email/bulk/validate \
+  --url https://api.apimask.dev/v1/email/bulk/validate \
   --header "Content-Type: application/json" \
-  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
-  --header "X-RapidAPI-Host: bulk-email-verification-api.p.rapidapi.com" \
+  --header "Authorization: Bearer $APIMASK_API_KEY" \
   --data '{"emails":["hello@example.com","support@example.com","test@mailinator.com"]}'
 ```
 

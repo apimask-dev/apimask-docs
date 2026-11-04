@@ -73,7 +73,7 @@ library. That is the correct outcome.
 ## What the endpoints look like
 
 All of these are part of the
-[Developer Utilities API](/api/developer-utilities) — one RapidAPI subscription,
+[Developer Utilities API](/api/developer-utilities) — one API key,
 one host, one response envelope.
 
 ### Identifiers
@@ -83,9 +83,9 @@ or `ulid`) and a `count` up to 100:
 
 ```bash
 curl --request POST \
-  --url https://apimask-developer-utilities-api.p.rapidapi.com/v1/dev/data/id/generate \
+  --url https://api.apimask.dev/v1/dev/data/id/generate \
   --header "Content-Type: application/json" \
-  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
+  --header "Authorization: Bearer $APIMASK_API_KEY" \
   --data '{"kind":"uuid4","count":3}'
 ```
 

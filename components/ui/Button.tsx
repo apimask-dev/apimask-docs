@@ -3,7 +3,7 @@ import type { AnchorHTMLAttributes, ReactNode } from "react";
 import styles from "./Button.module.css";
 import { cx } from "./cx";
 
-type Variant = "primary" | "secondary" | "rapidapi";
+type Variant = "primary" | "secondary";
 type Size = "md" | "sm";
 
 interface ButtonProps extends Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "href"> {

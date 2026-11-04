@@ -1,39 +1,73 @@
 ---
 title: Authentication
-description: ApiMask authentication is handled by RapidAPI using X-RapidAPI-Key and X-RapidAPI-Host headers.
+description: Authenticate ApiMask requests with an API key in the Authorization header. Live and test keys, rotation, revocation, and authentication errors.
 ---
 
 # Authentication
 
-ApiMask is distributed through RapidAPI. Authentication, subscriptions, plan limits,
-and billing are handled by RapidAPI.
+Every request needs an ApiMask API key. Create keys in the
+[dashboard](/dashboard/keys); you can have up to 20 active keys at once.
 
-## Required headers
+## Sending the key
 
-Every request must include the RapidAPI headers shown in your RapidAPI dashboard:
+Send the key as a Bearer token:
 
 ```http
-X-RapidAPI-Key: your-rapidapi-key
-X-RapidAPI-Host: apimask-developer-utilities-api.p.rapidapi.com
+POST /v1/utility/email/validate HTTP/1.1
+Host: api.apimask.dev
+Authorization: Bearer apim_live_...
 Content-Type: application/json
 ```
 
-Use the exact `X-RapidAPI-Host` value from the product you subscribed to. Different
-ApiMask products may use different RapidAPI hosts.
+An `X-API-Key: apim_live_...` header works too, for clients that can't set
+`Authorization`. If both are present, `Authorization` wins.
+
+Keys are **never** accepted in the query string, because URLs end up in access
+logs, proxies, and browser history. Keep keys on your server: a key used from a
+browser or a mobile app can be copied and spent by anyone.
+
+## Live and test keys
+
+| | Live key | Test key |
+|---|---|---|
+| Prefix | `apim_live_` | `apim_test_` |
+| Quota | Your plan's monthly units | A separate, small monthly allowance (see [Pricing](/pricing#test-keys)) |
+| AI endpoints (Pro) | Real model output | A fixed sample response, at no cost |
+| Use for | Production traffic | CI, local development, staging |
+
+Test keys exist so that a test suite or a script in a loop can never use up your
+production quota. Everything else, including validation errors and the response
+envelope, behaves exactly as it does with a live key.
+
+## Storing, rotating, and revoking keys
+
+- A key is shown **once**, when you create it. ApiMask stores only a keyed hash
+  plus the last four characters, so it can't show the key again. If you lose a
+  key, create a new one.
+- **Rotate** a key from the dashboard to get a replacement. The old key keeps
+  working for 24 hours, so you can deploy the new one without downtime; after
+  that it returns `401 KEY_EXPIRED`.
+- **Revoke** a key to stop it permanently. Requests with a revoked key get
+  `401 KEY_REVOKED`.
+
+## Authentication errors
+
+| HTTP | Code | Meaning |
+|---:|---|---|
+| 401 | `UNAUTHORIZED` | No key, a malformed key, or a key that doesn't exist. These all return the same response on purpose, so the API can't be used to test whether a key exists. |
+| 401 | `KEY_REVOKED` | The key was revoked. Create a new key; a revoked key can't be rotated. |
+| 401 | `KEY_EXPIRED` | The key was rotated more than 24 hours ago. Use its replacement. |
+| 403 | `FORBIDDEN_PRODUCT` | Your plan doesn't include this API. The AI endpoints need the [Pro plan](/pricing). |
+| 403 | `ORG_SUSPENDED` | The account is suspended. Contact support. |
+
+All errors use the standard envelope; see [Errors](/errors).
 
 ## Example
 
 ```bash
 curl --request POST \
-  --url https://apimask-developer-utilities-api.p.rapidapi.com/v1/dev/email/validate \
+  --url https://api.apimask.dev/v1/dev/data/hash \
+  --header "Authorization: Bearer $APIMASK_API_KEY" \
   --header "Content-Type: application/json" \
-  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
-  --header "X-RapidAPI-Host: apimask-developer-utilities-api.p.rapidapi.com" \
-  --data '{"email":"hello@example.com","check_smtp":false}'
+  --data '{"value":"hello","algorithms":["sha256"]}'
 ```
-
-## Troubleshooting
-
-- `401` usually means the RapidAPI key is missing, invalid, or not subscribed to the product.
-- `403` usually means the request is not allowed for the subscribed product or plan.
-- `429` means the RapidAPI plan limit has been reached.

@@ -14,7 +14,7 @@ import { SiteNav } from "./SiteNav";
 import { ArrowIcon } from "./ui/ArrowIcon";
 import styles from "./blog/BlogPost.module.css";
 
-const SITE_URL = "https://apimask.dev";
+const SITE_URL = "https://www.apimask.dev";
 
 type Heading = { id: string; text: string };
 
@@ -201,7 +201,7 @@ export default function BlogPostLayout({ slug, children }: { slug: string; child
                 <div className={styles.apiCta}>
                   <p className={styles.ctaEyebrow}>The API behind this guide</p>
                   <p className={styles.ctaCopy}>
-                    Everything above is available as a documented endpoint on RapidAPI.
+                    Everything above is a documented endpoint you can call with a free API key.
                   </p>
                   <Link href={post.api} className={styles.ctaLink} prefetch={false}>
                     Read the {post.category} docs <ArrowIcon className={styles.icon} />

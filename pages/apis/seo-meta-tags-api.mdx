@@ -1,6 +1,6 @@
 ---
 title: SEO Meta Tags API
-description: Generate SEO titles, meta descriptions, and keyword sets from page content with a single JSON endpoint through RapidAPI.
+description: Generate SEO titles, meta descriptions, and keyword sets from page content with a single JSON endpoint.
 ---
 
 # SEO Meta Tags API
@@ -10,21 +10,22 @@ keyword set in one call. Use it in CMS tools, page builders, ecommerce platforms
 and content automation workflows to keep metadata consistent and on-keyword
 without manual copywriting.
 
-This endpoint is part of the [AI Content Generator API](/api/ai-content-generator-api).
+> **Pro plan.** This is an AI endpoint: it needs the [Pro plan](/pricing) and
+> costs 20 units per call. Free and Starter keys get `403 FORBIDDEN_PRODUCT`.
+> Test keys on Pro return a fixed sample response at no cost.
 
-[Open AI Content Generator API on RapidAPI](https://rapidapi.com/aftaab/api/ai-content-generator-api)
+This endpoint is part of the [AI Content Generator API](/api/ai-content-generator-api).
 
 ## Base URL and authentication
 
 ```http
-https://ai-content-generator-api.p.rapidapi.com
+https://api.apimask.dev
 ```
 
 | Header | Value |
 |---|---|
 | `Content-Type` | `application/json` |
-| `X-RapidAPI-Key` | Your RapidAPI key |
-| `X-RapidAPI-Host` | `ai-content-generator-api.p.rapidapi.com` |
+| `Authorization` | `Bearer` followed by your ApiMask API key |
 
 See [Authentication](/authentication), [Rate limits](/rate-limits), and
 [Errors](/errors) for shared behavior.
@@ -47,10 +48,9 @@ POST /v1/content/meta-tags
 
 ```bash
 curl --request POST \
-  --url https://ai-content-generator-api.p.rapidapi.com/v1/content/meta-tags \
+  --url https://api.apimask.dev/v1/content/meta-tags \
   --header "Content-Type: application/json" \
-  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
-  --header "X-RapidAPI-Host: ai-content-generator-api.p.rapidapi.com" \
+  --header "Authorization: Bearer $APIMASK_API_KEY" \
   --data '{"page_content":"ApiMask is a platform of production-ready APIs for developers and startups building SaaS, AI, and automation products.","page_url":"https://apimask.dev","target_keyword":"developer APIs"}'
 ```
 

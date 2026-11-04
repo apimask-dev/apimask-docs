@@ -1,12 +1,16 @@
 ---
 title: Stacktrace Analyzer API
-description: Analyze stacktraces, identify root causes, suggest fixes, and return relevant documentation links through RapidAPI.
+description: Analyze stacktraces, identify root causes, suggest fixes, and return relevant documentation links.
 ---
 
 # Stacktrace Analyzer API
 
 Analyze stacktraces and error messages for developer tools, CI systems, support
 workflows, and coding assistants.
+
+> **Pro plan.** This is an AI endpoint: it needs the [Pro plan](/pricing) and
+> costs 20 units per call. Free and Starter keys get `403 FORBIDDEN_PRODUCT`.
+> Test keys on Pro return a fixed sample response at no cost.
 
 ## Endpoint
 
@@ -26,10 +30,9 @@ POST /v1/dev/stacktrace
 
 ```bash
 curl --request POST \
-  --url https://apimask-developer-utilities-api.p.rapidapi.com/v1/dev/stacktrace \
+  --url https://api.apimask.dev/v1/dev/stacktrace \
   --header "Content-Type: application/json" \
-  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
-  --header "X-RapidAPI-Host: apimask-developer-utilities-api.p.rapidapi.com" \
+  --header "Authorization: Bearer $APIMASK_API_KEY" \
   --data '{"stacktrace":"TypeError: Cannot read properties of undefined","language":"javascript","framework":"nextjs"}'
 ```
 

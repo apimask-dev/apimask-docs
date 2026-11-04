@@ -2,17 +2,19 @@ import Link from "next/link";
 import { Card, CardLink } from "./ui/Card";
 import { ArrowIcon } from "./ui/ArrowIcon";
 import styles from "./ProductCard.module.css";
-import type { ApiEndpoint, rapidapiProducts } from "../lib/products";
-import { docsHref } from "../lib/products";
+import type { ApiEndpoint, productFamilies } from "../lib/products";
+import { SIGNUP_HREF, docsHref } from "../lib/products";
 
-type FlagshipProduct = (typeof rapidapiProducts)[number];
+type FlagshipProduct = (typeof productFamilies)[number];
 
-export function FlagshipProductCard({ icon, count, title, copy, tags, docs, rapidapi }: FlagshipProduct) {
+export function FlagshipProductCard({ icon, count, title, copy, tags, docs, plan }: FlagshipProduct) {
   return (
     <Card>
       <div className={styles.top}>
         <span className={styles.icon}>{icon}</span>
-        <span className={styles.count}>{count} endpoints</span>
+        <span className={styles.count}>
+          {count} endpoints{plan === "pro" ? " · Pro plan" : ""}
+        </span>
       </div>
       <h3 className={styles.title}>{title}</h3>
       <p className={styles.copy}>{copy}</p>
@@ -25,10 +27,10 @@ export function FlagshipProductCard({ icon, count, title, copy, tags, docs, rapi
         <Link href={docs} className={styles.docsLink}>
           View docs
         </Link>
-        <a href={rapidapi} className={styles.rapidLink} target="_blank" rel="noreferrer">
-          Subscribe on RapidAPI
+        <Link href={plan === "pro" ? "/pricing" : SIGNUP_HREF} className={styles.keyLink} prefetch={false}>
+          {plan === "pro" ? "See Pro pricing" : "Get a free key"}
           <ArrowIcon className={styles.icon16} />
-        </a>
+        </Link>
       </div>
     </Card>
   );

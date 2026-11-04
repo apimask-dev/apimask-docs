@@ -1,6 +1,6 @@
 ---
 title: CORS Checker API
-description: Check CORS response headers, allowed origins, credentials, methods, exposed headers, and risk level through RapidAPI.
+description: Check CORS response headers, allowed origins, credentials, methods, exposed headers, and risk level.
 ---
 
 # CORS Checker API
@@ -25,10 +25,9 @@ POST /v1/utility/cors/check
 
 ```bash
 curl --request POST \
-  --url https://email-domain-validation-api.p.rapidapi.com/v1/utility/cors/check \
+  --url https://api.apimask.dev/v1/utility/cors/check \
   --header "Content-Type: application/json" \
-  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
-  --header "X-RapidAPI-Host: email-domain-validation-api.p.rapidapi.com" \
+  --header "Authorization: Bearer $APIMASK_API_KEY" \
   --data '{"url":"https://api.example.com","origin":"https://app.example.com"}'
 ```
 

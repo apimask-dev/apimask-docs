@@ -1,6 +1,6 @@
 ---
 title: SSL Certificate Checker API
-description: Check SSL certificates for validity, issuer, subject, SANs, expiration dates, and days remaining through RapidAPI.
+description: Check SSL certificates for validity, issuer, subject, SANs, expiration dates, and days remaining.
 ---
 
 # SSL Certificate Checker API
@@ -26,10 +26,9 @@ POST /v1/utility/ssl/check
 
 ```bash
 curl --request POST \
-  --url https://email-domain-validation-api.p.rapidapi.com/v1/utility/ssl/check \
+  --url https://api.apimask.dev/v1/utility/ssl/check \
   --header "Content-Type: application/json" \
-  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
-  --header "X-RapidAPI-Host: email-domain-validation-api.p.rapidapi.com" \
+  --header "Authorization: Bearer $APIMASK_API_KEY" \
   --data '{"domain":"example.com","port":443}'
 ```
 

@@ -1,40 +1,49 @@
 ---
 title: Email Validation API
-description: Validate email syntax, domains, MX records, disposable providers, role accounts, and optional SMTP mailbox checks through RapidAPI.
+description: Validate signup emails. Checks syntax, MX records, 10,000+ disposable domains including subdomains, role accounts, and suggests corrections for typos like gmail.con.
 ---
 
 # Email Validation API
 
-Validate email addresses before signup, lead capture, CRM imports, and outbound
-workflows. The API checks syntax, normalizes the address, identifies role accounts,
-detects disposable domains, checks MX records, and can optionally attempt SMTP
-mailbox verification.
+Check an address at signup, before it reaches your database. One call tells you
+whether the address is well formed, whether its domain can receive mail, whether
+it belongs to a disposable inbox service, whether it's a role account like
+`support@`, and whether it looks like a typo of a common provider.
 
-[Find ApiMask on RapidAPI](https://rapidapi.com/user/aftaab)
+- **Disposable detection** uses the community-maintained
+  [disposable-email-domains](https://github.com/disposable-email-domains/disposable-email-domains)
+  list (more than 10,000 domains, refreshed weekly) and matches subdomains too:
+  `inbox.mailinator.com` is flagged like `mailinator.com`.
+- **Typo suggestions** catch one-character mistakes in common providers:
+  `gmail.con`, `yaho.com`, `outlok.com`. Real providers that happen to look
+  similar, such as `mail.com` and `ymail.com`, are never "corrected".
+
+Costs 1 unit per call, on every plan including Free.
 
 ## Endpoint
 
 ```http
-POST /v1/dev/email/validate
-POST /v1/utility/email/validate
+POST https://api.apimask.dev/v1/utility/email/validate
 ```
+
+`POST /v1/dev/email/validate` is the same endpoint under the developer utilities
+path. Both return the same response.
 
 ## Request body
 
 | Field | Type | Required | Description |
 |---|---|---:|---|
-| `email` | `string` | Yes | Email address to validate. |
-| `check_smtp` | `boolean` | No | Attempt SMTP mailbox verification. Defaults to `false`; slower and not always reliable. |
+| `email` | `string` | Yes | The address to check. |
+| `check_smtp` | `boolean` | No | Accepted for compatibility. Mailbox probing is not available on the hosted API, so `smtp_verified` is always `false`. |
 
 ## Example request
 
 ```bash
 curl --request POST \
-  --url https://apimask-developer-utilities-api.p.rapidapi.com/v1/dev/email/validate \
+  --url https://api.apimask.dev/v1/utility/email/validate \
+  --header "Authorization: Bearer $APIMASK_API_KEY" \
   --header "Content-Type: application/json" \
-  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
-  --header "X-RapidAPI-Host: apimask-developer-utilities-api.p.rapidapi.com" \
-  --data '{"email":"hello@example.com","check_smtp":false}'
+  --data '{"email":"jane@gmail.con"}'
 ```
 
 ## Example response
@@ -44,17 +53,62 @@ curl --request POST \
   "success": true,
   "data": {
     "is_valid": true,
-    "email": "hello@example.com",
-    "local_part": "hello",
-    "domain": "example.com",
+    "email": "jane@gmail.con",
+    "local_part": "jane",
+    "domain": "gmail.con",
     "is_disposable": false,
+    "has_mx_records": false,
+    "smtp_verified": false,
+    "is_role_account": false,
+    "reason": null,
+    "did_you_mean": "jane@gmail.com"
+  },
+  "error": null,
+  "meta": { "request_id": "req_2037e0ed7edf" }
+}
+```
+
+A disposable address:
+
+```json
+{
+  "success": true,
+  "data": {
+    "is_valid": true,
+    "email": "sam@mailinator.com",
+    "local_part": "sam",
+    "domain": "mailinator.com",
+    "is_disposable": true,
     "has_mx_records": true,
     "smtp_verified": false,
     "is_role_account": false,
-    "reason": null
+    "reason": null,
+    "did_you_mean": null
   },
   "error": null,
-  "meta": {}
+  "meta": { "request_id": "req_a0da33901ed4" }
+}
+```
+
+A malformed address:
+
+```json
+{
+  "success": true,
+  "data": {
+    "is_valid": false,
+    "email": null,
+    "local_part": null,
+    "domain": null,
+    "is_disposable": false,
+    "has_mx_records": false,
+    "smtp_verified": false,
+    "is_role_account": false,
+    "reason": "An email address must have an @-sign.",
+    "did_you_mean": null
+  },
+  "error": null,
+  "meta": { "request_id": "req_example" }
 }
 ```
 
@@ -62,12 +116,47 @@ curl --request POST \
 
 | Field | Type | Description |
 |---|---|---|
-| `is_valid` | `boolean` | Whether the email is syntactically and structurally valid. |
-| `email` | `string` or `null` | Normalized email address if valid. |
-| `local_part` | `string` or `null` | Portion before `@`. |
-| `domain` | `string` or `null` | Portion after `@`. |
-| `is_disposable` | `boolean` | Whether the domain is a known disposable email provider. |
-| `has_mx_records` | `boolean` | Whether the domain has MX records. |
-| `smtp_verified` | `boolean` | Whether SMTP mailbox verification succeeded. |
-| `is_role_account` | `boolean` | Whether the address is a role account like `support@` or `info@`. |
-| `reason` | `string` or `null` | Invalid reason when available. |
+| `is_valid` | `boolean` | Whether the address is **syntactically** valid. It does not mean the domain accepts mail; check `has_mx_records` for that. |
+| `email` | `string` or `null` | The normalized address, or `null` when invalid. |
+| `local_part` | `string` or `null` | The part before `@`. |
+| `domain` | `string` or `null` | The part after `@`. |
+| `is_disposable` | `boolean` | Whether the domain, or a parent domain, is a known disposable inbox service. |
+| `has_mx_records` | `boolean` | Whether the domain publishes MX records, meaning it is set up to receive mail. |
+| `smtp_verified` | `boolean` | Always `false` on the hosted API. See [Limitations](#limitations). |
+| `is_role_account` | `boolean` | Whether the local part is a role such as `support`, `info`, or `admin`. |
+| `reason` | `string` or `null` | Why the address is invalid, in a sentence you can show the user. `null` when valid. |
+| `did_you_mean` | `string` or `null` | A corrected address when the domain looks like a typo of a common provider. The local part is kept as typed. `null` when there is no suggestion. |
+
+## Using it at signup
+
+A reasonable policy for a signup form:
+
+1. `is_valid` is `false`: reject, and show `reason`.
+2. `did_you_mean` is set: ask "Did you mean jane@gmail.com?" and let the user
+   accept or keep what they typed. Don't change the address silently.
+3. `is_disposable` is `true`: reject, or allow and flag the account for review.
+4. `has_mx_records` is `false`: the address can't receive mail; reject or ask
+   again.
+5. `is_role_account` is `true`: usually fine for B2B products, worth a flag for
+   free trials.
+
+Call it from your server, not the browser, so the API key stays private.
+
+## Limitations
+
+- **No mailbox verification.** The hosted API can't open SMTP connections, so it
+  can't tell whether `jane@` exists at a real domain. It checks the domain, not
+  the mailbox. For cleaning old marketing lists where bounces are the main
+  concern, a service that verifies mailboxes is a better fit.
+- **Disposable lists are never complete.** New throwaway domains appear daily.
+  The list is refreshed weekly, and a domain that was registered yesterday may
+  not be on it yet.
+- **Suggestions cover common providers only** (Gmail, Yahoo, Outlook, iCloud, and
+  about 20 others). A typo in a company domain won't get a suggestion.
+
+## Related
+
+- [Bulk Email Verification API](/api/bulk-email-verification): up to 500
+  addresses per call, or a CSV of up to 1,000 rows
+- [DNS Analyzer API](/api/dns-analyzer): MX, SPF, and DMARC records for a domain
+- [How to validate emails before users sign up](/blog/validate-emails-before-signup)

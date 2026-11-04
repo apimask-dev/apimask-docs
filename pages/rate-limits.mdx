@@ -1,24 +1,55 @@
 ---
-title: Limits on RapidAPI
-description: ApiMask request limits and quotas are controlled by the RapidAPI plan you subscribe to.
+title: Rate limits and quotas
+description: ApiMask rate limits per plan, concurrency limits, monthly unit quotas, the RateLimit-Limit and X-Quota-Remaining headers, and how to handle 429 responses.
 ---
 
-# Limits on RapidAPI
+# Rate limits and quotas
 
-ApiMask request limits, quotas, and throttling are controlled by the RapidAPI product
-and plan you subscribe to.
+ApiMask applies two kinds of limits to your account:
 
-## Where to check limits
+- A **rate limit**, which caps how fast you can call.
+- A **monthly quota** of units, which caps how much you can use. See
+  [Pricing](/pricing#what-a-unit-is) for what a unit is.
 
-Use your RapidAPI dashboard to view:
+Both apply to the whole account, across every key, not to each key separately.
 
-- Current plan
-- Monthly request quota
-- Remaining usage
-- Rate-limit responses
-- Upgrade options
+## Limits per plan
 
-## Common limit response
+| | Free | Starter | Pro |
+|---|---:|---:|---:|
+| Requests per second | 2 | 5 | 20 |
+| Short burst | 4 | 10 | 40 |
+| Requests per minute | 60 | 300 | 900 |
+| Requests in flight at once | 2 | 5 | 20 |
+| Units per month | 1,000 | 25,000 | 250,000 |
+| Test key: requests per second | 1 | 1 | 2 |
+| Test key: units per month | 100 | 200 | 500 |
 
-When a plan limit is reached, RapidAPI may return `429 Too Many Requests`. Upgrade or
-wait for the quota window to reset according to the plan details shown on RapidAPI.
+The burst lets a short spike through, for example a page that fires a few
+requests at once, as long as the average stays under the per-second rate.
+
+## Response headers
+
+Requests that pass the limits carry two headers:
+
+| Header | Meaning |
+|---|---|
+| `RateLimit-Limit` | Requests per second your plan allows. |
+| `X-Quota-Remaining` | Units left this month for the kind of key you used (live or test). |
+
+## When you hit a limit
+
+| Response | Cause | What to do |
+|---|---|---|
+| `429 RATE_LIMITED` with `Retry-After: 1` | Over the per-second or per-minute rate | Wait a second and retry, with backoff |
+| `429 CONCURRENCY_LIMITED` | Too many requests running at once | Lower your client's parallelism |
+| `429 QUOTA_EXCEEDED` | Monthly units used up | Wait for the reset, or [upgrade](/dashboard/billing) |
+
+None of these use any units. Free quotas reset on the 1st of each month at
+00:00 UTC; paid quotas reset on your renewal date.
+
+## Sending many addresses
+
+To check a list, use the [bulk endpoints](/api/bulk-email-verification). They
+take up to 500 addresses per call (1 unit each), so a 10,000-row list is 20
+calls instead of 10,000, and the rate limit stops being the bottleneck.

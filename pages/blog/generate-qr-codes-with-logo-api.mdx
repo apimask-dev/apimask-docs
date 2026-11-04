@@ -84,10 +84,9 @@ Example request:
 
 ```bash
 curl --request POST \
-  --url https://qr-code-generator-api-with-logo.p.rapidapi.com/v1/qr/url \
+  --url https://api.apimask.dev/v1/qr/url \
   --header "Content-Type: application/json" \
-  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
-  --header "X-RapidAPI-Host: qr-code-generator-api-with-logo.p.rapidapi.com" \
+  --header "Authorization: Bearer $APIMASK_API_KEY" \
   --data '{"url":"https://apimask.dev","output":"png","box_size":10,"fill_color":"#111111","back_color":"#ffffff"}'
 ```
 

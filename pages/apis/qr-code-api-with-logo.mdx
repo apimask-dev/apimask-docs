@@ -1,6 +1,6 @@
 ---
 title: QR Code API with Logo
-description: Generate branded QR codes with a centered logo overlay, custom colors, sizing, and error correction through RapidAPI.
+description: Generate branded QR codes with a centered logo overlay, custom colors, sizing, and error correction.
 ---
 
 # QR Code API with Logo
@@ -12,19 +12,16 @@ and anywhere a branded code reads better than a plain one.
 
 This endpoint is part of the [QR Code Generator API](/api/qr-code-generator-api).
 
-[Open QR Code Generator API with Logo on RapidAPI](https://rapidapi.com/aftaab/api/qr-code-generator-api-with-logo)
-
 ## Base URL and authentication
 
 ```http
-https://qr-code-generator-api-with-logo.p.rapidapi.com
+https://api.apimask.dev
 ```
 
 | Header | Value |
 |---|---|
 | `Content-Type` | `application/json` |
-| `X-RapidAPI-Key` | Your RapidAPI key |
-| `X-RapidAPI-Host` | `qr-code-generator-api-with-logo.p.rapidapi.com` |
+| `Authorization` | `Bearer` followed by your ApiMask API key |
 
 See [Authentication](/authentication), [Rate limits](/rate-limits), and
 [Errors](/errors) for shared behavior.
@@ -53,12 +50,14 @@ POST /v1/qr/generate
 
 ```bash
 curl --request POST \
-  --url https://qr-code-generator-api-with-logo.p.rapidapi.com/v1/qr/generate \
+  --url https://api.apimask.dev/v1/qr/generate \
   --header "Content-Type: application/json" \
-  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
-  --header "X-RapidAPI-Host: qr-code-generator-api-with-logo.p.rapidapi.com" \
-  --data '{"value":"https://apimask.dev","output":"png","error_correction":"H","logo_base64":"iVBORw0KGgoAAAANSUhEUg...","logo_size_ratio":0.22,"fill_color":"#111111","back_color":"#ffffff"}'
+  --header "Authorization: Bearer $APIMASK_API_KEY" \
+  --data '{"value":"https://www.apimask.dev","output":"png","error_correction":"H","logo_base64":"'"$(base64 < logo.png | tr -d '\n')"'","logo_size_ratio":0.22,"fill_color":"#111111","back_color":"#ffffff"}'
 ```
+
+The `$(base64 < logo.png | tr -d '\n')` part inlines a `logo.png` from the current
+directory, so the command works as pasted.
 
 ## Example response
 

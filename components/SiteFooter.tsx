@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { RAPIDAPI_PROFILE_URL, docsHref, liveCategories } from "../lib/products";
+import { docsHref, liveCategories } from "../lib/products";
 import styles from "./SiteFooter.module.css";
 
 const GITHUB_URL = "https://github.com/apimask-dev";
@@ -13,10 +13,10 @@ const CATEGORY_ENTRY: Record<string, string> = {
   "website-security": "ssl-checker",
   "qr-codes": "qr-code-generator-api",
   seo: "seo-website-audit",
-  "social-app": "instagram",
 };
 
 const gettingStarted = [
+  { label: "Get an API key", href: "/login" },
   { label: "Quickstart", href: "/quickstart" },
   { label: "Authentication", href: "/authentication" },
   { label: "Pricing", href: "/pricing" },
@@ -46,14 +46,10 @@ export function SiteFooter() {
             <span>ApiMask</span>
           </span>
           <p className={styles.blurb}>
-            Production-ready REST APIs for developer utilities, AI content, email and domain
-            validation, website and SEO checks, QR codes, and public social data. Distributed
-            through RapidAPI.
+            REST APIs for email and domain validation, website and SEO checks, QR codes,
+            developer utilities, and AI content. One key, one JSON envelope.
           </p>
           <div className={styles.social}>
-            <a href={RAPIDAPI_PROFILE_URL} target="_blank" rel="noreferrer">
-              RapidAPI
-            </a>
             <a href={GITHUB_URL} target="_blank" rel="noreferrer">
               GitHub
             </a>
@@ -94,7 +90,7 @@ export function SiteFooter() {
 
       <div className={styles.bottom}>
         <p>© {new Date().getFullYear()} ApiMask. All rights reserved.</p>
-        <p>Keys, plans, and billing are handled by RapidAPI.</p>
+        <p>Payments are processed by Lemon Squeezy.</p>
       </div>
     </footer>
   );

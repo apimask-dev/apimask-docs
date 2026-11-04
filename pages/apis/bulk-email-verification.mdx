@@ -1,29 +1,30 @@
 ---
 title: Bulk Email Verification API
-description: Validate email lists, upload CSVs, detect disposable addresses and role accounts, and check MX, SPF, and DMARC records through RapidAPI.
+description: Validate email lists, upload CSVs, detect disposable addresses and role accounts, and check MX, SPF, and DMARC records.
 ---
 
 # Bulk Email Verification API
 
 Validate email lists, clean CRM imports, detect disposable and role-account
 addresses, and check whether domains have MX, SPF, and DMARC records. The API
-supports JSON batches and CSV uploads through RapidAPI.
+supports JSON batches and CSV uploads.
 
-[Open Bulk Email Verification API on RapidAPI](https://rapidapi.com/aftaab/api/bulk-email-verification-api)
+Every endpoint here costs **1 unit per address or domain** in the request, on
+every plan including Free. A batch of 300 addresses costs 300 units. See
+[Pricing](/pricing#what-a-unit-is).
 
 ## Base URL and authentication
 
 ```http
-https://bulk-email-verification-api.p.rapidapi.com
+https://api.apimask.dev
 ```
 
-All requests authenticate through RapidAPI. JSON endpoints use these headers:
+All requests authenticate with your ApiMask API key. JSON endpoints use these headers:
 
 | Header | Value |
 |---|---|
 | `Content-Type` | `application/json` |
-| `X-RapidAPI-Key` | Your RapidAPI key |
-| `X-RapidAPI-Host` | `bulk-email-verification-api.p.rapidapi.com` |
+| `Authorization` | `Bearer` followed by your ApiMask API key |
 
 CSV uploads use `multipart/form-data`; your HTTP client usually sets the exact
 `Content-Type` boundary automatically.
@@ -76,10 +77,9 @@ records, disposable domains, and role-account local parts.
 
 ```bash
 curl --request POST \
-  --url https://bulk-email-verification-api.p.rapidapi.com/v1/email/bulk/validate \
+  --url https://api.apimask.dev/v1/email/bulk/validate \
   --header "Content-Type: application/json" \
-  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
-  --header "X-RapidAPI-Host: bulk-email-verification-api.p.rapidapi.com" \
+  --header "Authorization: Bearer $APIMASK_API_KEY" \
   --data '{"emails":["hello@example.com","support@example.com","test@mailinator.com"],"check_mx":true,"check_disposable":true,"check_role_account":true}'
 ```
 
@@ -98,6 +98,28 @@ curl --request POST \
         "has_mx_records": true,
         "is_role_account": false,
         "reason": null
+      },
+      {
+        "input": "support@example.com",
+        "is_valid": true,
+        "email": "support@example.com",
+        "local_part": "support",
+        "domain": "example.com",
+        "is_disposable": false,
+        "has_mx_records": true,
+        "is_role_account": true,
+        "reason": null
+      },
+      {
+        "input": "test@mailinator.com",
+        "is_valid": true,
+        "email": "test@mailinator.com",
+        "local_part": "test",
+        "domain": "mailinator.com",
+        "is_disposable": true,
+        "has_mx_records": true,
+        "is_role_account": false,
+        "reason": null
       }
     ],
     "summary": {
@@ -111,9 +133,12 @@ curl --request POST \
     }
   },
   "error": null,
-  "meta": { "request_id": "req_example" }
+  "meta": { "request_id": "req_97763643571e" }
 }
 ```
+
+Bulk rows don't include `did_you_mean`. To suggest typo fixes, use the
+[single-address endpoint](/api/email-validation) at signup.
 
 ---
 
@@ -134,9 +159,8 @@ treated as the email column.
 
 ```bash
 curl --request POST \
-  --url https://bulk-email-verification-api.p.rapidapi.com/v1/email/bulk/validate-csv \
-  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
-  --header "X-RapidAPI-Host: bulk-email-verification-api.p.rapidapi.com" \
+  --url https://api.apimask.dev/v1/email/bulk/validate-csv \
+  --header "Authorization: Bearer $APIMASK_API_KEY" \
   --form "file=@emails.csv"
 ```
 
@@ -163,11 +187,37 @@ domains.
 
 ```bash
 curl --request POST \
-  --url https://bulk-email-verification-api.p.rapidapi.com/v1/email/domain/health \
+  --url https://api.apimask.dev/v1/email/domain/health \
   --header "Content-Type: application/json" \
-  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
-  --header "X-RapidAPI-Host: bulk-email-verification-api.p.rapidapi.com" \
-  --data '{"domains":["example.com","apimask.dev"]}'
+  --header "Authorization: Bearer $APIMASK_API_KEY" \
+  --data '{"domains":["example.com"]}'
+```
+
+```json
+{
+  "success": true,
+  "data": {
+    "results": [
+      {
+        "domain": "example.com",
+        "has_mx_records": true,
+        "mx_records": [{ "host": "", "priority": 0 }],
+        "has_spf": true,
+        "spf": { "raw": "v=spf1 -all", "valid": true },
+        "has_dmarc": true,
+        "dmarc": { "raw": "v=DMARC1;p=reject;sp=reject;adkim=s;aspf=s", "valid": true }
+      }
+    ],
+    "summary": {
+      "total": 1,
+      "domains_with_mx": 1,
+      "domains_with_spf": 1,
+      "domains_with_dmarc": 1
+    }
+  },
+  "error": null,
+  "meta": { "request_id": "req_3d822b1b01e4" }
+}
 ```
 
 ---
@@ -185,8 +235,10 @@ Both endpoints accept 1-500 email addresses.
 
 ## Notes
 
-- This API checks syntax, domains, MX records, disposable providers, role
-  accounts, SPF, and DMARC.
-- SMTP mailbox probing is not included in V1.
+- This API checks syntax, domains, MX records, disposable providers (10,000+
+  domains, refreshed weekly), role accounts, SPF, and DMARC.
+- It does not check whether a specific mailbox exists: the hosted API can't open
+  SMTP connections. DKIM isn't checked either, because it needs the sender's
+  selector name.
 - Validation improves list quality but does not guarantee that a mailbox exists
   or that an email will be delivered.

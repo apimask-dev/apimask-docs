@@ -104,10 +104,9 @@ A backend signup flow might look like this:
 
 ```bash
 curl --request POST \
-  --url https://apimask-developer-utilities-api.p.rapidapi.com/v1/dev/email/validate \
+  --url https://api.apimask.dev/v1/dev/email/validate \
   --header "Content-Type: application/json" \
-  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
-  --header "X-RapidAPI-Host: apimask-developer-utilities-api.p.rapidapi.com" \
+  --header "Authorization: Bearer $APIMASK_API_KEY" \
   --data '{"email":"founder@example.com"}'
 ```
 

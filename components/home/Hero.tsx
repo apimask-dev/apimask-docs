@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { RAPIDAPI_PROFILE_URL, liveCategories, liveEndpointCount } from "../../lib/products";
+import { SIGNUP_HREF, liveEndpointCount } from "../../lib/products";
 import { CodeTabs } from "../ui/CodeTabs";
 import styles from "./Home.module.css";
 
@@ -9,32 +9,25 @@ export function Hero() {
       <div className={styles.heroInner}>
         <div>
           <p className={styles.heroBadge}>
-            <b>New</b>
-            {liveCategories.length} live API categories on RapidAPI
+            <b>Free</b>
+            1,000 units a month, no card
           </p>
-          <h1 id="hero-heading">Ship faster with {liveEndpointCount} production-ready APIs.</h1>
+          <h1 id="hero-heading">Stop fake signups before they reach your database.</h1>
           <p className={styles.heroLead}>
-            Developer utilities, AI content, email and domain validation, website and SEO checks,
-            QR codes, and public social data — all returning clean, predictable JSON. Skip the
-            scrapers, the proxy pools, and the weeks of glue code.
+            Email validation that knows 10,000+ disposable domains and catches typos like
+            gmail.con, plus {liveEndpointCount - 1} more domain, website, SEO, QR, and developer
+            APIs, all returning the same predictable JSON.
           </p>
           <div className={styles.heroActions}>
-            <a
-              href={RAPIDAPI_PROFILE_URL}
-              className={styles.primaryAction}
-              target="_blank"
-              rel="noreferrer"
-            >
-              View on RapidAPI
-            </a>
+            <Link href={SIGNUP_HREF} className={styles.primaryAction} prefetch={false}>
+              Get a free API key
+            </Link>
             <Link href="/api" className={styles.secondaryAction} prefetch={false}>
               Browse all APIs
             </Link>
           </div>
-          {/* ApiMask has no account system of its own; being explicit about that
-              up front is the honest equivalent of a "free API key" CTA. */}
           <p className={styles.heroNote}>
-            Keys, plans, and billing are handled by RapidAPI — no separate ApiMask account.
+            Sign in with your email to get a key. Paid plans start at $9 a month.
           </p>
         </div>
 

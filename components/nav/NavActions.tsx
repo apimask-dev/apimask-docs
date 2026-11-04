@@ -1,11 +1,10 @@
 import Link from "next/link";
-import { RAPIDAPI_PROFILE_URL } from "../../lib/products";
+import { SIGNUP_HREF } from "../../lib/products";
 import { ThemeToggle } from "../ui/ThemeToggle";
 import styles from "./Nav.module.css";
 
 /** Trailing controls: theme toggle, a ghost link into the catalog, and the one
- *  conversion CTA. ApiMask has no signup of its own — RapidAPI owns keys,
- *  plans, and billing — so this is the site's only "get started" action. */
+ *  conversion CTA: sign-in, which creates the account on first use. */
 export function NavActions({
   className,
   showThemeToggle = true,
@@ -19,9 +18,9 @@ export function NavActions({
       <Link href="/api" className={styles.ghostLink} prefetch={false}>
         Browse APIs
       </Link>
-      <a href={RAPIDAPI_PROFILE_URL} className={styles.cta} target="_blank" rel="noreferrer">
-        View on RapidAPI
-      </a>
+      <Link href={SIGNUP_HREF} className={styles.cta} prefetch={false}>
+        Get an API key
+      </Link>
     </div>
   );
 }

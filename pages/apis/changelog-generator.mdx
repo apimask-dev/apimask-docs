@@ -1,12 +1,16 @@
 ---
 title: Changelog Generator API
-description: Generate categorized changelogs from raw git logs or diffs through RapidAPI.
+description: Generate categorized changelogs from raw git logs or diffs.
 ---
 
 # Changelog Generator API
 
 Turn raw git logs or diffs into a clean changelog for release notes, CI pipelines,
 developer portals, and deployment automation.
+
+> **Pro plan.** This is an AI endpoint: it needs the [Pro plan](/pricing) and
+> costs 20 units per call. Free and Starter keys get `403 FORBIDDEN_PRODUCT`.
+> Test keys on Pro return a fixed sample response at no cost.
 
 ## Endpoint
 
@@ -26,10 +30,9 @@ POST /v1/dev/changelog
 
 ```bash
 curl --request POST \
-  --url https://apimask-developer-utilities-api.p.rapidapi.com/v1/dev/changelog \
+  --url https://api.apimask.dev/v1/dev/changelog \
   --header "Content-Type: application/json" \
-  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
-  --header "X-RapidAPI-Host: apimask-developer-utilities-api.p.rapidapi.com" \
+  --header "Authorization: Bearer $APIMASK_API_KEY" \
   --data '{"version":"1.2.0","format_style":"markdown","git_log":"feat: add JSON formatter\nfix: handle invalid base64"}'
 ```
 

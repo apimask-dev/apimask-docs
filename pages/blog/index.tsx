@@ -13,7 +13,7 @@ import { SiteNav } from "../../components/SiteNav";
 import { ArrowIcon } from "../../components/ui/ArrowIcon";
 import styles from "../../components/blog/BlogIndex.module.css";
 
-const SITE_URL = "https://apimask.dev";
+const SITE_URL = "https://www.apimask.dev";
 const TITLE = "ApiMask Blog — API Guides, SEO Automation, and Developer Workflows";
 const DESCRIPTION =
   "Practical guides on email validation, DNS, security headers, CORS, regex, QR codes, SEO automation, social data, and website audit workflows.";

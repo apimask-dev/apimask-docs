@@ -1,6 +1,6 @@
 ---
 title: QR Code Generator API
-description: Generate QR codes as PNG or SVG for URLs, text, WiFi, vCards, email, and SMS, with branded colors and logo overlay, through RapidAPI.
+description: Generate QR codes as PNG or SVG for URLs, text, WiFi, vCards, email, and SMS, with branded colors and logo overlay.
 ---
 
 # QR Code Generator API
@@ -11,22 +11,19 @@ with full control over colors, size, error correction, and an optional logo
 overlay. Use it in event tools, venue WiFi flows, ecommerce apps, CMS plugins,
 internal dashboards, and marketing automation.
 
-[Open QR Code Generator API on RapidAPI](https://rapidapi.com/aftaab/api/qr-code-generator-api-with-logo)
-
 ## Base URL and authentication
 
 ```http
-https://qr-code-generator-api-with-logo.p.rapidapi.com
+https://api.apimask.dev
 ```
 
-All requests are `POST` with a JSON body and authenticate through RapidAPI. Send
+All requests are `POST` with a JSON body and authenticate with your ApiMask API key. Send
 these headers on every call:
 
 | Header | Value |
 |---|---|
 | `Content-Type` | `application/json` |
-| `X-RapidAPI-Key` | Your RapidAPI key |
-| `X-RapidAPI-Host` | `qr-code-generator-api-with-logo.p.rapidapi.com` |
+| `Authorization` | `Bearer` followed by your ApiMask API key |
 
 See [Authentication](/authentication), [Rate limits](/rate-limits), and
 [Errors](/errors) for shared behavior.
@@ -101,10 +98,9 @@ POST /v1/qr/url
 
 ```bash
 curl --request POST \
-  --url https://qr-code-generator-api-with-logo.p.rapidapi.com/v1/qr/generate \
+  --url https://api.apimask.dev/v1/qr/generate \
   --header "Content-Type: application/json" \
-  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
-  --header "X-RapidAPI-Host: qr-code-generator-api-with-logo.p.rapidapi.com" \
+  --header "Authorization: Bearer $APIMASK_API_KEY" \
   --data '{"value":"https://apimask.dev","output":"png","box_size":10,"border":4}'
 ```
 
@@ -120,10 +116,9 @@ curl --request POST \
 
 ```bash
 curl --request POST \
-  --url https://qr-code-generator-api-with-logo.p.rapidapi.com/v1/qr/url \
+  --url https://api.apimask.dev/v1/qr/url \
   --header "Content-Type: application/json" \
-  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
-  --header "X-RapidAPI-Host: qr-code-generator-api-with-logo.p.rapidapi.com" \
+  --header "Authorization: Bearer $APIMASK_API_KEY" \
   --data '{"url":"https://apimask.dev/pricing","output":"svg"}'
 ```
 
@@ -144,10 +139,9 @@ See the focused [WiFi QR Code API](/api/wifi-qr-code-api) page. Plus all
 
 ```bash
 curl --request POST \
-  --url https://qr-code-generator-api-with-logo.p.rapidapi.com/v1/qr/wifi \
+  --url https://api.apimask.dev/v1/qr/wifi \
   --header "Content-Type: application/json" \
-  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
-  --header "X-RapidAPI-Host: qr-code-generator-api-with-logo.p.rapidapi.com" \
+  --header "Authorization: Bearer $APIMASK_API_KEY" \
   --data '{"ssid":"Guest WiFi","password":"secret123","encryption":"WPA","hidden":false}'
 ```
 
@@ -170,10 +164,9 @@ curl --request POST \
 
 ```bash
 curl --request POST \
-  --url https://qr-code-generator-api-with-logo.p.rapidapi.com/v1/qr/vcard \
+  --url https://api.apimask.dev/v1/qr/vcard \
   --header "Content-Type: application/json" \
-  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
-  --header "X-RapidAPI-Host: qr-code-generator-api-with-logo.p.rapidapi.com" \
+  --header "Authorization: Bearer $APIMASK_API_KEY" \
   --data '{"full_name":"Aftaab","organization":"ApiMask","email":"hello@apimask.dev","website":"https://apimask.dev"}'
 ```
 
@@ -192,10 +185,9 @@ curl --request POST \
 
 ```bash
 curl --request POST \
-  --url https://qr-code-generator-api-with-logo.p.rapidapi.com/v1/qr/email \
+  --url https://api.apimask.dev/v1/qr/email \
   --header "Content-Type: application/json" \
-  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
-  --header "X-RapidAPI-Host: qr-code-generator-api-with-logo.p.rapidapi.com" \
+  --header "Authorization: Bearer $APIMASK_API_KEY" \
   --data '{"to":"hello@apimask.dev","subject":"API question","body":"Hi, I have a question about your API."}'
 ```
 
@@ -213,10 +205,9 @@ curl --request POST \
 
 ```bash
 curl --request POST \
-  --url https://qr-code-generator-api-with-logo.p.rapidapi.com/v1/qr/sms \
+  --url https://api.apimask.dev/v1/qr/sms \
   --header "Content-Type: application/json" \
-  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
-  --header "X-RapidAPI-Host: qr-code-generator-api-with-logo.p.rapidapi.com" \
+  --header "Authorization: Bearer $APIMASK_API_KEY" \
   --data '{"phone":"+15551234567","message":"START"}'
 ```
 

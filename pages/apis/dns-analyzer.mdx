@@ -1,6 +1,6 @@
 ---
 title: DNS Analyzer API
-description: Analyze A, AAAA, MX, TXT, NS, CNAME, SPF, and DMARC records for a domain through RapidAPI.
+description: Analyze A, AAAA, MX, TXT, NS, CNAME, SPF, and DMARC records for a domain.
 ---
 
 # DNS Analyzer API
@@ -24,10 +24,9 @@ POST /v1/utility/dns/analyze
 
 ```bash
 curl --request POST \
-  --url https://email-domain-validation-api.p.rapidapi.com/v1/utility/dns/analyze \
+  --url https://api.apimask.dev/v1/utility/dns/analyze \
   --header "Content-Type: application/json" \
-  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
-  --header "X-RapidAPI-Host: email-domain-validation-api.p.rapidapi.com" \
+  --header "Authorization: Bearer $APIMASK_API_KEY" \
   --data '{"domain":"example.com"}'
 ```
 

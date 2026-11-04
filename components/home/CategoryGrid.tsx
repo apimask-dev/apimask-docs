@@ -25,7 +25,7 @@ export function CategoryGrid() {
       <SectionHead
         eyebrow="Catalog"
         title="Browse by category."
-        lead={`${spellCount(liveCategories.length)} live categories today, with more on the public roadmap. Every live category links straight into its documentation.`}
+        lead={`${spellCount(liveCategories.length)} live categories. Every one links straight into its documentation.`}
       />
 
       <div className={styles.categoryGrid}>
@@ -45,18 +45,22 @@ export function CategoryGrid() {
         ))}
       </div>
 
-      <h3 className={styles.soonHeading}>On the roadmap</h3>
-      <div className={styles.categoryGrid}>
-        {soonCategories.map((category) => (
-          <div key={category.slug} className={`${styles.categoryCard} ${styles.soon}`}>
-            <div className={styles.categoryTop}>
-              <h3>{category.name}</h3>
-              <span className={styles.soonBadge}>Soon</span>
-            </div>
-            <p>{category.note}</p>
+      {soonCategories.length > 0 && (
+        <>
+          <h3 className={styles.soonHeading}>On the roadmap</h3>
+          <div className={styles.categoryGrid}>
+            {soonCategories.map((category) => (
+              <div key={category.slug} className={`${styles.categoryCard} ${styles.soon}`}>
+                <div className={styles.categoryTop}>
+                  <h3>{category.name}</h3>
+                  <span className={styles.soonBadge}>Soon</span>
+                </div>
+                <p>{category.note}</p>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
+        </>
+      )}
 
       <Link href="/api" className={styles.moreLink} prefetch={false}>
         Browse the full API catalog

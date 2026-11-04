@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { RAPIDAPI_PROFILE_URL } from "../lib/products";
+import { SIGNUP_HREF } from "../lib/products";
 import { NavActions } from "./nav/NavActions";
 import { NavLinks } from "./nav/NavLinks";
 import { NAV_ITEMS, isActive } from "./nav/nav-config";
@@ -88,15 +88,14 @@ export function SiteNav() {
             {item.label}
           </Link>
         ))}
-        <a
-          href={RAPIDAPI_PROFILE_URL}
+        <Link
+          href={SIGNUP_HREF}
           className={styles.mobileCta}
-          target="_blank"
-          rel="noreferrer"
+          prefetch={false}
           onClick={() => setOpen(false)}
         >
-          View on RapidAPI
-        </a>
+          Get an API key
+        </Link>
       </div>
     </header>
   );

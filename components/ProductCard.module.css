@@ -69,7 +69,7 @@
 }
 
 .docsLink,
-.rapidLink {
+.keyLink {
   display: inline-flex;
   align-items: center;
   font-size: 0.875rem;
@@ -85,7 +85,7 @@
   color: var(--ink);
 }
 
-.rapidLink {
+.keyLink {
   color: var(--accent);
 }
 
@@ -98,7 +98,7 @@
 }
 
 .docsLink:hover .icon16,
-.rapidLink:hover .icon16 {
+.keyLink:hover .icon16 {
   transform: translateX(3px);
 }
 

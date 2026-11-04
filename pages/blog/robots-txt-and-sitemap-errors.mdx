@@ -77,10 +77,9 @@ The [Robots.txt Analyzer](/api/robots-txt-analyzer) fetches and parses the file:
 
 ```bash
 curl --request POST \
-  --url https://email-domain-validation-api.p.rapidapi.com/v1/utility/robots/analyze \
+  --url https://api.apimask.dev/v1/utility/robots/analyze \
   --header "Content-Type: application/json" \
-  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
-  --header "X-RapidAPI-Host: email-domain-validation-api.p.rapidapi.com" \
+  --header "Authorization: Bearer $APIMASK_API_KEY" \
   --data '{"url":"https://example.com"}'
 ```
 
@@ -169,7 +168,7 @@ deploy, for every URL, is noise and gets discounted.
 **A sitemap that is not actually generated.** Static file, generated once,
 `/sitemap.xml` returning last year's URL set. Generate it from your routes, not
 by hand — and note that
-[this site's own sitemap](https://apimask.dev/sitemap.xml) is built by walking
+[this site's own sitemap](https://www.apimask.dev/sitemap.xml) is built by walking
 the pages directory for exactly this reason.
 
 ## Wiring the checks into CI

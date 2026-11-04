@@ -1,12 +1,16 @@
 ---
 title: README Generator API
-description: Generate professional README.md content from repository metadata through RapidAPI.
+description: Generate professional README.md content from repository metadata.
 ---
 
 # README Generator API
 
 Generate a professional `README.md` draft from repository metadata. Use it in project
 scaffolding, internal developer portals, template generators, and Git automation.
+
+> **Pro plan.** This is an AI endpoint: it needs the [Pro plan](/pricing) and
+> costs 20 units per call. Free and Starter keys get `403 FORBIDDEN_PRODUCT`.
+> Test keys on Pro return a fixed sample response at no cost.
 
 ## Endpoint
 
@@ -31,11 +35,10 @@ POST /v1/dev/readme
 
 ```bash
 curl --request POST \
-  --url https://apimask-developer-utilities-api.p.rapidapi.com/v1/dev/readme \
+  --url https://api.apimask.dev/v1/dev/readme \
   --header "Content-Type: application/json" \
-  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
-  --header "X-RapidAPI-Host: apimask-developer-utilities-api.p.rapidapi.com" \
-  --data '{"repo_name":"apimask","description":"Developer utility APIs","language":"TypeScript","stack":["Next.js","FastAPI"],"features":["API docs","RapidAPI examples"]}'
+  --header "Authorization: Bearer $APIMASK_API_KEY" \
+  --data '{"repo_name":"apimask","description":"Developer utility APIs","language":"TypeScript","stack":["Next.js","Go"],"features":["API docs","Copy-paste examples"]}'
 ```
 
 ## Example response

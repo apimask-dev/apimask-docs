@@ -1,6 +1,6 @@
 ---
 title: UUID and ULID Generator API
-description: Generate UUIDv4, UUIDv1, or ULID-compatible identifiers through RapidAPI.
+description: Generate UUIDv4, UUIDv1, or ULID-compatible identifiers.
 ---
 
 # UUID and ULID Generator API
@@ -25,10 +25,9 @@ POST /v1/dev/data/id/generate
 
 ```bash
 curl --request POST \
-  --url https://apimask-developer-utilities-api.p.rapidapi.com/v1/dev/data/id/generate \
+  --url https://api.apimask.dev/v1/dev/data/id/generate \
   --header "Content-Type: application/json" \
-  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
-  --header "X-RapidAPI-Host: apimask-developer-utilities-api.p.rapidapi.com" \
+  --header "Authorization: Bearer $APIMASK_API_KEY" \
   --data '{"kind":"uuid4","count":3}'
 ```
 

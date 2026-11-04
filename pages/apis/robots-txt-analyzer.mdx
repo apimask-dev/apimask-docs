@@ -1,6 +1,6 @@
 ---
 title: Robots.txt Analyzer API
-description: Analyze robots.txt status, directives, sitemap URLs, user agents, and warnings through RapidAPI.
+description: Analyze robots.txt status, directives, sitemap URLs, user agents, and warnings.
 ---
 
 # Robots.txt Analyzer API
@@ -24,10 +24,9 @@ POST /v1/utility/robots/analyze
 
 ```bash
 curl --request POST \
-  --url https://email-domain-validation-api.p.rapidapi.com/v1/utility/robots/analyze \
+  --url https://api.apimask.dev/v1/utility/robots/analyze \
   --header "Content-Type: application/json" \
-  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
-  --header "X-RapidAPI-Host: email-domain-validation-api.p.rapidapi.com" \
+  --header "Authorization: Bearer $APIMASK_API_KEY" \
   --data '{"url":"https://example.com"}'
 ```
 

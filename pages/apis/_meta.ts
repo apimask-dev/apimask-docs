@@ -10,8 +10,6 @@ export default {
   "ai-content-generator-api": "AI Content Generator API",
   "seo-meta-tags-api": "SEO Meta Tags API",
   "seo-site-audit": "SEO Site Audit",
-  twitter: "Twitter/X API",
-  instagram: "Instagram API",
   "email-validation": "Email Validation",
   "regex-generator": "Regex Generator",
   "regex-explainer": "Regex Explainer",
@@ -30,9 +28,4 @@ export default {
   "robots-txt-analyzer": "Robots.txt Analyzer",
   "sitemap-validator": "Sitemap Validator",
   "cors-checker": "CORS Checker",
-  resume: "Resume Roadmap",
-  appstore: "App Store Roadmap",
-  pdf: "PDF Roadmap",
-  ocr: "OCR Roadmap",
-  content: "Content Tools",
 };

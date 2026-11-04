@@ -1,6 +1,6 @@
 ---
 title: Hash Generator API
-description: Generate MD5, SHA-1, SHA-256, SHA-512, and BLAKE2 hashes for strings through RapidAPI.
+description: Generate MD5, SHA-1, SHA-256, SHA-512, and BLAKE2 hashes for strings.
 ---
 
 # Hash Generator API
@@ -25,10 +25,9 @@ POST /v1/dev/data/hash
 
 ```bash
 curl --request POST \
-  --url https://apimask-developer-utilities-api.p.rapidapi.com/v1/dev/data/hash \
+  --url https://api.apimask.dev/v1/dev/data/hash \
   --header "Content-Type: application/json" \
-  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
-  --header "X-RapidAPI-Host: apimask-developer-utilities-api.p.rapidapi.com" \
+  --header "Authorization: Bearer $APIMASK_API_KEY" \
   --data '{"value":"hello","algorithms":["md5","sha256","sha512"]}'
 ```
 

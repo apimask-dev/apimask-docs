@@ -22,24 +22,27 @@ const claims = [
 // Verbatim from pages/apis/email-validation.mdx — the docs are the source of
 // truth for this snippet, so the homepage can never drift from the real shape.
 const REQUEST = `curl --request POST \\
-  --url https://apimask-developer-utilities-api.p.rapidapi.com/v1/dev/email/validate \\
+  --url https://api.apimask.dev/v1/utility/email/validate \\
+  --header "Authorization: Bearer $APIMASK_API_KEY" \\
   --header "Content-Type: application/json" \\
-  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \\
-  --data '{"email":"hello@example.com"}'`;
+  --data '{"email":"jane@gmail.con"}'`;
 
 const RESPONSE = `{
   "success": true,
   "data": {
     "is_valid": true,
-    "email": "hello@example.com",
-    "domain": "example.com",
+    "email": "jane@gmail.con",
+    "local_part": "jane",
+    "domain": "gmail.con",
     "is_disposable": false,
-    "has_mx_records": true,
+    "has_mx_records": false,
+    "smtp_verified": false,
     "is_role_account": false,
-    "reason": null
+    "reason": null,
+    "did_you_mean": "jane@gmail.com"
   },
   "error": null,
-  "meta": {}
+  "meta": { "request_id": "req_example" }
 }`;
 
 export function DocsQuality() {
@@ -69,7 +72,7 @@ export function DocsQuality() {
         <div className={styles.samplePanel}>
           <div className={styles.sampleBar}>
             <span>
-              <b>POST</b> /v1/dev/email/validate
+              <b>POST</b> /v1/utility/email/validate
             </span>
             <span>email-validation</span>
           </div>

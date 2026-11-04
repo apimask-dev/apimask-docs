@@ -1,24 +1,72 @@
 ---
 title: Pricing
-description: ApiMask pricing, quotas, payments, and subscriptions are managed through RapidAPI.
+description: ApiMask pricing. Free plan with 1,000 units a month and no card, Starter at $9 a month for 25,000 units, Pro at $29 a month for 250,000 units including the AI endpoints.
 ---
 
 # Pricing
 
-ApiMask pricing is managed on RapidAPI. Each RapidAPI product can have its own plans,
-monthly quotas, and overage rules.
+Start free, no card. Upgrade in the [dashboard](/dashboard/billing) when you need
+more, and cancel there at any time.
 
-[Find ApiMask on RapidAPI](https://rapidapi.com/user/aftaab)
+| | Free | Starter | Pro |
+|---|---:|---:|---:|
+| Price | $0 | **$9 / month** | **$29 / month** |
+| Units per month | 1,000 | 25,000 | 250,000 |
+| Rate limit | 2 requests/s | 5 requests/s | 20 requests/s |
+| Email, domain, website, SEO, QR, and developer utility APIs | Yes | Yes | Yes |
+| AI endpoints (content, regex, stacktrace, README, changelog) | No | No | Yes |
+| Test key allowance per month | 100 | 200 | 500 |
 
-## What RapidAPI handles
+Prices are in US dollars. Payments are handled by
+[Lemon Squeezy](https://www.lemonsqueezy.com), which acts as the merchant of record
+and adds sales tax or VAT where it applies.
 
-- Plan selection
-- Payments and invoices
-- API keys
-- Monthly quotas and rate limits
-- Usage dashboards
+[Get a free API key](/login)
 
-## What this site provides
+## What a unit is
 
-This site focuses on product information and detailed API documentation: endpoint
-behavior, request schemas, response schemas, examples, and implementation notes.
+Most calls cost **1 unit**. Calls that do more work cost more:
+
+| Endpoint | Units |
+|---|---:|
+| Single checks: email validation, DNS, SSL, security headers, robots.txt, sitemap, CORS, URL safety, QR codes, and the developer utilities | 1 per call |
+| [Bulk email verification](/api/bulk-email-verification) (JSON or CSV), disposable and role-account checks | 1 per address |
+| Domain health | 1 per domain |
+| [SEO site audit](/api/seo-site-audit) | 10 per call |
+| AI endpoints (Pro) | 20 per call |
+
+A bulk call with 300 addresses costs 300 units, the same as 300 single calls.
+
+**Failed requests are almost always free.** Units are refunded for validation
+errors (`422`), requests refused for your plan (`403`), and any server error
+(`5xx`). Requests rejected for a bad key, the rate limit, or the quota are never
+charged in the first place. The exception is `400 BAD_REQUEST`, such as an
+unreadable CSV upload, which uses the call's units. See [Errors](/errors).
+
+## When the month resets
+
+- **Free:** on the 1st of each month, at 00:00 UTC.
+- **Starter and Pro:** on your renewal date.
+
+The dashboard's [Usage](/dashboard/usage) page shows how much of the month you've
+used. Every successful response also carries an `X-Quota-Remaining` header. When
+the quota runs out, requests return `429 QUOTA_EXCEEDED` until the month resets or
+you upgrade. There are no overage charges: you are never billed for more than your
+plan.
+
+## Test keys
+
+Test keys (`apim_test_...`) have their own allowance from the table above and
+never use your live units. See [Authentication](/authentication#live-and-test-keys).
+
+## Changing or cancelling
+
+- **Upgrade:** choose a plan on the [Billing](/dashboard/billing) page. The new
+  limits apply within a minute of payment.
+- **Cancel or change card:** use **Manage subscription** on the Billing page,
+  which opens the Lemon Squeezy customer portal. A cancelled plan keeps working
+  until the end of the period you paid for, then the account returns to Free.
+- **Failed payment:** the plan keeps working for 7 days while the payment is
+  retried.
+
+Questions about billing: [support@apimask.dev](mailto:support@apimask.dev).

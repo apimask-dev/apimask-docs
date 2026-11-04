@@ -1,6 +1,6 @@
 ---
 title: Base64 Encode and Decode API
-description: Encode UTF-8 text as Base64 or decode Base64 text through RapidAPI, with optional URL-safe alphabet support.
+description: Encode UTF-8 text as Base64 or decode Base64 text, with optional URL-safe alphabet support.
 ---
 
 # Base64 Encode and Decode API
@@ -26,10 +26,9 @@ POST /v1/dev/data/base64/decode
 
 ```bash
 curl --request POST \
-  --url https://apimask-developer-utilities-api.p.rapidapi.com/v1/dev/data/base64/encode \
+  --url https://api.apimask.dev/v1/dev/data/base64/encode \
   --header "Content-Type: application/json" \
-  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
-  --header "X-RapidAPI-Host: apimask-developer-utilities-api.p.rapidapi.com" \
+  --header "Authorization: Bearer $APIMASK_API_KEY" \
   --data '{"value":"hello ApiMask","urlsafe":false}'
 ```
 

@@ -1,6 +1,6 @@
 ---
 title: SEO Site Audit API
-description: Run a combined website audit for URL safety, security headers, robots.txt, sitemap, CORS, SSL, DNS, and SEO meta tags in one call through RapidAPI.
+description: Run a combined website audit for URL safety, security headers, robots.txt, sitemap, CORS, SSL, DNS, and SEO meta tags in one call.
 ---
 
 # SEO Site Audit API
@@ -31,10 +31,9 @@ POST /v1/seo/site-audit
 
 ```bash
 curl --request POST \
-  --url https://seo-website-audit-api.p.rapidapi.com/v1/seo/site-audit \
+  --url https://api.apimask.dev/v1/seo/site-audit \
   --header "Content-Type: application/json" \
-  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
-  --header "X-RapidAPI-Host: seo-website-audit-api.p.rapidapi.com" \
+  --header "Authorization: Bearer $APIMASK_API_KEY" \
   --data '{"url":"https://example.com","sitemap_url":"https://example.com/sitemap.xml","origin":"https://app.example.com"}'
 ```
 

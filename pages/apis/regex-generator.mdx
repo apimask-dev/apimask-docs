@@ -1,12 +1,16 @@
 ---
 title: Regex Generator API
-description: Generate regular expressions from plain English descriptions with explanations and test cases through RapidAPI.
+description: Generate regular expressions from plain English descriptions with explanations and test cases.
 ---
 
 # Regex Generator API
 
 Generate a regular expression from a plain English description. Use it in developer
 tools, form builders, validation workflows, and automation systems.
+
+> **Pro plan.** This is an AI endpoint: it needs the [Pro plan](/pricing) and
+> costs 20 units per call. Free and Starter keys get `403 FORBIDDEN_PRODUCT`.
+> Test keys on Pro return a fixed sample response at no cost.
 
 ## Endpoint
 
@@ -25,10 +29,9 @@ POST /v1/dev/regex/generate
 
 ```bash
 curl --request POST \
-  --url https://apimask-developer-utilities-api.p.rapidapi.com/v1/dev/regex/generate \
+  --url https://api.apimask.dev/v1/dev/regex/generate \
   --header "Content-Type: application/json" \
-  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
-  --header "X-RapidAPI-Host: apimask-developer-utilities-api.p.rapidapi.com" \
+  --header "Authorization: Bearer $APIMASK_API_KEY" \
   --data '{"description":"Match a valid email address","flavor":"python"}'
 ```
 

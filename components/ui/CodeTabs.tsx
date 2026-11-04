@@ -4,67 +4,64 @@ import styles from "./CodeTabs.module.css";
 import { cx } from "./cx";
 import { highlightCode, highlightJson } from "./highlight";
 
-// Must match the host documented on pages/apis/instagram.mdx — this block was
-// previously advertising "instagram-api-collection.p.rapidapi.com", which is
-// not a real RapidAPI host and would have failed if copy-pasted.
-const HOST = "instagram-api.p.rapidapi.com";
-const PATH = "/v1/instagram/profile?username=nasawebb";
+// Must match pages/apis/email-validation.mdx. The response is the one the Go
+// gateway returns for this input (apimask-platform/apis/emailvalidation).
+const BASE = "https://api.apimask.dev";
+const PATH = "/v1/utility/email/validate";
+const BODY = `{"email":"sam@mailinator.com"}`;
 
 const snippets = {
   curl: {
     label: "cURL",
-    code: `HOST="${HOST}"
-
-curl --request GET \\
-  --url "https://$HOST${PATH}" \\
-  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \\
-  --header "X-RapidAPI-Host: $HOST"`,
+    code: `curl --request POST \\
+  --url ${BASE}${PATH} \\
+  --header "Authorization: Bearer $APIMASK_API_KEY" \\
+  --header "Content-Type: application/json" \\
+  --data '${BODY}'`,
   },
   js: {
     label: "JavaScript",
-    code: `const host = "${HOST}";
-const endpoint = "/v1/instagram/profile";
-const url = new URL("https://" + host + endpoint);
-url.searchParams.set("username", "nasawebb");
-
-const res = await fetch(url, {
+    code: `const res = await fetch("${BASE}${PATH}", {
+  method: "POST",
   headers: {
-    "X-RapidAPI-Key": process.env.RAPIDAPI_KEY,
-    "X-RapidAPI-Host": host,
+    Authorization: \`Bearer \${process.env.APIMASK_API_KEY}\`,
+    "Content-Type": "application/json",
   },
+  body: JSON.stringify({ email: "sam@mailinator.com" }),
 });
 
-const data = await res.json();`,
+const { data } = await res.json();
+if (data.is_disposable) rejectSignup();`,
   },
   python: {
     label: "Python",
     code: `import os, requests
 
-host = "${HOST}"
-res = requests.get(
-    f"https://{host}${PATH}",
-    headers={
-        "X-RapidAPI-Key": os.environ["RAPIDAPI_KEY"],
-        "X-RapidAPI-Host": host,
-    },
+res = requests.post(
+    "${BASE}${PATH}",
+    headers={"Authorization": f"Bearer {os.environ['APIMASK_API_KEY']}"},
+    json={"email": "sam@mailinator.com"},
 )
 
-data = res.json()`,
+data = res.json()["data"]
+if data["is_disposable"]:
+    reject_signup()`,
   },
 } as const;
 
 const representativeResponse = `{
   "success": true,
   "data": {
-    "id": "549313808",
-    "username": "nasawebb",
-    "full_name": "NASA Webb Telescope",
-    "is_verified": true,
-    "followers_count": 3547801,
-    "following_count": 35,
-    "media_count": 1302,
-    "source": "apify",
-    "fetched_at": "2026-07-20T10:10:24.746979+00:00"
+    "is_valid": true,
+    "email": "sam@mailinator.com",
+    "local_part": "sam",
+    "domain": "mailinator.com",
+    "is_disposable": true,
+    "has_mx_records": true,
+    "smtp_verified": false,
+    "is_role_account": false,
+    "reason": null,
+    "did_you_mean": null
   },
   "error": null,
   "meta": { "request_id": "req_example" }
@@ -94,13 +91,13 @@ export function CodeTabs() {
   }
 
   return (
-    <div className={styles.terminal} aria-label="Instagram API request and representative response">
+    <div className={styles.terminal} aria-label="Email validation request and representative response">
       <div className={styles.top}>
         <div className={styles.meta}>
-          <span className={styles.method}>GET</span>
+          <span className={styles.method}>POST</span>
           <span>{PATH}</span>
         </div>
-        <span className={styles.collection}>instagram.profile</span>
+        <span className={styles.collection}>email.validate</span>
       </div>
 
       <div className={styles.tabs} role="tablist" aria-label="Request language">
@@ -139,7 +136,7 @@ export function CodeTabs() {
 
       <div className={styles.footer}>
         <span>schema-backed example</span>
-        <span>$RAPIDAPI_KEY</span>
+        <span>$APIMASK_API_KEY</span>
       </div>
     </div>
   );

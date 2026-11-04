@@ -1,12 +1,16 @@
 ---
 title: Regex Explainer API
-description: Explain regular expressions in plain English with token-by-token breakdowns through RapidAPI.
+description: Explain regular expressions in plain English with token-by-token breakdowns.
 ---
 
 # Regex Explainer API
 
 Explain a regular expression in plain English. Use it in developer education,
 debugging tools, code review assistants, and validation UI.
+
+> **Pro plan.** This is an AI endpoint: it needs the [Pro plan](/pricing) and
+> costs 20 units per call. Free and Starter keys get `403 FORBIDDEN_PRODUCT`.
+> Test keys on Pro return a fixed sample response at no cost.
 
 ## Endpoint
 
@@ -24,10 +28,9 @@ POST /v1/dev/regex/explain
 
 ```bash
 curl --request POST \
-  --url https://apimask-developer-utilities-api.p.rapidapi.com/v1/dev/regex/explain \
+  --url https://api.apimask.dev/v1/dev/regex/explain \
   --header "Content-Type: application/json" \
-  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
-  --header "X-RapidAPI-Host: apimask-developer-utilities-api.p.rapidapi.com" \
+  --header "Authorization: Bearer $APIMASK_API_KEY" \
   --data '{"pattern":"^[A-Z][a-z]+$"}'
 ```
 

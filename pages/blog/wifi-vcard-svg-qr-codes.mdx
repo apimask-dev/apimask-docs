@@ -50,10 +50,9 @@ what was encoded:
 
 ```bash
 curl --request POST \
-  --url https://qr-code-generator-api-with-logo.p.rapidapi.com/v1/qr/wifi \
+  --url https://api.apimask.dev/v1/qr/wifi \
   --header "Content-Type: application/json" \
-  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
-  --header "X-RapidAPI-Host: qr-code-generator-api-with-logo.p.rapidapi.com" \
+  --header "Authorization: Bearer $APIMASK_API_KEY" \
   --data '{"ssid":"Guest WiFi","password":"secret123","encryption":"WPA","hidden":false,"output":"png"}'
 ```
 

@@ -3,7 +3,8 @@ import path from "path";
 import type { GetServerSideProps } from "next";
 import { blogPosts } from "../components/blog-posts";
 
-const BASE_URL = "https://apimask.dev";
+// The apex redirects to www (308), so every URL here is the www form.
+const BASE_URL = "https://www.apimask.dev";
 
 // Stable per-deploy timestamp. Generating `new Date()` on every request makes
 // every page look like it changes constantly, which is a weak crawl signal.

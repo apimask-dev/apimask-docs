@@ -1,45 +1,108 @@
 ---
 title: Quickstart
-description: Subscribe to ApiMask on RapidAPI and make your first API request with curl, JavaScript, or Python.
+description: Get a free ApiMask API key and make your first request with curl, JavaScript, or Python in about two minutes.
 ---
 
 # Quickstart
 
-Get up and running with ApiMask through RapidAPI in a few minutes.
+You need an email address and a terminal. The free plan includes 1,000 units a
+month and doesn't ask for a card.
 
-## 1. Subscribe on RapidAPI
+## 1. Get an API key
 
-Open the ApiMask listing on RapidAPI, choose a plan, and copy the generated request
-headers from RapidAPI's code examples.
+[Sign in with your email](/login). The first sign-in creates your account, and the
+link we send logs you in; there is no password. In the dashboard, open
+**API keys** and create a key.
 
-[Find ApiMask on RapidAPI](https://rapidapi.com/user/aftaab)
+The key is shown **once**, so copy it somewhere safe. ApiMask stores only a hash
+of it. Put it in an environment variable:
+
+```bash
+export APIMASK_API_KEY="apim_live_..."
+```
 
 ## 2. Make a request
 
-RapidAPI requests use the `X-RapidAPI-Key` and `X-RapidAPI-Host` headers. The host
-shown below is for the Developer Utilities API.
+Every endpoint lives under `https://api.apimask.dev` and takes the key as a
+Bearer token. This call checks whether a signup email is disposable or mistyped:
 
 ```bash
 curl --request POST \
-  --url https://apimask-developer-utilities-api.p.rapidapi.com/v1/dev/data/json/format \
+  --url https://api.apimask.dev/v1/utility/email/validate \
+  --header "Authorization: Bearer $APIMASK_API_KEY" \
   --header "Content-Type: application/json" \
-  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
-  --header "X-RapidAPI-Host: apimask-developer-utilities-api.p.rapidapi.com" \
-  --data '{"text":"{\"name\":\"ApiMask\",\"ok\":true}","indent":2}'
+  --data '{"email":"sam@mailinator.com"}'
 ```
 
-## 3. Pick an endpoint
+```json
+{
+  "success": true,
+  "data": {
+    "is_valid": true,
+    "email": "sam@mailinator.com",
+    "local_part": "sam",
+    "domain": "mailinator.com",
+    "is_disposable": true,
+    "has_mx_records": true,
+    "smtp_verified": false,
+    "is_role_account": false,
+    "reason": null,
+    "did_you_mean": null
+  },
+  "error": null,
+  "meta": { "request_id": "req_a0da33901ed4" }
+}
+```
 
-Start with a live endpoint:
+The same call from code:
 
-- [Email Validation API](/api/email-validation)
-- [Bulk Email Verification API](/api/bulk-email-verification)
-- [Regex Generator API](/api/regex-generator)
-- [Stacktrace Analyzer API](/api/stacktrace-analyzer)
-- [JSON Formatter API](/api/json-formatter)
-- [SSL Checker API](/api/ssl-checker)
+```js
+// JavaScript (Node 18+, Deno, or Bun)
+const res = await fetch("https://api.apimask.dev/v1/utility/email/validate", {
+  method: "POST",
+  headers: {
+    Authorization: `Bearer ${process.env.APIMASK_API_KEY}`,
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify({ email: "sam@mailinator.com" }),
+});
+const { success, data, error } = await res.json();
+```
 
-## 4. Use RapidAPI examples
+```python
+# Python
+import os, requests
 
-RapidAPI generates code samples for multiple languages after you subscribe. Use the
-endpoint docs on this site for request fields, response fields, and behavior notes.
+res = requests.post(
+    "https://api.apimask.dev/v1/utility/email/validate",
+    headers={"Authorization": f"Bearer {os.environ['APIMASK_API_KEY']}"},
+    json={"email": "sam@mailinator.com"},
+    timeout=20,
+)
+body = res.json()
+```
+
+Call ApiMask from your server, never from a browser: anyone who can see the key
+can spend your quota.
+
+## 3. Check the response
+
+Every response has the same four fields: `success`, `data`, `error`, and
+`meta.request_id`. On failure `data` is `null` and `error` holds a stable `code`
+you can branch on. See [Errors](/errors) for the full list. Quote the
+`request_id` if you contact support.
+
+## 4. Use a test key in CI
+
+Create a second key with type **Test**. Test keys start with `apim_test_`, have
+their own small monthly allowance, and never touch your live quota. On Pro, the
+AI endpoints return a fixed sample response for test keys, so tests are free and
+deterministic. See [Authentication](/authentication#live-and-test-keys).
+
+## Next steps
+
+- [Email Validation API](/api/email-validation): disposable detection and typo suggestions
+- [Bulk Email Verification API](/api/bulk-email-verification): up to 500 addresses per call, or a CSV
+- [DNS Analyzer API](/api/dns-analyzer): MX, SPF, and DMARC for a domain
+- [Pricing](/pricing): what a unit is and what each plan includes
+- [Rate limits and quotas](/rate-limits)

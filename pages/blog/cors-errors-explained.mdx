@@ -119,10 +119,9 @@ Example request:
 
 ```bash
 curl --request POST \
-  --url https://email-domain-validation-api.p.rapidapi.com/v1/utility/cors/check \
+  --url https://api.apimask.dev/v1/utility/cors/check \
   --header "Content-Type: application/json" \
-  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
-  --header "X-RapidAPI-Host: email-domain-validation-api.p.rapidapi.com" \
+  --header "Authorization: Bearer $APIMASK_API_KEY" \
   --data '{"url":"https://api.example.com","origin":"https://app.example.com"}'
 ```
 

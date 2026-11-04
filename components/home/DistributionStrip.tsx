@@ -5,7 +5,7 @@ import styles from "./Home.module.css";
 // ApiMask has no public reference customers, so this states verifiable facts
 // about the surface area instead of implying enterprise adoption.
 const items = [
-  { value: "RapidAPI", label: "distribution and billing" },
+  { value: "1,000", label: "free units a month" },
   { value: `${liveCategories.length}`, label: "live API categories" },
   { value: `${liveEndpointCount}`, label: "documented endpoints" },
   { value: "JSON", label: "consistent response envelope" },

@@ -52,10 +52,9 @@ description and returns a pattern, an explanation, and test cases:
 
 ```bash
 curl --request POST \
-  --url https://apimask-developer-utilities-api.p.rapidapi.com/v1/dev/regex/generate \
+  --url https://api.apimask.dev/v1/dev/regex/generate \
   --header "Content-Type: application/json" \
-  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
-  --header "X-RapidAPI-Host: apimask-developer-utilities-api.p.rapidapi.com" \
+  --header "Authorization: Bearer $APIMASK_API_KEY" \
   --data '{"description":"Match a valid email address","flavor":"python"}'
 ```
 
@@ -110,10 +109,9 @@ description plus a token-by-token breakdown:
 
 ```bash
 curl --request POST \
-  --url https://apimask-developer-utilities-api.p.rapidapi.com/v1/dev/regex/explain \
+  --url https://api.apimask.dev/v1/dev/regex/explain \
   --header "Content-Type: application/json" \
-  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
-  --header "X-RapidAPI-Host: apimask-developer-utilities-api.p.rapidapi.com" \
+  --header "Authorization: Bearer $APIMASK_API_KEY" \
   --data '{"pattern":"^[A-Z][a-z]+$"}'
 ```
 
@@ -188,7 +186,7 @@ Both endpoints are part of the
 [Developer Utilities API](/api/developer-utilities), alongside the hashing, ID
 generation, JSON formatting, and URL parsing endpoints covered in
 [the developer utility APIs you keep rewriting](/blog/developer-utility-apis-you-keep-rewriting).
-One RapidAPI subscription covers all of them.
+One API key covers all of them; the regex endpoints are on the Pro plan.
 
 The rule of thumb: generate when you know the rule but not the syntax; explain
 when you have the syntax but not the rule. Reach for neither when the thing you

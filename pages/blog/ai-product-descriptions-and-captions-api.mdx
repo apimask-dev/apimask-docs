@@ -51,10 +51,9 @@ suggestions:
 
 ```bash
 curl --request POST \
-  --url https://ai-content-generator-api.p.rapidapi.com/v1/content/product-description \
+  --url https://api.apimask.dev/v1/content/product-description \
   --header "Content-Type: application/json" \
-  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
-  --header "X-RapidAPI-Host: ai-content-generator-api.p.rapidapi.com" \
+  --header "Authorization: Bearer $APIMASK_API_KEY" \
   --data '{
     "product_name":"TrailLight 500",
     "product_details":"Rechargeable USB-C headlamp, 500 lumens, 12-hour runtime, IPX6 waterproof.",
@@ -181,7 +180,7 @@ nothing and destroys your ability to attribute conversion changes.
 
 The [AI Content Generator API](/api/ai-content-generator-api) covers all eight
 endpoints — summarize, rewrite, meta tags, blog outline, product description,
-social caption, headlines, and FAQ — under one RapidAPI subscription. For the
+social caption, headlines, and FAQ — on the Pro plan, with one API key. For the
 metadata-specific workflow, see
 [generating SEO titles and meta descriptions at scale](/blog/generate-seo-meta-tags-at-scale).
 

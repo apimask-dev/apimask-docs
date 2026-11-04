@@ -1,6 +1,6 @@
 ---
 title: Sitemap Validator API
-description: Validate XML sitemaps, sitemap indexes, status codes, URL counts, and warnings through RapidAPI.
+description: Validate XML sitemaps, sitemap indexes, status codes, URL counts, and warnings.
 ---
 
 # Sitemap Validator API
@@ -24,10 +24,9 @@ POST /v1/utility/sitemap/validate
 
 ```bash
 curl --request POST \
-  --url https://email-domain-validation-api.p.rapidapi.com/v1/utility/sitemap/validate \
+  --url https://api.apimask.dev/v1/utility/sitemap/validate \
   --header "Content-Type: application/json" \
-  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
-  --header "X-RapidAPI-Host: email-domain-validation-api.p.rapidapi.com" \
+  --header "Authorization: Bearer $APIMASK_API_KEY" \
   --data '{"url":"https://example.com/sitemap.xml"}'
 ```
 

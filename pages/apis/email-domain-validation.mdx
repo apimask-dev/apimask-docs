@@ -1,14 +1,18 @@
 ---
 title: Email, Domain, and Website Utilities API
-description: ApiMask email validation, DNS analyzer, SSL checker, URL safety checker, security headers, robots.txt, sitemap, and CORS APIs through RapidAPI.
+description: ApiMask email validation with disposable and typo detection, DNS analyzer, SSL checker, URL safety checker, security headers, robots.txt, sitemap, and CORS APIs.
 ---
 
 # Email, Domain, and Website Utilities API
 
 Use these APIs for signup validation, website monitoring, SEO checks, security audits,
-and operational tooling.
+and operational tooling. The headline endpoint is
+[email validation](/api/email-validation): it flags addresses at 10,000+
+disposable domains and suggests corrections for typos like `gmail.con`.
 
-[Subscribe to the Email & Domain Validation API on RapidAPI](https://rapidapi.com/aftaab/api/email-domain-validation-api)
+Every endpoint here costs 1 unit per call and is included in every plan,
+including Free. For lists, use the
+[Bulk Email Verification API](/api/bulk-email-verification).
 
 ## Endpoints
 
@@ -25,16 +29,15 @@ and operational tooling.
 
 ## Base URL
 
-Use the RapidAPI base URL and host shown in your RapidAPI code examples.
+Every endpoint is served from one host:
 
 ```http
-https://email-domain-validation-api.p.rapidapi.com
+https://api.apimask.dev
 ```
 
 ## Authentication
 
 ```http
-X-RapidAPI-Key: your-rapidapi-key
-X-RapidAPI-Host: email-domain-validation-api.p.rapidapi.com
+Authorization: Bearer apim_live_...
 Content-Type: application/json
 ```

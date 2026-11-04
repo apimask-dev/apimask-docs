@@ -25,15 +25,13 @@
   font-size: 13px;
 }
 
-.primary,
-.rapidapi {
+.primary {
   background: #11140f;
   color: #ffffff;
   box-shadow: 0 14px 28px rgba(17, 20, 15, 0.16);
 }
 
-html.dark .primary,
-html.dark .rapidapi {
+html.dark .primary {
   background: #f4f7f0;
   color: #11140f;
   box-shadow: none;

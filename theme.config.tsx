@@ -5,11 +5,11 @@ import type { DocsThemeConfig } from "nextra-theme-docs";
 import { DocsNavExtras } from "./components/nav/DocsNavExtras";
 import { SiteFooter } from "./components/SiteFooter";
 
-const SITE_URL = "https://apimask.dev";
+const SITE_URL = "https://www.apimask.dev";
 const SITE_NAME = "ApiMask";
-const DEFAULT_TITLE = "ApiMask - Developer, AI, Email, Domain & Website APIs";
+const DEFAULT_TITLE = "ApiMask - Email Validation, Domain & Website APIs";
 const DEFAULT_DESCRIPTION =
-  "ApiMask is a growing platform of production-ready APIs: developer utilities, AI content, bulk email verification, domain validation, SEO, security, and website intelligence. Available through RapidAPI with clean JSON responses and copy-paste examples.";
+  "ApiMask: email and domain validation that stops disposable and mistyped signup emails, plus website, SEO, QR code, developer utility, and AI content APIs. Free tier with 1,000 units a month; one API key and one JSON envelope for every endpoint.";
 // A 1200x630 card, the ratio Open Graph and Twitter crop to. Previously this
 // pointed at the 200px logo file, which social clients letterboxed on a
 // background of their own choosing.
@@ -25,7 +25,7 @@ const organizationLd = {
   url: SITE_URL,
   logo: LOGO,
   description: DEFAULT_DESCRIPTION,
-  sameAs: ["https://rapidapi.com/user/aftaab", "https://github.com/apimask-dev"],
+  sameAs: ["https://github.com/apimask-dev"],
 };
 
 const websiteLd = {
@@ -98,7 +98,7 @@ function useSeoHead() {
       <meta name="robots" content="index,follow" />
       <meta
         name="keywords"
-        content="ApiMask, RapidAPI, developer utilities API, AI content API, bulk email verification API, email validation API, domain analysis API, DNS analyzer API, SSL checker API, security headers API, SEO meta tags API, QR code API, JSON formatter API"
+        content="ApiMask, disposable email API, email typo detection API, developer utilities API, AI content API, bulk email verification API, email validation API, domain analysis API, DNS analyzer API, SSL checker API, security headers API, SEO meta tags API, QR code API, JSON formatter API"
       />
       <link rel="shortcut icon" href="/favicon.ico" />
       <link rel="icon" href="/favicon-32x32.png" sizes="32x32" type="image/png" />

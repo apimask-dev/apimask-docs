@@ -99,6 +99,7 @@ export function ApiCatalog() {
                 <h3>
                   <Link href={docsHref(endpoint.slug)}>{endpoint.name}</Link>
                   {endpoint.isCollection && <span className={styles.badge}>Collection</span>}
+                  {endpoint.plan === "pro" && <span className={styles.badge}>Pro plan</span>}
                 </h3>
                 <p>{endpoint.description}</p>
                 <span className={styles.rowCategory}>
@@ -109,16 +110,6 @@ export function ApiCatalog() {
                 <Link href={docsHref(endpoint.slug)} className={styles.docsLink}>
                   View docs
                 </Link>
-                {endpoint.rapidapi && (
-                  <a
-                    href={endpoint.rapidapi}
-                    className={styles.rapidLink}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    RapidAPI
-                  </a>
-                )}
               </div>
             </li>
           ))}
@@ -127,20 +118,20 @@ export function ApiCatalog() {
 
       {/* Roadmap categories are kept out of the searchable list so a filtered
           result never mixes shippable endpoints with things that don't exist. */}
-      <section className={styles.roadmap} aria-label="Roadmap categories">
-        <h2>Coming soon</h2>
-        <p className={styles.roadmapLead}>
-          In active development. These aren&apos;t available on RapidAPI yet.
-        </p>
-        <ul className={styles.roadmapList}>
-          {soonCategories.map((category) => (
-            <li key={category.slug}>
-              <b>{category.name}</b>
-              <span>{category.note}</span>
-            </li>
-          ))}
-        </ul>
-      </section>
+      {soonCategories.length > 0 && (
+        <section className={styles.roadmap} aria-label="Roadmap categories">
+          <h2>Coming soon</h2>
+          <p className={styles.roadmapLead}>In development. Not available yet.</p>
+          <ul className={styles.roadmapList}>
+            {soonCategories.map((category) => (
+              <li key={category.slug}>
+                <b>{category.name}</b>
+                <span>{category.note}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
     </div>
   );
 }

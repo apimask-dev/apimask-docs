@@ -1,6 +1,6 @@
 ---
 title: JSON Formatter API
-description: Validate, format, minify, and optionally sort JSON through RapidAPI.
+description: Validate, format, minify, and optionally sort JSON.
 ---
 
 # JSON Formatter API
@@ -26,10 +26,9 @@ POST /v1/dev/data/json/format
 
 ```bash
 curl --request POST \
-  --url https://apimask-developer-utilities-api.p.rapidapi.com/v1/dev/data/json/format \
+  --url https://api.apimask.dev/v1/dev/data/json/format \
   --header "Content-Type: application/json" \
-  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
-  --header "X-RapidAPI-Host: apimask-developer-utilities-api.p.rapidapi.com" \
+  --header "Authorization: Bearer $APIMASK_API_KEY" \
   --data '{"text":"{\"name\":\"ApiMask\",\"ok\":true}","indent":2,"sort_keys":false}'
 ```
 

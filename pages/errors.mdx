@@ -1,37 +1,77 @@
 ---
 title: Errors
-description: Understand ApiMask error responses, validation errors, RapidAPI authentication failures, and rate-limit responses.
+description: ApiMask error responses. The JSON error envelope, every error code with its HTTP status, field-level validation errors, and which errors are safe to retry.
 ---
 
 # Errors
 
-ApiMask endpoint responses use a consistent JSON envelope when the request reaches
-the ApiMask API:
+Every response, success or failure, uses the same JSON envelope. On failure,
+`success` is `false`, `data` is `null`, and `error` has a stable `code` you can
+branch on and a human-readable `message` you shouldn't parse.
 
 ```json
 {
   "success": false,
   "data": null,
   "error": {
-    "code": "RATE_LIMIT_EXCEEDED",
-    "message": "You have exceeded your rate limit. Retry after 60 seconds.",
-    "retry_after": 60
+    "code": "QUOTA_EXCEEDED",
+    "message": "The monthly quota for this plan is used up."
   },
-  "meta": { "request_id": "req_xyz456" }
+  "meta": { "request_id": "req_0cb6945759b1" }
 }
 ```
 
-## Common error codes
+Validation errors add a `fields` list naming each problem:
 
-| Code | HTTP | Meaning |
-|---|---|---|
-| `UNAUTHORIZED` | 401 | Missing, invalid, or unsubscribed RapidAPI credentials. |
-| `RATE_LIMIT_EXCEEDED` | 429 | Too many requests for the active RapidAPI plan. |
-| `INVALID_REQUEST` | 400 | Request body failed validation. |
-| `INTERNAL_ERROR` | 500 | Unexpected server error. |
+```json
+{
+  "success": false,
+  "data": null,
+  "error": {
+    "code": "VALIDATION_ERROR",
+    "message": "Request validation failed.",
+    "fields": [{ "field": "email", "message": "Field is required." }]
+  },
+  "meta": { "request_id": "req_e035058838c0" }
+}
+```
 
-## RapidAPI errors
+Include `meta.request_id` when you contact support; it identifies the exact
+request in our logs.
 
-RapidAPI may return its own `401`, `403`, or `429` response before the request reaches
-ApiMask. In that case, check the subscription, `X-RapidAPI-Key`, `X-RapidAPI-Host`,
-and plan quota in your RapidAPI dashboard.
+## Error codes
+
+| HTTP | Code | Meaning | Retry? |
+|---:|---|---|---|
+| 400 | `BAD_REQUEST` | The request couldn't be read, for example a malformed CSV upload. | No, fix the request |
+| 401 | `UNAUTHORIZED` | The API key is missing or invalid. | No |
+| 401 | `KEY_REVOKED` | The key was revoked. | No |
+| 401 | `KEY_EXPIRED` | The key expired after a rotation. | No |
+| 403 | `FORBIDDEN_PRODUCT` | Your plan or key doesn't include this API. | No, [upgrade](/pricing) |
+| 403 | `PLAN_REQUIRED` | This AI endpoint needs the Pro plan. | No, [upgrade](/pricing) |
+| 403 | `ORG_SUSPENDED` | The account is suspended. | No, contact support |
+| 404 | `NOT_FOUND` | No endpoint at this path with this method. Almost every endpoint is `POST`. | No |
+| 422 | `VALIDATION_ERROR` | The body isn't valid JSON, or a field is missing or out of range. See `fields`. | No, fix the request |
+| 429 | `RATE_LIMITED` | Too many requests per second. The response has `Retry-After: 1`. | Yes, after a second |
+| 429 | `CONCURRENCY_LIMITED` | Too many requests in flight at once. | Yes, with fewer parallel requests |
+| 429 | `QUOTA_EXCEEDED` | The month's units are used up. | After the month resets, or upgrade |
+| 500 | `INTERNAL_ERROR` | Something broke on our side. | Yes, with backoff |
+| 502 | `UPSTREAM_UNAVAILABLE` | A provider an endpoint depends on, such as the AI model, failed. | Yes, with backoff |
+| 503 | `AI_UNAVAILABLE` | AI endpoints are paused. | Yes, later |
+| 503 | `NOT_READY`, `QUOTA_UNAVAILABLE` | The service is starting up or can't reach its quota ledger. | Yes, with backoff |
+
+New codes may be added over time. Treat any code you don't recognise by its
+HTTP status.
+
+## What you're charged for
+
+Errors with status `403`, `422`, and `5xx` don't use any units. `401`, `404`,
+and `429` responses are refused before anything runs, so they don't either. A
+`400 BAD_REQUEST` (for example an unreadable CSV) does use the call's units. See
+[What a unit is](/pricing#what-a-unit-is).
+
+## Retrying safely
+
+Retry `429 RATE_LIMITED` and `5xx` responses with exponential backoff and
+jitter, starting at about one second, and give up after a few attempts. Don't
+retry `4xx` responses other than `429`: the same request will fail the same way.

@@ -100,10 +100,9 @@ A simple DNS analysis request can help you inspect important records without bui
 
 ```bash
 curl --request POST \
-  --url https://email-domain-validation-api.p.rapidapi.com/v1/utility/dns/analyze \
+  --url https://api.apimask.dev/v1/utility/dns/analyze \
   --header "Content-Type: application/json" \
-  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
-  --header "X-RapidAPI-Host: email-domain-validation-api.p.rapidapi.com" \
+  --header "Authorization: Bearer $APIMASK_API_KEY" \
   --data '{"domain":"example.com"}'
 ```
 

@@ -1,6 +1,6 @@
 ---
 title: URL Parser API
-description: Parse URLs into scheme, host, port, path, query parameters, fragment, credentials metadata, and normalized URL through RapidAPI.
+description: Parse URLs into scheme, host, port, path, query parameters, fragment, credentials metadata, and normalized URL.
 ---
 
 # URL Parser API
@@ -24,10 +24,9 @@ POST /v1/dev/data/url/parse
 
 ```bash
 curl --request POST \
-  --url https://apimask-developer-utilities-api.p.rapidapi.com/v1/dev/data/url/parse \
+  --url https://api.apimask.dev/v1/dev/data/url/parse \
   --header "Content-Type: application/json" \
-  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
-  --header "X-RapidAPI-Host: apimask-developer-utilities-api.p.rapidapi.com" \
+  --header "Authorization: Bearer $APIMASK_API_KEY" \
   --data '{"url":"https://example.com:443/docs?q=api#intro"}'
 ```
 

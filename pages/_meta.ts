@@ -3,7 +3,7 @@ export default {
   authentication: "Authentication",
   pricing: "Pricing",
   errors: "Errors",
-  "rate-limits": "Limits on RapidAPI",
+  "rate-limits": "Rate limits and quotas",
   changelog: "Changelog",
   apis: "API Catalog",
   // Blog uses its own layout (not the docs shell). Keep routes, hide from docs nav.

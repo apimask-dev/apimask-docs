@@ -2,25 +2,17 @@
 // the homepage, the /api catalog, the site footer, and their JSON-LD.
 //
 // Titles and descriptions below are lifted verbatim from each endpoint page's
-// frontmatter under pages/apis/, and RapidAPI links from the listings those
-// pages actually link to — so nothing here is invented, and drift between the
-// catalog and the docs is a copy-paste away from being caught.
+// frontmatter under pages/apis/, so nothing here is invented, and drift between
+// the catalog and the docs is a copy-paste away from being caught. Only routes
+// the Go gateway serves (apimask-platform/internal/gateway/catalog.go) belong
+// here.
 
-/** Marketplace profile. Every generic "subscribe / view on RapidAPI" CTA in the
- *  site points here. Previously three files disagreed: the homepage and SiteNav
- *  hardcoded a single Instagram listing while theme.config used the profile. */
-export const RAPIDAPI_PROFILE_URL = "https://rapidapi.com/user/aftaab";
+/** Where every "get an API key" call to action points: magic-link sign-in,
+ *  which creates the account on first use. */
+export const SIGNUP_HREF = "/login";
 
-const RAPIDAPI = {
-  devUtilities: "https://rapidapi.com/aftaab/api/apimask-developer-utilities-api",
-  emailDomain: "https://rapidapi.com/aftaab/api/email-domain-validation-api",
-  bulkEmail: "https://rapidapi.com/aftaab/api/bulk-email-verification-api",
-  seoAudit: "https://rapidapi.com/aftaab/api/seo-website-audit-api",
-  qrWithLogo: "https://rapidapi.com/aftaab/api/qr-code-generator-api-with-logo",
-  aiContent: "https://rapidapi.com/aftaab/api/ai-content-generator-api",
-  twitter: "https://rapidapi.com/aftaab/api/twitter-x-api",
-  instagram: "https://rapidapi.com/aftaab/api/instagram-api",
-} as const;
+/** Public API base URL used in every example. */
+export const API_BASE_URL = "https://api.apimask.dev";
 
 /* -------------------------------------------------------------------------- */
 /* Categories                                                                  */
@@ -36,9 +28,10 @@ export type Category = {
   note: string;
 };
 
-// Forward-looking category map. "Live" groups are shippable today; the rest are
-// on the public roadmap. Kept honest with explicit status so we capture
-// category search intent without overpromising.
+// Category map. Only live groups are listed: the site does not advertise
+// roadmap categories, because nothing beyond these is committed
+// (apimask-platform/docs/business/roadmap.md). "Soon" stays in the type for a
+// future family that has a date.
 export const categories: Category[] = [
   {
     slug: "developer-utilities",
@@ -56,7 +49,7 @@ export const categories: Category[] = [
     slug: "email-domain",
     name: "Email & domain",
     status: "Live",
-    note: "Validation, bulk lists, MX/DNS, deliverability",
+    note: "Disposable and typo detection, bulk lists, MX, SPF, DMARC",
   },
   {
     slug: "website-security",
@@ -75,48 +68,6 @@ export const categories: Category[] = [
     name: "SEO",
     status: "Live",
     note: "Site audits, meta tags, robots.txt, sitemaps",
-  },
-  {
-    slug: "social-app",
-    name: "Social & app intelligence",
-    status: "Live",
-    note: "Twitter/X and Instagram profile and content data",
-  },
-  {
-    slug: "ocr-pdf",
-    name: "OCR & PDF",
-    status: "Soon",
-    note: "PDF-to-Markdown, table & field extraction, OCR cleanup",
-  },
-  {
-    slug: "resume-ats",
-    name: "Resume & ATS",
-    status: "Soon",
-    note: "ATS scoring, keyword gaps, resume rewrite",
-  },
-  {
-    slug: "appstore-aso",
-    name: "App Store / ASO",
-    status: "Soon",
-    note: "Metadata, keywords, release notes, review sentiment",
-  },
-  {
-    slug: "enrichment",
-    name: "Data enrichment",
-    status: "Soon",
-    note: "Company, email, and domain enrichment",
-  },
-  {
-    slug: "threat-intel",
-    name: "Security & threat intel",
-    status: "Soon",
-    note: "URL safety, breach checks, header hardening",
-  },
-  {
-    slug: "ai-agents",
-    name: "AI agents & workflows",
-    status: "Soon",
-    note: "Tool endpoints and structured extraction for agents",
   },
 ];
 
@@ -138,7 +89,8 @@ export type ApiEndpoint = {
   /** One line, from the page's frontmatter description. */
   description: string;
   category: string;
-  rapidapi?: string;
+  /** Set for routes only the Pro plan includes (the AI endpoints). */
+  plan?: "pro";
   /** Product hub pages that document a whole collection rather than one call. */
   isCollection?: boolean;
 };
@@ -154,7 +106,6 @@ export const endpoints: ApiEndpoint[] = [
     description:
       "Regex, stacktrace, README, changelog, JSON, Base64, hash, ID, and URL parsing endpoints in one product.",
     category: "developer-utilities",
-    rapidapi: RAPIDAPI.devUtilities,
     isCollection: true,
   },
   {
@@ -163,7 +114,6 @@ export const endpoints: ApiEndpoint[] = [
     description:
       "Email validation, DNS, SSL, URL safety, security headers, robots.txt, sitemap, and CORS checks in one product.",
     category: "email-domain",
-    rapidapi: RAPIDAPI.emailDomain,
     isCollection: true,
   },
   {
@@ -172,7 +122,6 @@ export const endpoints: ApiEndpoint[] = [
     description:
       "Site audit, SEO meta tags, sitemap, robots.txt, SSL, DNS, security headers, URL safety, and CORS checks in one product.",
     category: "seo",
-    rapidapi: RAPIDAPI.seoAudit,
     isCollection: true,
   },
 
@@ -181,9 +130,8 @@ export const endpoints: ApiEndpoint[] = [
     slug: "email-validation",
     name: "Email Validation API",
     description:
-      "Validate email syntax, domains, MX records, disposable providers, role accounts, and optional SMTP mailbox checks.",
+      "Validate signup emails. Checks syntax, MX records, 10,000+ disposable domains including subdomains, role accounts, and suggests corrections for typos like gmail.con.",
     category: "email-domain",
-    rapidapi: RAPIDAPI.emailDomain,
   },
   {
     slug: "bulk-email-verification",
@@ -191,14 +139,12 @@ export const endpoints: ApiEndpoint[] = [
     description:
       "Validate email lists, upload CSVs, detect disposable addresses and role accounts, and check MX, SPF, and DMARC records.",
     category: "email-domain",
-    rapidapi: RAPIDAPI.bulkEmail,
   },
   {
     slug: "dns-analyzer",
     name: "DNS Analyzer API",
     description: "Analyze A, AAAA, MX, TXT, NS, CNAME, SPF, and DMARC records for a domain.",
     category: "email-domain",
-    rapidapi: RAPIDAPI.emailDomain,
   },
 
   // --- Website & security ---
@@ -208,7 +154,6 @@ export const endpoints: ApiEndpoint[] = [
     description:
       "Check SSL certificates for validity, issuer, subject, SANs, expiration dates, and days remaining.",
     category: "website-security",
-    rapidapi: RAPIDAPI.emailDomain,
   },
   {
     slug: "security-headers-analyzer",
@@ -216,7 +161,6 @@ export const endpoints: ApiEndpoint[] = [
     description:
       "Analyze website security headers, score header coverage, and get missing header recommendations.",
     category: "website-security",
-    rapidapi: RAPIDAPI.emailDomain,
   },
   {
     slug: "url-safety-checker",
@@ -224,7 +168,6 @@ export const endpoints: ApiEndpoint[] = [
     description:
       "Check URL redirects, final URL, homograph risk, status code, threat indicators, and safety status.",
     category: "website-security",
-    rapidapi: RAPIDAPI.emailDomain,
   },
   {
     slug: "cors-checker",
@@ -232,7 +175,6 @@ export const endpoints: ApiEndpoint[] = [
     description:
       "Check CORS response headers, allowed origins, credentials, methods, exposed headers, and risk level.",
     category: "website-security",
-    rapidapi: RAPIDAPI.emailDomain,
   },
 
   // --- SEO ---
@@ -242,7 +184,6 @@ export const endpoints: ApiEndpoint[] = [
     description:
       "Run one combined website audit covering URL safety, security headers, robots.txt, sitemap, CORS, SSL, DNS, and SEO meta tags.",
     category: "seo",
-    rapidapi: RAPIDAPI.seoAudit,
   },
   {
     slug: "seo-meta-tags-api",
@@ -250,21 +191,19 @@ export const endpoints: ApiEndpoint[] = [
     description:
       "Generate SEO titles, meta descriptions, and keyword sets from page content with a single JSON endpoint.",
     category: "seo",
-    rapidapi: RAPIDAPI.aiContent,
+    plan: "pro",
   },
   {
     slug: "robots-txt-analyzer",
     name: "Robots.txt Analyzer API",
     description: "Analyze robots.txt status, directives, sitemap URLs, user agents, and warnings.",
     category: "seo",
-    rapidapi: RAPIDAPI.emailDomain,
   },
   {
     slug: "sitemap-validator",
     name: "Sitemap Validator API",
     description: "Validate XML sitemaps, sitemap indexes, status codes, URL counts, and warnings.",
     category: "seo",
-    rapidapi: RAPIDAPI.emailDomain,
   },
 
   // --- QR codes ---
@@ -274,7 +213,6 @@ export const endpoints: ApiEndpoint[] = [
     description:
       "Generate QR codes as PNG or SVG for URLs, text, WiFi, vCards, email links, and SMS, with branded colors.",
     category: "qr-codes",
-    rapidapi: RAPIDAPI.qrWithLogo,
   },
   {
     slug: "qr-code-api-with-logo",
@@ -282,7 +220,6 @@ export const endpoints: ApiEndpoint[] = [
     description:
       "Generate branded QR codes with a centered logo overlay, custom colors, sizing, and error correction.",
     category: "qr-codes",
-    rapidapi: RAPIDAPI.qrWithLogo,
   },
   {
     slug: "wifi-qr-code-api",
@@ -290,7 +227,6 @@ export const endpoints: ApiEndpoint[] = [
     description:
       "Generate scannable WiFi QR codes for guest networks, venues, offices, events, and customer onboarding.",
     category: "qr-codes",
-    rapidapi: RAPIDAPI.qrWithLogo,
   },
 
   // --- AI content ---
@@ -300,25 +236,7 @@ export const endpoints: ApiEndpoint[] = [
     description:
       "Generate summaries, rewrites, SEO meta tags, blog outlines, product descriptions, social captions, headlines, and FAQs.",
     category: "ai-content",
-    rapidapi: RAPIDAPI.aiContent,
-  },
-
-  // --- Social & app intelligence ---
-  {
-    slug: "twitter",
-    name: "Twitter/X Data API",
-    description:
-      "Twitter/X profiles, tweets, search results, replies, and thread extraction as normalized JSON.",
-    category: "social-app",
-    rapidapi: RAPIDAPI.twitter,
-  },
-  {
-    slug: "instagram",
-    name: "Instagram API Collection",
-    description:
-      "Instagram profiles, posts, reels, comments, hashtag search, and AI insights in normalized JSON.",
-    category: "social-app",
-    rapidapi: RAPIDAPI.instagram,
+    plan: "pro",
   },
 
   // --- Developer utilities ---
@@ -328,14 +246,14 @@ export const endpoints: ApiEndpoint[] = [
     description:
       "Generate regular expressions from plain English descriptions, with explanations and test cases.",
     category: "developer-utilities",
-    rapidapi: RAPIDAPI.devUtilities,
+    plan: "pro",
   },
   {
     slug: "regex-explainer",
     name: "Regex Explainer API",
     description: "Explain regular expressions in plain English with token-by-token breakdowns.",
     category: "developer-utilities",
-    rapidapi: RAPIDAPI.devUtilities,
+    plan: "pro",
   },
   {
     slug: "stacktrace-analyzer",
@@ -343,28 +261,27 @@ export const endpoints: ApiEndpoint[] = [
     description:
       "Analyze stacktraces, identify root causes, suggest fixes, and return relevant documentation links.",
     category: "developer-utilities",
-    rapidapi: RAPIDAPI.devUtilities,
+    plan: "pro",
   },
   {
     slug: "readme-generator",
     name: "README Generator API",
     description: "Generate professional README.md content from repository metadata.",
     category: "developer-utilities",
-    rapidapi: RAPIDAPI.devUtilities,
+    plan: "pro",
   },
   {
     slug: "changelog-generator",
     name: "Changelog Generator API",
     description: "Generate categorized changelogs from raw git logs or diffs.",
     category: "developer-utilities",
-    rapidapi: RAPIDAPI.devUtilities,
+    plan: "pro",
   },
   {
     slug: "json-formatter",
     name: "JSON Formatter API",
     description: "Validate, format, minify, and optionally sort JSON.",
     category: "developer-utilities",
-    rapidapi: RAPIDAPI.devUtilities,
   },
   {
     slug: "base64-encoder-decoder",
@@ -372,21 +289,18 @@ export const endpoints: ApiEndpoint[] = [
     description:
       "Encode UTF-8 text as Base64 or decode it back, with optional URL-safe alphabet support.",
     category: "developer-utilities",
-    rapidapi: RAPIDAPI.devUtilities,
   },
   {
     slug: "hash-generator",
     name: "Hash Generator API",
     description: "Generate MD5, SHA-1, SHA-256, SHA-512, and BLAKE2 hashes for strings.",
     category: "developer-utilities",
-    rapidapi: RAPIDAPI.devUtilities,
   },
   {
     slug: "id-generator",
     name: "UUID and ULID Generator API",
     description: "Generate UUIDv4, UUIDv1, or ULID-compatible identifiers.",
     category: "developer-utilities",
-    rapidapi: RAPIDAPI.devUtilities,
   },
   {
     slug: "url-parser",
@@ -394,7 +308,6 @@ export const endpoints: ApiEndpoint[] = [
     description:
       "Parse URLs into scheme, host, port, path, query parameters, fragment, and normalized URL.",
     category: "developer-utilities",
-    rapidapi: RAPIDAPI.devUtilities,
   },
 ];
 
@@ -404,7 +317,8 @@ export function docsHref(slug: string): string {
   return `/api/${slug}`;
 }
 
-export const liveEndpointCount = endpoints.length;
+/** Endpoint pages, not counting the collection hubs that only link to them. */
+export const liveEndpointCount = endpoints.filter((e) => !e.isCollection).length;
 
 export function endpointsByCategory(slug: string): ApiEndpoint[] {
   return endpoints.filter((e) => e.category === slug);
@@ -420,27 +334,62 @@ export const categoryCounts: Record<string, number> = endpoints.reduce<Record<st
 );
 
 /* -------------------------------------------------------------------------- */
-/* Flagship products                                                           */
+/* API families                                                                */
 /* -------------------------------------------------------------------------- */
 
-// The three ApiMask products with their own dedicated RapidAPI listing today.
-/** Every RapidAPI listing, as shown on the homepage.
+/** API families, as shown on the homepage, in the order we lead with. One
+ *  ApiMask key covers every family the plan includes; these are groupings for
+ *  reading, not separate subscriptions.
  *
- *  `count` is the number of endpoints in the RapidAPI listing, which is not the
- *  same as the number of docs pages under pages/apis/ — several endpoints share
- *  a page, and a few are sold under more than one listing. The numbers are the
- *  operation counts in the platform's own OpenAPI specs
- *  (apimask-platform/docs/*.openapi.json), so verify against those when a
- *  listing gains an endpoint. */
-export const rapidapiProducts = [
+ *  `count` is the number of gateway routes in the family, which is not the same
+ *  as the number of docs pages under pages/apis/: several routes share a page,
+ *  and a few appear in more than one family. Verify against
+ *  apimask-platform/internal/gateway/catalog.go when a family gains a route. */
+export const productFamilies = [
+  {
+    icon: "MX",
+    count: 8,
+    title: "Email & Domain Validation API",
+    copy: "Validate signup emails against 10,000+ disposable domains, suggest fixes for typos like gmail.con, and check DNS, SSL, URL safety, security headers, robots.txt, sitemaps, and CORS.",
+    tags: ["Disposable", "Typos", "MX", "DMARC"],
+    docs: docsHref("email-domain-validation"),
+    plan: "free",
+  },
+  {
+    icon: "@",
+    count: 5,
+    title: "Bulk Email Verification API",
+    copy: "Validate JSON batches and CSV uploads of up to 500 addresses, flag disposable and role-account emails, and check MX, SPF, and DMARC readiness.",
+    tags: ["CSV", "MX", "SPF", "DMARC"],
+    docs: docsHref("bulk-email-verification"),
+    plan: "free",
+  },
+  {
+    icon: "SEO",
+    count: 9,
+    title: "SEO Website Audit API",
+    copy: "Run one combined website audit, validate sitemaps and robots.txt, and check SSL, DNS, security headers, URL safety, and CORS.",
+    tags: ["Audit", "Sitemap", "Robots", "SSL"],
+    docs: docsHref("seo-website-audit"),
+    plan: "free",
+  },
+  {
+    icon: "{}",
+    count: 12,
+    title: "Developer Utilities API",
+    copy: "JSON, Base64, hashing, IDs, and URL parsing on every plan; regex generation and explanation, stacktrace analysis, and README and changelog generation on Pro.",
+    tags: ["JSON", "Hash", "UUID", "Regex"],
+    docs: docsHref("developer-utilities"),
+    plan: "free",
+  },
   {
     icon: "QR",
     count: 6,
-    title: "QR Code Generator API with Logo",
+    title: "QR Code Generator API",
     copy: "PNG/SVG QR codes for URLs, WiFi, vCards, email, and SMS, with branded colors and optional logo overlay.",
     tags: ["Logo", "WiFi", "vCard", "SVG"],
     docs: docsHref("qr-code-generator-api"),
-    rapidapi: RAPIDAPI.qrWithLogo,
+    plan: "free",
   },
   {
     icon: "AI",
@@ -449,62 +398,8 @@ export const rapidapiProducts = [
     copy: "Summaries, rewrites, SEO meta tags, blog outlines, product descriptions, social captions, headlines, and FAQs.",
     tags: ["SEO", "Rewrite", "Captions", "FAQ"],
     docs: docsHref("ai-content-generator-api"),
-    rapidapi: RAPIDAPI.aiContent,
-  },
-  {
-    icon: "@",
-    count: 5,
-    title: "Bulk Email Verification API",
-    copy: "Validate JSON batches and CSV uploads, flag disposable and role-account emails, and check MX, SPF, and DMARC readiness.",
-    tags: ["CSV", "MX", "SPF", "DMARC"],
-    docs: docsHref("bulk-email-verification"),
-    rapidapi: RAPIDAPI.bulkEmail,
-  },
-  {
-    icon: "{}",
-    count: 12,
-    title: "Developer Utilities API",
-    copy: "Regex generation and explanation, stacktrace analysis, README and changelog generation, JSON, Base64, hashing, IDs, and URL parsing.",
-    tags: ["Regex", "JSON", "Hash", "UUID"],
-    docs: docsHref("developer-utilities"),
-    rapidapi: RAPIDAPI.devUtilities,
-  },
-  {
-    icon: "MX",
-    count: 8,
-    title: "Email & Domain Validation API",
-    copy: "Validate emails and domains, and check DNS records, SSL certificates, URL safety, security headers, robots.txt, sitemaps, and CORS.",
-    tags: ["MX", "SSL", "Headers", "CORS"],
-    docs: docsHref("email-domain-validation"),
-    rapidapi: RAPIDAPI.emailDomain,
-  },
-  {
-    icon: "SEO",
-    count: 9,
-    title: "SEO Website Audit API",
-    copy: "Run one combined website audit, validate sitemaps and robots.txt, check SSL, DNS, security headers, URL safety, and CORS, and generate meta tags.",
-    tags: ["Audit", "Sitemap", "Robots", "Meta"],
-    docs: docsHref("seo-website-audit"),
-    rapidapi: RAPIDAPI.seoAudit,
-  },
-  {
-    icon: "X",
-    count: 10,
-    title: "Twitter/X Data API",
-    copy: "Profiles, tweets, search results, replies, and thread extraction through stable, normalized JSON endpoints.",
-    tags: ["Profiles", "Tweets", "Search", "Threads"],
-    docs: docsHref("twitter"),
-    rapidapi: RAPIDAPI.twitter,
-  },
-  {
-    icon: "IG",
-    count: 9,
-    title: "Instagram API Collection",
-    copy: "Profiles, posts, reels, comments, hashtag search, and AI insights, returned as normalized JSON.",
-    tags: ["Profiles", "Reels", "Hashtags", "Insights"],
-    docs: docsHref("instagram"),
-    rapidapi: RAPIDAPI.instagram,
+    plan: "pro",
   },
 ] as const;
 
-export const rapidapiProductCount = rapidapiProducts.length;
+export const productFamilyCount = productFamilies.length;

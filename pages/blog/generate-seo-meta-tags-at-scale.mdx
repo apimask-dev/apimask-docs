@@ -53,10 +53,9 @@ title, a description, and a keyword set:
 
 ```bash
 curl --request POST \
-  --url https://ai-content-generator-api.p.rapidapi.com/v1/content/meta-tags \
+  --url https://api.apimask.dev/v1/content/meta-tags \
   --header "Content-Type: application/json" \
-  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
-  --header "X-RapidAPI-Host: ai-content-generator-api.p.rapidapi.com" \
+  --header "Authorization: Bearer $APIMASK_API_KEY" \
   --data '{
     "page_content":"ApiMask is a platform of production-ready APIs for developers and startups building SaaS, AI, and automation products.",
     "page_url":"https://apimask.dev",

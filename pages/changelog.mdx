@@ -1,13 +1,31 @@
 ---
 title: Changelog
-description: ApiMask documentation and API catalog release notes.
+description: ApiMask API and documentation release notes.
 ---
 
 # Changelog
 
 ## Unreleased
 
-- Repositioned `apimask.dev` as a docs-first RapidAPI site.
-- Added live API catalog pages for Developer Utilities and Email, Domain, and Website Utilities.
-- Added SEO-focused endpoint docs for implemented Developer Utility and Utility APIs.
-- Added RapidAPI authentication, pricing, limit, sitemap, and robots.txt guidance.
+**Accounts and billing**
+
+- ApiMask now issues its own API keys. [Sign in with your email](/login) to create
+  live and test keys, see usage, and manage billing in the dashboard. The old
+  marketplace listings are retired.
+- Requests go to `https://api.apimask.dev` with `Authorization: Bearer <key>`.
+  The marketplace key and host headers are no longer used.
+- New plans: Free (1,000 units a month), Starter ($9 a month, 25,000 units), and
+  Pro ($29 a month, 250,000 units, including the AI endpoints). See
+  [Pricing](/pricing).
+
+**Email validation**
+
+- Disposable detection now uses a list of more than 10,000 domains, refreshed
+  weekly, and also matches their subdomains (`inbox.mailinator.com`).
+- Single-address validation returns `did_you_mean` with a corrected address for
+  common provider typos such as `gmail.con` or `yaho.com`.
+
+**Removed**
+
+- The Twitter/X, Instagram, OCR, PDF, resume, and App Store pages. These APIs are
+  not offered.

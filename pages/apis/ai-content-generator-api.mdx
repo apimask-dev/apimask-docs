@@ -1,6 +1,6 @@
 ---
 title: AI Content Generator API
-description: Generate summaries, rewrites, SEO meta tags, blog outlines, product descriptions, social captions, headlines, and FAQs from a single JSON API through RapidAPI.
+description: Generate summaries, rewrites, SEO meta tags, blog outlines, product descriptions, social captions, headlines, and FAQs from a single JSON API.
 ---
 
 # AI Content Generator API
@@ -10,22 +10,23 @@ SaaS apps, CMS tools, SEO dashboards, ecommerce catalogs, internal tools, and
 marketing automation. Every endpoint takes plain JSON in and returns structured
 JSON out, so you can wire results straight into a UI, database, or workflow.
 
-[Open AI Content Generator API on RapidAPI](https://rapidapi.com/aftaab/api/ai-content-generator-api)
+> **Pro plan.** These are AI endpoints: they need the [Pro plan](/pricing) and
+> costs 20 units per call. Free and Starter keys get `403 FORBIDDEN_PRODUCT`.
+> Test keys on Pro return a fixed sample response at no cost.
 
 ## Base URL and authentication
 
 ```http
-https://ai-content-generator-api.p.rapidapi.com
+https://api.apimask.dev
 ```
 
-All requests are `POST` with a JSON body and authenticate through RapidAPI. Send
+All requests are `POST` with a JSON body and authenticate with your ApiMask API key. Send
 these headers on every call:
 
 | Header | Value |
 |---|---|
 | `Content-Type` | `application/json` |
-| `X-RapidAPI-Key` | Your RapidAPI key |
-| `X-RapidAPI-Host` | `ai-content-generator-api.p.rapidapi.com` |
+| `Authorization` | `Bearer` followed by your ApiMask API key |
 
 See [Authentication](/authentication), [Rate limits](/rate-limits), and
 [Errors](/errors) for shared behavior.
@@ -82,10 +83,9 @@ points.
 
 ```bash
 curl --request POST \
-  --url https://ai-content-generator-api.p.rapidapi.com/v1/content/summarize \
+  --url https://api.apimask.dev/v1/content/summarize \
   --header "Content-Type: application/json" \
-  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
-  --header "X-RapidAPI-Host: ai-content-generator-api.p.rapidapi.com" \
+  --header "Authorization: Bearer $APIMASK_API_KEY" \
   --data '{"text":"ApiMask is a platform of production-ready APIs for developers and startups building SaaS, AI, and automation products. It bundles content, QR, and developer utilities.","max_words":60,"format":"paragraph"}'
 ```
 
@@ -134,10 +134,9 @@ meaning.
 
 ```bash
 curl --request POST \
-  --url https://ai-content-generator-api.p.rapidapi.com/v1/content/rewrite \
+  --url https://api.apimask.dev/v1/content/rewrite \
   --header "Content-Type: application/json" \
-  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
-  --header "X-RapidAPI-Host: ai-content-generator-api.p.rapidapi.com" \
+  --header "Authorization: Bearer $APIMASK_API_KEY" \
   --data '{"text":"Our API is fast and easy to use.","tone":"confident","audience":"developers"}'
 ```
 
@@ -180,10 +179,9 @@ page for the full field reference.
 
 ```bash
 curl --request POST \
-  --url https://ai-content-generator-api.p.rapidapi.com/v1/content/meta-tags \
+  --url https://api.apimask.dev/v1/content/meta-tags \
   --header "Content-Type: application/json" \
-  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
-  --header "X-RapidAPI-Host: ai-content-generator-api.p.rapidapi.com" \
+  --header "Authorization: Bearer $APIMASK_API_KEY" \
   --data '{"page_content":"ApiMask is a platform of production-ready APIs for developers and startups building SaaS, AI, and automation products.","page_url":"https://apimask.dev","target_keyword":"developer APIs"}'
 ```
 
@@ -228,10 +226,9 @@ curl --request POST \
 
 ```bash
 curl --request POST \
-  --url https://ai-content-generator-api.p.rapidapi.com/v1/content/blog/outline \
+  --url https://api.apimask.dev/v1/content/blog/outline \
   --header "Content-Type: application/json" \
-  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
-  --header "X-RapidAPI-Host: ai-content-generator-api.p.rapidapi.com" \
+  --header "Authorization: Bearer $APIMASK_API_KEY" \
   --data '{"topic":"How to validate emails at signup","target_keyword":"email validation","audience":"developers","sections":5}'
 ```
 
@@ -286,10 +283,9 @@ curl --request POST \
 
 ```bash
 curl --request POST \
-  --url https://ai-content-generator-api.p.rapidapi.com/v1/content/product-description \
+  --url https://api.apimask.dev/v1/content/product-description \
   --header "Content-Type: application/json" \
-  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
-  --header "X-RapidAPI-Host: ai-content-generator-api.p.rapidapi.com" \
+  --header "Authorization: Bearer $APIMASK_API_KEY" \
   --data '{"product_name":"TrailLight 500","product_details":"Rechargeable USB-C headlamp, 500 lumens, 12-hour runtime, IPX6 waterproof.","audience":"hikers","length":"medium"}'
 ```
 
@@ -343,11 +339,10 @@ optional hashtags.
 
 ```bash
 curl --request POST \
-  --url https://ai-content-generator-api.p.rapidapi.com/v1/content/social-caption \
+  --url https://api.apimask.dev/v1/content/social-caption \
   --header "Content-Type: application/json" \
-  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
-  --header "X-RapidAPI-Host: ai-content-generator-api.p.rapidapi.com" \
-  --data '{"content":"We launched a new developer utilities API on RapidAPI.","platform":"x","variants":2,"call_to_action":"Try the free plan"}'
+  --header "Authorization: Bearer $APIMASK_API_KEY" \
+  --data '{"content":"We launched a new developer utilities API.","platform":"x","variants":2,"call_to_action":"Try the free plan"}'
 ```
 
 ```json
@@ -357,11 +352,11 @@ curl --request POST \
     "platform": "x",
     "variants": [
       {
-        "caption": "Just shipped our Developer Utilities API on RapidAPI. Email validation, JSON tools, hashing, and more in one subscription. Try the free plan 👇",
+        "caption": "Just shipped our Developer Utilities API. Email validation, JSON tools, hashing, and more with one API key. Try the free plan 👇",
         "hashtags": ["#API", "#DevTools", "#BuildInPublic"]
       },
       {
-        "caption": "One API, a dozen developer utilities. Now live on RapidAPI. Try the free plan.",
+        "caption": "One API, a dozen developer utilities. Now live. Try the free plan.",
         "hashtags": ["#developers", "#API", "#SaaS"]
       }
     ]
@@ -398,11 +393,10 @@ predicted click score.
 
 ```bash
 curl --request POST \
-  --url https://ai-content-generator-api.p.rapidapi.com/v1/content/headlines \
+  --url https://api.apimask.dev/v1/content/headlines \
   --header "Content-Type: application/json" \
-  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
-  --header "X-RapidAPI-Host: ai-content-generator-api.p.rapidapi.com" \
-  --data '{"topic":"Developer utilities API on RapidAPI","audience":"developers","count":3}'
+  --header "Authorization: Bearer $APIMASK_API_KEY" \
+  --data '{"topic":"Developer utilities API","audience":"developers","count":3}'
 ```
 
 ```json
@@ -451,11 +445,10 @@ curl --request POST \
 
 ```bash
 curl --request POST \
-  --url https://ai-content-generator-api.p.rapidapi.com/v1/content/faq \
+  --url https://api.apimask.dev/v1/content/faq \
   --header "Content-Type: application/json" \
-  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
-  --header "X-RapidAPI-Host: ai-content-generator-api.p.rapidapi.com" \
-  --data '{"source_text":"ApiMask APIs are billed through RapidAPI. The free plan includes 100 requests per month. Paid plans add higher quotas and priority support.","count":2}'
+  --header "Authorization: Bearer $APIMASK_API_KEY" \
+  --data '{"source_text":"ApiMask plans are billed monthly. The free plan includes 1,000 units per month. Paid plans add higher quotas and the AI endpoints.","count":3}'
 ```
 
 ```json
@@ -465,11 +458,15 @@ curl --request POST \
     "faqs": [
       {
         "question": "How is ApiMask billed?",
-        "answer": "ApiMask APIs are billed through RapidAPI subscriptions."
+        "answer": "ApiMask plans are billed monthly."
       },
       {
         "question": "What does the free plan include?",
-        "answer": "The free plan includes 100 requests per month."
+        "answer": "The free plan includes 1,000 units per month."
+      },
+      {
+        "question": "What do paid plans add?",
+        "answer": "Paid plans add higher quotas and the AI endpoints."
       }
     ]
   },

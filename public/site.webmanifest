@@ -1,7 +1,7 @@
 {
   "name": "ApiMask",
   "short_name": "ApiMask",
-  "description": "A growing platform of developer, AI, email, domain, SEO, security, and website APIs available through RapidAPI.",
+  "description": "Email and domain validation, website, SEO, QR code, developer utility, and AI content APIs.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0a0b0d",

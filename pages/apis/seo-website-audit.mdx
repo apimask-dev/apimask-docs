@@ -1,6 +1,6 @@
 ---
 title: SEO Website Audit API
-description: ApiMask SEO website audit, meta tag generation, sitemap, robots.txt, SSL, DNS, security headers, URL safety, and CORS APIs through RapidAPI.
+description: ApiMask SEO website audit, AI meta tag generation, sitemap, robots.txt, SSL, DNS, security headers, URL safety, and CORS APIs.
 ---
 
 # SEO Website Audit API
@@ -8,8 +8,6 @@ description: ApiMask SEO website audit, meta tag generation, sitemap, robots.txt
 Audit websites for SEO, technical health, sitemap validity, robots.txt rules, SSL status,
 DNS records, security headers, URL safety, and CORS policy. Use it to power SEO
 dashboards, agency reporting, CMS plugins, website monitoring, and launch QA.
-
-[Subscribe to the SEO Website Audit API on RapidAPI](https://rapidapi.com/aftaab/api/seo-website-audit-api)
 
 ## Endpoints
 
@@ -25,24 +23,22 @@ dashboards, agency reporting, CMS plugins, website monitoring, and launch QA.
 | `/v1/utility/url/safety` | `POST` | [URL Safety Checker API](/api/url-safety-checker) |
 | `/v1/utility/cors/check` | `POST` | [CORS Checker API](/api/cors-checker) |
 
-Every endpoint except `/v1/seo/site-audit` is also available in the
-[Email & Domain Validation API](/api/email-domain-validation) and the
-[AI Content Generator API](/api/ai-content-generator-api). The paths are identical
-across listings; only the host changes, so those endpoint pages show a different
-`X-RapidAPI-Host` than the one below. Subscribe to whichever listing matches the
-work you are doing — this one if the job is site auditing.
+One API key covers all of these. The deterministic checks cost 1 unit per call
+on every plan, the combined site audit costs 10, and meta tag generation is an AI
+endpoint on the [Pro plan](/pricing) at 20 units. The same checks are also listed
+under [Email & Domain Validation](/api/email-domain-validation); the paths are
+the same.
 
 ## Base URL
 
 ```http
-https://seo-website-audit-api.p.rapidapi.com
+https://api.apimask.dev
 ```
 
 ## Authentication
 
 ```http
-X-RapidAPI-Key: your-rapidapi-key
-X-RapidAPI-Host: seo-website-audit-api.p.rapidapi.com
+Authorization: Bearer apim_live_...
 Content-Type: application/json
 ```
 

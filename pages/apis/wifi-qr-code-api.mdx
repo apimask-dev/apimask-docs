@@ -1,6 +1,6 @@
 ---
 title: WiFi QR Code API
-description: Generate scannable WiFi QR codes for guest networks, venues, offices, events, and customer onboarding through RapidAPI.
+description: Generate scannable WiFi QR codes for guest networks, venues, offices, events, and customer onboarding.
 ---
 
 # WiFi QR Code API
@@ -11,19 +11,16 @@ events, and onboarding flows. Output is a ready-to-use PNG or SVG image.
 
 This endpoint is part of the [QR Code Generator API](/api/qr-code-generator-api).
 
-[Open QR Code Generator API on RapidAPI](https://rapidapi.com/aftaab/api/qr-code-generator-api-with-logo)
-
 ## Base URL and authentication
 
 ```http
-https://qr-code-generator-api-with-logo.p.rapidapi.com
+https://api.apimask.dev
 ```
 
 | Header | Value |
 |---|---|
 | `Content-Type` | `application/json` |
-| `X-RapidAPI-Key` | Your RapidAPI key |
-| `X-RapidAPI-Host` | `qr-code-generator-api-with-logo.p.rapidapi.com` |
+| `Authorization` | `Bearer` followed by your ApiMask API key |
 
 See [Authentication](/authentication), [Rate limits](/rate-limits), and
 [Errors](/errors) for shared behavior.
@@ -53,10 +50,9 @@ POST /v1/qr/wifi
 
 ```bash
 curl --request POST \
-  --url https://qr-code-generator-api-with-logo.p.rapidapi.com/v1/qr/wifi \
+  --url https://api.apimask.dev/v1/qr/wifi \
   --header "Content-Type: application/json" \
-  --header "X-RapidAPI-Key: $RAPIDAPI_KEY" \
-  --header "X-RapidAPI-Host: qr-code-generator-api-with-logo.p.rapidapi.com" \
+  --header "Authorization: Bearer $APIMASK_API_KEY" \
   --data '{"ssid":"Guest WiFi","password":"secret123","encryption":"WPA","hidden":false,"output":"png"}'
 ```
 

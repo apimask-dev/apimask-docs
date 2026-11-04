@@ -9,12 +9,12 @@ import { Reliability } from "../components/home/Reliability";
 import { Security } from "../components/home/Security";
 import { SiteFooter } from "../components/SiteFooter";
 import { SiteNav } from "../components/SiteNav";
-import { liveCategories, liveEndpointCount } from "../lib/products";
+import { liveCategories } from "../lib/products";
 
 const SITE_URL = "https://www.apimask.dev";
-const TITLE = `${liveEndpointCount} Production-Ready APIs on RapidAPI | ApiMask`;
+const TITLE = "Email Validation API and Developer APIs with a Free Tier | ApiMask";
 const DESCRIPTION =
-  "Developer utility, AI content, email and domain validation, website and SEO, QR code, and public social data APIs. Clean JSON, documented endpoints, distributed through RapidAPI.";
+  "Block disposable and mistyped signup emails with an API that knows 10,000+ throwaway domains, plus domain, website, SEO, QR code, and developer utility APIs. Free tier, no card; paid plans from $9 a month.";
 
 export default function LandingPage() {
   return (
@@ -33,7 +33,7 @@ export default function LandingPage() {
         <meta name="robots" content="index,follow" />
         <meta
           name="keywords"
-          content="REST API platform, developer utilities API, AI content API, email validation API, domain intelligence API, SEO audit API, QR code API, social data API, RapidAPI"
+          content="REST API platform, developer utilities API, AI content API, email validation API, domain intelligence API, SEO audit API, QR code API, disposable email API"
         />
         <meta name="description" content={DESCRIPTION} />
         <meta property="og:title" content={TITLE} />
@@ -60,7 +60,7 @@ export default function LandingPage() {
                   url: SITE_URL,
                   logo: `${SITE_URL}/apimask-logo.png`,
                   description: DESCRIPTION,
-                  sameAs: ["https://rapidapi.com/user/aftaab", "https://github.com/apimask-dev"],
+                  sameAs: ["https://github.com/apimask-dev"],
                 },
                 {
                   "@type": "WebSite",

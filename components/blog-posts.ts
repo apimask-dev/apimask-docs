@@ -22,7 +22,7 @@ export type BlogPost = {
   featured?: boolean;
 };
 
-// Two posts per live API category. Adding a post means three files: the MDX
+// About two posts per live API category. Adding a post means three files: the MDX
 // body in pages/blog/, an entry here, and a key in pages/blog/_meta.ts.
 const posts: BlogPost[] = [
   {
@@ -169,30 +169,6 @@ const posts: BlogPost[] = [
     date: "2026-04-21",
     api: docsHref("robots-txt-analyzer"),
     keywords: ["robots.txt checker api", "sitemap validator api", "crawl budget"],
-  },
-  {
-    title: "Pulling Public Instagram Profile and Post Data Without Scrapers",
-    slug: "instagram-profile-data-api-without-scrapers",
-    category: "Social & app intelligence",
-    categorySlug: "social-app",
-    description:
-      "What a maintained Instagram data API actually gives you, what it can't, and why running your own scraper is a bigger commitment than it looks.",
-    readTime: "10 min read",
-    date: "2026-05-05",
-    api: docsHref("instagram"),
-    keywords: ["instagram api", "instagram profile data api", "instagram scraper alternative"],
-  },
-  {
-    title: "Twitter/X Data for Developers: What's Actually Available",
-    slug: "twitter-x-data-for-developers",
-    category: "Social & app intelligence",
-    categorySlug: "social-app",
-    description:
-      "Profiles, tweets, search, replies, and thread reconstruction — the shape of the data, the limits worth knowing, and what to build on it.",
-    readTime: "9 min read",
-    date: "2026-05-19",
-    api: docsHref("twitter"),
-    keywords: ["twitter api for developers", "x api data", "tweet data api"],
   },
   {
     title: "Cleaning a 50,000-Row Email List with a Bulk Verification API",
