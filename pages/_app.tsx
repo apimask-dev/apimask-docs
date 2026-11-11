@@ -17,12 +17,13 @@ import { captureSource } from "../lib/source";
 // it is unnecessary and was observed to destabilize hydration of the docs
 // shell's sidebar (its active-item highlighting occasionally disagreed
 // between server and client render in production). Marketing pages (home,
-// blog) and the app pages (sign-in, dashboard) have no other theme
+// blog, tools) and the app pages (sign-in, dashboard) have no other theme
 // management, so they still need this provider.
 function isMarketingRoute(pathname: string): boolean {
   return (
     pathname === "/" ||
     pathname.startsWith("/blog") ||
+    pathname.startsWith("/tools") ||
     pathname.startsWith("/login") ||
     pathname.startsWith("/dashboard")
   );

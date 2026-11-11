@@ -26,6 +26,7 @@ const gettingStarted = [
 
 const company = [
   { label: "API catalog", href: "/api" },
+  { label: "Free tools", href: "/tools" },
   { label: "Blog", href: "/blog" },
   { label: "Changelog", href: "/changelog" },
 ];

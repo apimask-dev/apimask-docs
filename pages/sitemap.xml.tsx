@@ -22,6 +22,10 @@ const TOP_LEVEL = [
   "rate-limits",
   "blog",
   "changelog",
+  "tools",
+  "tools/disposable-email-checker",
+  "tools/dmarc-checker",
+  "tools/spf-checker",
 ];
 
 type SitemapEntry = { loc: string; priority: number; changefreq: string; lastmod: string };
@@ -97,6 +101,8 @@ function entryFor(route: string): SitemapEntry {
       lastmod: BLOG_DATES.get(route.slice("blog/".length)) ?? lastmod,
     };
   }
+  if (route === "tools" || route.startsWith("tools/"))
+    return { loc, priority: 0.8, changefreq: "monthly", lastmod };
   if (route === "quickstart" || route === "pricing")
     return { loc, priority: 0.7, changefreq: "monthly", lastmod };
   return { loc, priority: 0.6, changefreq: "monthly", lastmod };

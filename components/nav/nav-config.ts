@@ -7,6 +7,7 @@ export const NAV_ITEMS = [
   { label: "APIs", href: "/api" },
   { label: "Docs", href: "/quickstart" },
   { label: "Pricing", href: "/pricing" },
+  { label: "Free tools", href: "/tools" },
   { label: "Blog", href: "/blog" },
 ] as const;
 
@@ -23,7 +24,7 @@ export function isActive(pathname: string, href: string): boolean {
   // /quickstart is the "Docs" entry point, but every other docs page should
   // light it up too — except the ones that have their own top-level nav item.
   if (href === "/quickstart") {
-    if (path === "/" || path.startsWith("/api") || path.startsWith("/blog")) return false;
+    if (path === "/" || path.startsWith("/api") || path.startsWith("/blog") || path.startsWith("/tools")) return false;
     if (path.startsWith("/pricing")) return false;
     return true;
   }
